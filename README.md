@@ -2,7 +2,7 @@
 
 The [Solana Snippets VSCode Extension](https://code.visualstudio.com/api/language-extensions/solana-snippets) allows you to quickly insert Solana snippets into your code. This snippets are well tested in a real [Solana program](./snippets) and compiled to the VSCode Snippets format (JSON) using a [custom compiler](./compiler).
 
-![Solana Snippets](./resources/check-rent.gif)
+![Solana Snippets](https://raw.githubusercontent.com/patriciobcs/solana-snippets/main/resources/check-rent.gif)
 
 ## Snippets
 
@@ -60,7 +60,7 @@ git tag solana-snippets-v1.0.0 b24bfe7
 git push upstream --tags
 ```
 
-### Publish Github release
+### Publish release
 
 * Go to [GitHub Releases UI](https://github.com/patriciobcs/solana-snippets/releases)
 * Click "Draft new release", and enter the new tag in the "Tag version" box.

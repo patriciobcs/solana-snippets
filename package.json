@@ -1,9 +1,10 @@
 {
 	"name": "solana-snippets",
 	"displayName": "Solana Snippets",
-	"description": "Solana Snippets",
+	"description": "Extension to quickly write and customize well tested Solana snippets.",
 	"version": "0.0.1",
 	"publisher": "patriciobcs",
+	"icon": "resources/logo.png",
 	"repository": "https://github.com/patriciobcs/solana-snippets",
 	"engines": {
 		"vscode": "^1.28.0"
@@ -22,6 +23,7 @@
 	"scripts": {
     "vscode:prepublish": "yarn compile",
     "compile": "source ./build.sh",
-    "build": "vsce package"
+    "build": "vsce package",
+		"publish": "vsce publish"
   }
 }

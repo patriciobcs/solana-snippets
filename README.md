@@ -1,6 +1,6 @@
 # Solana Snippets
 
-The [Solana Snippets VSCode Extension](https://code.visualstudio.com/api/language-extensions/solana-snippets) allows you to quickly insert Solana snippets into your code. This snippets are well tested in a real [Solana program](./snippets) and compiled to the VSCode Snippets format (JSON) using a [custom compiler](./compiler).
+The [Solana Snippets VSCode Extension](https://marketplace.visualstudio.com/items?itemName=patriciobcs.solana-snippets) allows you to quickly insert Solana snippets into your code. This snippets are well tested in a real [Solana program](./snippets) and compiled to the VSCode Snippets format (JSON) using a [custom compiler](./compiler).
 
 ![Solana Snippets](https://raw.githubusercontent.com/patriciobcs/solana-snippets/main/resources/check-rent.gif)
 

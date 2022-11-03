@@ -12,11 +12,13 @@ use solana_program::{
 };
 // snippet-suggestion-end
 
-fn unpack(accounts: &[AccountInfo]) -> ProgramResult {
+fn apack(accounts: &[AccountInfo]) -> ProgramResult {
     let account_info_iter = &mut accounts.iter();
     let __account___info = next_account_info(account_info_iter)?;
+    let __account__ = __Account__ {};
+
     // snippet-start
-    let mut __account__ = __Account__::unpack(&__account___info.data.borrow())?;
+    __Account__::pack(__account__, &mut __account___info.data.borrow_mut())?;
     // snippet-end
 
     Ok(())

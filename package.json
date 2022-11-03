@@ -4,6 +4,7 @@
 	"description": "Solana Snippets",
 	"version": "0.0.1",
 	"publisher": "patriciobcs",
+	"repository": "https://github.com/patriciobcs/solana-snippets",
 	"engines": {
 		"vscode": "^1.28.0"
 	},
@@ -17,5 +18,10 @@
 				"path": "./snippets.json"
 			}
 		]
-	}
+	},
+	"scripts": {
+    "vscode:prepublish": "yarn compile",
+    "compile": "source ./build.sh",
+    "build": "vsce package"
+  }
 }

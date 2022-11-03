@@ -1,7 +1,7 @@
 use crate::state::__Account__;
 /**
  * title: Check Rent Exempt
- * description: Check if an Account is Rent Exempt
+ * description: Check if an account is rent exempt
  * platform: native, anchor
  */
 // snippet-suggestion-start

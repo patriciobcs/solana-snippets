@@ -1,2 +1,5 @@
 compiler/**
 snippets/**
+scaffold/**
+resources/**
+build.sh

@@ -1,0 +1,21 @@
+{
+	"name": "solana-snippets",
+	"displayName": "Solana Snippets",
+	"description": "Solana Snippets",
+	"version": "0.0.1",
+	"publisher": "patriciobcs",
+	"engines": {
+		"vscode": "^1.28.0"
+	},
+	"categories": [
+		"Snippets"
+	],
+	"contributes": {
+		"snippets": [
+			{
+				"language": "rust",
+				"path": "./snippets.json"
+			}
+		]
+	}
+}

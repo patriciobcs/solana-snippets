@@ -66,3 +66,11 @@ git push upstream --tags
 * Click "Draft new release", and enter the new tag in the "Tag version" box.
 * Title the release "Solana Snippets vX.Y.Z", complete the description, and attach the `solana_snippets-v0.0.1.vsix`.
 * Click "Publish release"
+
+## Disclaimer
+
+* This extension is not affiliated with Solana Foundation or Solana Labs. It is a non-profit community project.
+* Solana Snippets is in active development, so all the snippets are subject to change.
+* Even if the snippets can suggest good practices and validations, they are just suggestions and not a guarantee of correctness. 
+* Double check the code before deploying it to the mainnet though extensive testing, code review, and audits.
+* **The snippets are unaudited**. Use at your own risk.

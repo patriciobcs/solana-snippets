@@ -1,29 +1,322 @@
 {
-	"name": "solana-snippets",
-	"displayName": "Solana Snippets",
-	"description": "Extension to quickly write and customize well tested Solana snippets.",
-	"version": "0.0.1",
-	"publisher": "patriciobcs",
-	"icon": "resources/logo.png",
-	"repository": "https://github.com/patriciobcs/solana-snippets",
-	"engines": {
-		"vscode": "^1.28.0"
-	},
-	"categories": [
-		"Snippets"
-	],
-	"contributes": {
-		"snippets": [
-			{
-				"language": "rust",
-				"path": "./snippets.json"
-			}
-		]
-	},
-	"scripts": {
+  "name": "solana-snippets",
+  "displayName": "Solana Snippets",
+  "description": "Extension to quickly write and customize well tested Solana snippets.",
+  "version": "0.0.2",
+  "publisher": "patriciobcs",
+  "icon": "resources/logo.png",
+  "repository": "https://github.com/patriciobcs/solana-snippets",
+  "engines": {
+    "vscode": "^1.28.0"
+  },
+  "categories": [
+    "Snippets"
+  ],
+  "contributes": {
+    "configurationDefaults": {
+      "rust-analyzer.completion.snippets.custom": {
+        "Get Account": {
+          "prefix": [
+            "gacc"
+          ],
+          "body": [
+            "let ${1:account}_info = next_account_info(account_info_iter)?;"
+          ],
+          "requires": [
+            "solana_program::account_info::next_account_info",
+            "solana_program::account_info::AccountInfo",
+            "solana_program::entrypoint::ProgramResult"
+          ],
+          "description": "Get next account in the accounts iterator",
+          "scope": "expr"
+        },
+        "Init Associated Token Account": {
+          "prefix": [
+            "tka"
+          ],
+          "body": [
+            "invoke(",
+            "    &initialize_account(",
+            "        &spl_token::ID,",
+            "        ${1:token}_info.key,",
+            "        ${2:mint}_info.key,",
+            "        ${3:authority}_info.key,",
+            "    )?,",
+            "    &[",
+            "        ${1:token}_info.clone(),",
+            "        ${2:mint}_info.clone(),",
+            "        ${3:authority}_info.clone(),",
+            "    ],",
+            ")?;"
+          ],
+          "requires": [
+            "solana_program::account_info::next_account_info",
+            "solana_program::account_info::AccountInfo",
+            "solana_program::entrypoint::ProgramResult",
+            "solana_program::program::invoke",
+            "spl_token::instruction::initialize_account"
+          ],
+          "description": "Initialize an associated token account using the Token Program",
+          "scope": "expr"
+        },
+        "Transfer Native SOL": {
+          "prefix": [
+            "tsol"
+          ],
+          "body": [
+            "invoke(",
+            "    &transfer(${1:sender}_info.key, ${2:receiver}_info.key, ${3:amount}),",
+            "    &[",
+            "        ${1:sender}_info.clone(),",
+            "        ${2:receiver}_info.clone(),",
+            "        ${4:system_program}_info.clone(),",
+            "    ],",
+            ")?;"
+          ],
+          "requires": [
+            "solana_program::program::invoke",
+            "solana_program::system_instruction::transfer",
+            "solana_program::entrypoint::ProgramResult",
+            "solana_program::account_info::AccountInfo",
+            "solana_program::account_info::next_account_info"
+          ],
+          "description": "Transfer native SOL using System Program",
+          "scope": "expr"
+        },
+        "Transfer Tokens": {
+          "prefix": [
+            "tkt"
+          ],
+          "body": [
+            "invoke(",
+            "    &transfer(",
+            "        &spl_token::ID,",
+            "        ${1:sender}_info.key,",
+            "        ${2:receiver}_info.key,",
+            "        ${3:authority}_info.key,",
+            "        &[],",
+            "        ${4:amount},",
+            "    )?,",
+            "    &[",
+            "        ${1:sender}_info.clone(),",
+            "        ${2:receiver}_info.clone(),",
+            "        ${3:authority}_info.clone(),",
+            "    ],",
+            ")?;"
+          ],
+          "requires": [
+            "solana_program::account_info::next_account_info",
+            "solana_program::account_info::AccountInfo",
+            "solana_program::entrypoint::ProgramResult",
+            "solana_program::program::invoke",
+            "spl_token::instruction::transfer"
+          ],
+          "description": "Transfer tokens using the Token Program",
+          "scope": "expr"
+        },
+        "Set PDA Bump": {
+          "prefix": [
+            "sbump"
+          ],
+          "body": [
+            "${1:account}.bump = *ctx",
+            "    .bumps",
+            "    .get(\"${1:account}\")",
+            "    .expect(ProgramError::InvalidAccountData.into());"
+          ],
+          "requires": [
+            "solana_program::ProgramError"
+          ],
+          "description": "Sets a PDA bump on an Account",
+          "scope": "expr"
+        },
+        "Unpack Account": {
+          "prefix": [
+            "apack"
+          ],
+          "body": [
+            "${1:Account}::pack(${2:account}, &mut ${2:account}_info.data.borrow_mut())?;"
+          ],
+          "requires": [
+            "crate::state::__Account__",
+            "solana_program::account_info::next_account_info",
+            "solana_program::account_info::AccountInfo",
+            "solana_program::entrypoint::ProgramResult",
+            "solana_program::program_pack::Pack"
+          ],
+          "description": "Unpacks an Account Info",
+          "scope": "expr"
+        },
+        "Check Rent Exempt": {
+          "prefix": [
+            "chrent"
+          ],
+          "body": [
+            "if !rent.is_exempt(${1:account}_info.lamports(), ${2:Account}::LEN) {",
+            "    return Err(ProgramError::InvalidAccountData.into());",
+            "}"
+          ],
+          "requires": [
+            "solana_program::account_info::next_account_info",
+            "solana_program::account_info::AccountInfo",
+            "solana_program::entrypoint::ProgramResult",
+            "solana_program::program_error::ProgramError",
+            "solana_program::program_pack::Pack",
+            "solana_program::sysvar::rent::Rent",
+            "solana_program::sysvar::Sysvar"
+          ],
+          "description": "Check if an account is rent exempt",
+          "scope": "expr"
+        },
+        "Burn Tokens": {
+          "prefix": [
+            "tkb"
+          ],
+          "body": [
+            "invoke(",
+            "    &burn(",
+            "        &spl_token::ID,",
+            "        ${1:token}_info.key,",
+            "        ${2:mint}_info.key,",
+            "        ${3:authority}_info.key,",
+            "        &[],",
+            "        ${4:amount},",
+            "    )?,",
+            "    &[",
+            "        ${1:token}_info.clone(),",
+            "        ${2:mint}_info.clone(),",
+            "        ${3:authority}_info.clone(),",
+            "    ],",
+            ")?;"
+          ],
+          "requires": [
+            "solana_program::program::invoke",
+            "solana_program::entrypoint::ProgramResult",
+            "solana_program::account_info::next_account_info",
+            "solana_program::account_info::AccountInfo",
+            "spl_token::instruction::burn"
+          ],
+          "description": "Burn tokens using the Token Program",
+          "scope": "expr"
+        },
+        "Get Clock Sysvar": {
+          "prefix": [
+            "gclock"
+          ],
+          "body": [
+            "let ${1:clock} = Clock::get()?;"
+          ],
+          "requires": [
+            "solana_program::sysvar::Sysvar",
+            "solana_program::sysvar::clock::Clock",
+            "solana_program::entrypoint::ProgramResult"
+          ],
+          "description": "Gets the Clock Sysvar",
+          "scope": "expr"
+        },
+        "Get Rent Sysvar": {
+          "prefix": [
+            "grent"
+          ],
+          "body": [
+            "let ${1:rent} = Rent::get()?;"
+          ],
+          "requires": [
+            "solana_program::sysvar::rent::Rent",
+            "solana_program::sysvar::Sysvar",
+            "solana_program::entrypoint::ProgramResult"
+          ],
+          "description": "Gets the Rent Sysvar",
+          "scope": "expr"
+        },
+        "Delegate Tokens": {
+          "prefix": [
+            "tka"
+          ],
+          "body": [
+            "invoke(",
+            "    &approve(",
+            "        &spl_token::ID,",
+            "        ${1:token}_info.key,",
+            "        ${2:delegate}_info.key,",
+            "        ${3:authority}_info.key,",
+            "        &[],",
+            "        ${4:amount},",
+            "    )?,",
+            "    &[",
+            "        ${1:token}_info.clone(),",
+            "        ${2:delegate}_info.clone(),",
+            "        ${3:authority}_info.clone(),",
+            "    ],",
+            ")?;"
+          ],
+          "requires": [
+            "solana_program::entrypoint::ProgramResult",
+            "solana_program::program::invoke",
+            "solana_program::account_info::next_account_info",
+            "solana_program::account_info::AccountInfo",
+            "spl_token::instruction::approve"
+          ],
+          "description": "Delegate tokens using the Token Program",
+          "scope": "expr"
+        },
+        "Get Accounts Iterator": {
+          "prefix": [
+            "gaccs"
+          ],
+          "body": [
+            "let account_info_iter = &mut accounts.iter();",
+            "let ${1:account}_info = next_account_info(account_info_iter)?;"
+          ],
+          "requires": [
+            "solana_program::entrypoint::ProgramResult",
+            "solana_program::account_info::AccountInfo",
+            "solana_program::account_info::next_account_info"
+          ],
+          "description": "Start iterator to get accounts of instruction",
+          "scope": "expr"
+        },
+        "Revoke Tokens Delegation": {
+          "prefix": [
+            "tkr"
+          ],
+          "body": [
+            "invoke(",
+            "    &revoke(",
+            "        &spl_token::ID,",
+            "        ${1:token}_info.key,",
+            "        ${2:authority}_info.key,",
+            "        &[],",
+            "    )?,",
+            "    &[",
+            "        ${1:token}_info.clone(),",
+            "        ${3:delegate}_info.clone(),",
+            "        ${2:authority}_info.clone(),",
+            "    ],",
+            ")?;"
+          ],
+          "requires": [
+            "solana_program::account_info::next_account_info",
+            "solana_program::account_info::AccountInfo",
+            "solana_program::entrypoint::ProgramResult",
+            "solana_program::program::invoke",
+            "spl_token::instruction::revoke"
+          ],
+          "description": "Revoke the delegation of any tokens using the Token Program",
+          "scope": "expr"
+        }
+      }
+    }
+  },
+  "scripts": {
     "vscode:prepublish": "yarn compile",
-    "compile": "source ./build.sh",
+    "gen": "yarn test && yarn compile",
+    "compile": "cd compiler && cargo run && cd ..",
+    "test": "cd snippets && cargo test-sbf && cd ..",
     "build": "vsce package",
-		"publish": "vsce publish"
-  }
+    "publish": "vsce publish"
+  },
+  "extensionDependencies": [
+    "rust-lang.rust-analyzer"
+  ]
 }

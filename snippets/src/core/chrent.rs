@@ -4,15 +4,15 @@ use crate::state::__Account__;
  * description: Check if an account is rent exempt
  * platform: native, anchor
  */
-// snippet-suggestion-start
-use solana_program::{
-    account_info::{next_account_info, AccountInfo},
-    entrypoint::ProgramResult,
-    program_error::ProgramError,
-    program_pack::Pack,
-    sysvar::{rent::Rent, Sysvar},
-};
-// snippet-suggestion-end
+// snippet-requires-start
+use solana_program::account_info::next_account_info;
+use solana_program::account_info::AccountInfo;
+use solana_program::entrypoint::ProgramResult;
+use solana_program::program_error::ProgramError;
+use solana_program::program_pack::Pack;
+use solana_program::sysvar::rent::Rent;
+use solana_program::sysvar::Sysvar;
+// snippet-requires-end
 
 fn chrent(accounts: &[AccountInfo]) -> ProgramResult {
     let account_info_iter = &mut accounts.iter();
@@ -20,11 +20,11 @@ fn chrent(accounts: &[AccountInfo]) -> ProgramResult {
 
     let rent = Rent::get()?;
 
-    // snippet-start
+    // snippet-body-start
     if !rent.is_exempt(__account___info.lamports(), __Account__::LEN) {
         return Err(ProgramError::InvalidAccountData.into());
     }
-    // snippet-end
+    // snippet-body-end
 
     Ok(())
 }

@@ -3,14 +3,13 @@
  * description: Transfer tokens using the Token Program
  * platform: native, anchor
  */
-// snippet-suggestion-start
-use solana_program::{
-    account_info::{next_account_info, AccountInfo},
-    entrypoint::ProgramResult,
-    program::invoke,
-};
-pub use spl_token::{instruction::transfer, ID};
-// snippet-suggestion-end
+// snippet-requires-start
+use solana_program::account_info::next_account_info;
+use solana_program::account_info::AccountInfo;
+use solana_program::entrypoint::ProgramResult;
+use solana_program::program::invoke;
+use spl_token::instruction::transfer;
+// snippet-requires-end
 
 fn tkt(accounts: &[AccountInfo], __amount__: u64) -> ProgramResult {
     let account_info_iter = &mut accounts.iter();
@@ -18,7 +17,7 @@ fn tkt(accounts: &[AccountInfo], __amount__: u64) -> ProgramResult {
     let __receiver___info = next_account_info(account_info_iter)?;
     let __authority___info = next_account_info(account_info_iter)?;
 
-    // snippet-start
+    // snippet-body-start
     invoke(
         &transfer(
             &spl_token::ID,
@@ -34,7 +33,7 @@ fn tkt(accounts: &[AccountInfo], __amount__: u64) -> ProgramResult {
             __authority___info.clone(),
         ],
     )?;
-    // snippet-end
+    // snippet-body-end
 
     Ok(())
 }

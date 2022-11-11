@@ -3,17 +3,16 @@
  * description: Gets the Clock Sysvar
  * platform: native, anchor
  */
-// snippet-suggestion-start
-use solana_program::{
-    entrypoint::ProgramResult,
-    sysvar::{clock::Clock, Sysvar},
-};
-// snippet-suggestion-end
+// snippet-requires-start
+use solana_program::sysvar::Sysvar;
+use solana_program::sysvar::clock::Clock;
+use solana_program::entrypoint::ProgramResult;
+// snippet-requires-end
 
 fn gclock() -> ProgramResult {
-    // snippet-start
+    // snippet-body-start
     let __clock__ = Clock::get()?;
-    // snippet-end
+    // snippet-body-end
 
     Ok(())
 }

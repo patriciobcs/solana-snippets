@@ -3,17 +3,16 @@
  * description: Gets the Rent Sysvar
  * platform: native, anchor
  */
-// snippet-suggestion-start
-use solana_program::{
-    entrypoint::ProgramResult,
-    sysvar::{rent::Rent, Sysvar},
-};
-// snippet-suggestion-end
+// snippet-requires-start
+use solana_program::sysvar::rent::Rent;
+use solana_program::sysvar::Sysvar;
+use solana_program::entrypoint::ProgramResult;
+// snippet-requires-end
 
 pub fn grent() -> ProgramResult {
-    // snippet-start
+    // snippet-body-start
     let __rent__ = Rent::get()?;
-    // snippet-end
+    // snippet-body-end
 
     Ok(())
 }

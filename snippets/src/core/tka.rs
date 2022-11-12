@@ -1,24 +1,25 @@
-/**
- * title: Delegate Tokens
- * description: Delegate tokens using the Token Program
- * platform: native, anchor
- */
-// snippet-requires-start
-use solana_program::entrypoint::ProgramResult;
-use solana_program::program::invoke;
+/// title: Delegate Tokens
+/// description: Delegate tokens using the Token Program
+/// platform: native, anchor
+/// prefix: tka
+
+/// processor requires
 use solana_program::account_info::next_account_info;
 use solana_program::account_info::AccountInfo;
-use spl_token::instruction::approve;
-// snippet-requires-end
+use solana_program::entrypoint::ProgramResult;
 
-fn tka(accounts: &[AccountInfo], __amount__: u64) -> ProgramResult {
+/// snippet requires
+use solana_program::program::invoke;
+use spl_token::instruction::approve;
+
+fn processor(accounts: &[AccountInfo], __amount__: u64) -> ProgramResult {
     let account_info_iter = &mut accounts.iter();
     let __account___info = next_account_info(account_info_iter)?;
     let __token___info = next_account_info(account_info_iter)?;
     let __delegate___info = next_account_info(account_info_iter)?;
     let __authority___info = next_account_info(account_info_iter)?;
 
-    // snippet-body-start
+    /* snippet */
     invoke(
         &approve(
             &spl_token::ID,
@@ -34,7 +35,6 @@ fn tka(accounts: &[AccountInfo], __amount__: u64) -> ProgramResult {
             __authority___info.clone(),
         ],
     )?;
-    // snippet-body-end
-
+    /* snippet */
     Ok(())
 }

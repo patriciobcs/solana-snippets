@@ -14,6 +14,7 @@
   ],
   "contributes": {
     "configurationDefaults": {
+      "rust-analyzer.completion.autoimport.enable": true,
       "rust-analyzer.completion.snippets.custom": {
         "Get Account": {
           "prefix": [
@@ -23,16 +24,14 @@
             "let ${1:account}_info = next_account_info(account_info_iter)?;"
           ],
           "requires": [
-            "solana_program::account_info::next_account_info",
-            "solana_program::account_info::AccountInfo",
-            "solana_program::entrypoint::ProgramResult"
+            "solana_program::account_info::next_account_info"
           ],
           "description": "Get next account in the accounts iterator",
           "scope": "expr"
         },
         "Init Associated Token Account": {
           "prefix": [
-            "tka"
+            "tki"
           ],
           "body": [
             "invoke(",
@@ -50,9 +49,6 @@
             ")?;"
           ],
           "requires": [
-            "solana_program::account_info::next_account_info",
-            "solana_program::account_info::AccountInfo",
-            "solana_program::entrypoint::ProgramResult",
             "solana_program::program::invoke",
             "spl_token::instruction::initialize_account"
           ],
@@ -75,10 +71,7 @@
           ],
           "requires": [
             "solana_program::program::invoke",
-            "solana_program::system_instruction::transfer",
-            "solana_program::entrypoint::ProgramResult",
-            "solana_program::account_info::AccountInfo",
-            "solana_program::account_info::next_account_info"
+            "solana_program::system_instruction::transfer"
           ],
           "description": "Transfer native SOL using System Program",
           "scope": "expr"
@@ -105,9 +98,6 @@
             ")?;"
           ],
           "requires": [
-            "solana_program::account_info::next_account_info",
-            "solana_program::account_info::AccountInfo",
-            "solana_program::entrypoint::ProgramResult",
             "solana_program::program::invoke",
             "spl_token::instruction::transfer"
           ],
@@ -140,8 +130,6 @@
           "requires": [
             "crate::state::__Account__",
             "solana_program::account_info::next_account_info",
-            "solana_program::account_info::AccountInfo",
-            "solana_program::entrypoint::ProgramResult",
             "solana_program::program_pack::Pack"
           ],
           "description": "Unpacks an Account Info",
@@ -157,12 +145,9 @@
             "}"
           ],
           "requires": [
-            "solana_program::account_info::next_account_info",
-            "solana_program::account_info::AccountInfo",
-            "solana_program::entrypoint::ProgramResult",
+            "crate::state::__Account__",
             "solana_program::program_error::ProgramError",
             "solana_program::program_pack::Pack",
-            "solana_program::sysvar::rent::Rent",
             "solana_program::sysvar::Sysvar"
           ],
           "description": "Check if an account is rent exempt",
@@ -191,9 +176,6 @@
           ],
           "requires": [
             "solana_program::program::invoke",
-            "solana_program::entrypoint::ProgramResult",
-            "solana_program::account_info::next_account_info",
-            "solana_program::account_info::AccountInfo",
             "spl_token::instruction::burn"
           ],
           "description": "Burn tokens using the Token Program",
@@ -207,9 +189,8 @@
             "let ${1:clock} = Clock::get()?;"
           ],
           "requires": [
-            "solana_program::sysvar::Sysvar",
             "solana_program::sysvar::clock::Clock",
-            "solana_program::entrypoint::ProgramResult"
+            "solana_program::sysvar::Sysvar"
           ],
           "description": "Gets the Clock Sysvar",
           "scope": "expr"
@@ -223,8 +204,7 @@
           ],
           "requires": [
             "solana_program::sysvar::rent::Rent",
-            "solana_program::sysvar::Sysvar",
-            "solana_program::entrypoint::ProgramResult"
+            "solana_program::sysvar::Sysvar"
           ],
           "description": "Gets the Rent Sysvar",
           "scope": "expr"
@@ -251,10 +231,7 @@
             ")?;"
           ],
           "requires": [
-            "solana_program::entrypoint::ProgramResult",
             "solana_program::program::invoke",
-            "solana_program::account_info::next_account_info",
-            "solana_program::account_info::AccountInfo",
             "spl_token::instruction::approve"
           ],
           "description": "Delegate tokens using the Token Program",
@@ -269,8 +246,6 @@
             "let ${1:account}_info = next_account_info(account_info_iter)?;"
           ],
           "requires": [
-            "solana_program::entrypoint::ProgramResult",
-            "solana_program::account_info::AccountInfo",
             "solana_program::account_info::next_account_info"
           ],
           "description": "Start iterator to get accounts of instruction",
@@ -296,9 +271,6 @@
             ")?;"
           ],
           "requires": [
-            "solana_program::account_info::next_account_info",
-            "solana_program::account_info::AccountInfo",
-            "solana_program::entrypoint::ProgramResult",
             "solana_program::program::invoke",
             "spl_token::instruction::revoke"
           ],

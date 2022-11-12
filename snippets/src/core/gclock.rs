@@ -1,18 +1,18 @@
-/**
- * title: Get Clock Sysvar
- * description: Gets the Clock Sysvar
- * platform: native, anchor
- */
-// snippet-requires-start
-use solana_program::sysvar::Sysvar;
-use solana_program::sysvar::clock::Clock;
+/// title: Get Clock Sysvar
+/// description: Gets the Clock Sysvar
+/// platform: native, anchor
+/// prefix: gclock
+
+/// processor requires
 use solana_program::entrypoint::ProgramResult;
-// snippet-requires-end
 
-fn gclock() -> ProgramResult {
-    // snippet-body-start
+/// snippet requires
+use solana_program::sysvar::clock::Clock;
+use solana_program::sysvar::Sysvar;
+
+fn processor() -> ProgramResult {
+    /* snippet */
     let __clock__ = Clock::get()?;
-    // snippet-body-end
-
+    /* snippet */
     Ok(())
 }

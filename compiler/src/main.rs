@@ -1,21 +1,16 @@
+mod consts;
+
 use json::{object, JsonValue};
 use std::collections::HashMap;
 use std::fs::{read_dir, File, read_to_string};
 use std::io::{self, BufRead};
 use std::path::Path;
+use crate::consts::*;
 
-fn parse_config(contents: String, config_name: String) -> String {
-    let start_tag = config_name + ":";
+fn parse_config(contents: String, config_name: &str) -> String {
+    let start_tag = config_name.to_string() + ":";
     let start_bytes = contents.find(&start_tag).unwrap() + start_tag.len();
     contents[start_bytes..].trim().into()
-}
-
-fn parse_command(contents: String) -> String {
-    let start_tag = "fn ";
-    let end_tag = "(";
-    let start_bytes = contents.find(&start_tag).unwrap() + start_tag.len();
-    let end_bytes = contents.find(&end_tag).unwrap();
-    contents[start_bytes..end_bytes].into()
 }
 
 fn parse_body_line(contents: String, inputs: &mut HashMap<String, usize>) -> String {
@@ -44,6 +39,13 @@ fn parse_requires_line(contents: String) -> String {
     contents.trim().replacen("use ", "", 1).replacen(";", "", 1)
 }
 
+enum Reading {
+    CONFIG,
+    REQUIRES,
+    SNIPPET,
+    NONE,
+}
+
 fn generate_snippet(filepath: String) -> (String, JsonValue) {
     let mut inputs = HashMap::new();
     let mut config = object! {
@@ -54,30 +56,46 @@ fn generate_snippet(filepath: String) -> (String, JsonValue) {
         scope: "expr",
     };
     let mut title: String = "".into();
-    let mut is_reading_snippet = false;
-    let mut is_reading_requires = false;
+    let mut reading = Reading::CONFIG;
 
     if let Ok(lines) = read_lines(filepath) {
         for line in lines {
-            if let Ok(ip) = line {
-                if ip.contains("title") {
-                    title = parse_config(ip, "title".into());
-                } else if ip.contains("description") {
-                    config["description"] = parse_config(ip, "description".into()).into();
-                } else if ip.contains("fn") {
-                    config["prefix"].push(parse_command(ip)).ok();
-                } else if ip.contains("snippet-body-start") {
-                    is_reading_snippet = true;
-                } else if ip.contains("snippet-body-end") {
-                    is_reading_snippet = false;
-                } else if is_reading_snippet {
-                    config["body"].push(parse_body_line(ip, &mut inputs)).ok();
-                } else if ip.contains("snippet-requires-start") {
-                    is_reading_requires = true;
-                } else if ip.contains("snippet-requires-end") {
-                    is_reading_requires = false;
-                } else if is_reading_requires && ip.contains("use ") {
-                    config["requires"].push(parse_requires_line(ip)).ok();
+            if let Ok(contents) = line {
+                match reading {
+                    Reading::CONFIG => {
+                        if contents.trim().len() == 0 {
+                            reading = Reading::NONE;
+                        } else {
+                            if title.len() == 0 && contents.contains(TITLE) {
+                                title = parse_config(contents, TITLE);
+                            } else if contents.contains(DESCRIPTION) {
+                                config[DESCRIPTION] = parse_config(contents, DESCRIPTION).into();
+                            } else if contents.contains(PREFIX) {
+                                config[PREFIX].push(parse_config(contents, PREFIX)).ok();
+                            }
+                        }
+                    }
+                    Reading::REQUIRES => {
+                        if contents.trim().len() == 0 {
+                            reading = Reading::NONE;
+                        } else {
+                            config[REQUIRES].push(parse_requires_line(contents)).ok();
+                        }
+                    }
+                    Reading::SNIPPET => {
+                        if contents.contains(SNIPPET_TAG) {
+                            reading = Reading::NONE;
+                        } else {
+                            config[BODY].push(parse_body_line(contents, &mut inputs)).ok();
+                        }
+                    }
+                    Reading::NONE => {
+                        if contents.contains(SNIPPET_TAG) {
+                            reading = Reading::SNIPPET;
+                        } else if contents.contains(SNIPPET_REQUIRES) {
+                            reading = Reading::REQUIRES;
+                        }
+                    }
                 }
             }
         }
@@ -92,10 +110,6 @@ where
     let file = File::open(filename)?;
     Ok(io::BufReader::new(file).lines())
 }
-
-const SNIPPETS_DIR: &str = "../snippets/src/core";
-
-const EXTENSION_CONFIG_DIR: &str = "../package.json";
 
 fn main() -> std::io::Result<()> {
     let mut snippets = object! {};

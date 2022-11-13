@@ -13,51 +13,67 @@ pub enum CustomInstruction  {
 		CheckRent {},
 }
 
-pub fn no_accounts_instruction(program_id: &Pubkey, instruction: CustomInstruction) -> Result<Instruction, ProgramError> {
-	let accounts = vec![];
-
-	Ok(Instruction {
-			program_id: *program_id,
-			accounts,
-			data: instruction.try_to_vec().unwrap(),
-	})
+pub enum AT {
+	R,
+	W,
+	RS,
+	WS,
 }
 
-pub fn single_readonly_account_instruction(program_id: &Pubkey, instruction: CustomInstruction, account: &Pubkey) -> Result<Instruction, ProgramError> {
-	let mut accounts = vec![];
-	accounts.push(AccountMeta::new_readonly(*account, false));
-
-	Ok(Instruction {
-			program_id: *program_id,
-			accounts,
-			data: instruction.try_to_vec().unwrap(),
-	})
+#[macro_export]
+macro_rules! accounts {
+		() => { Vec::new() };
+    ( $( $account:expr, $type:expr ),* ) => {
+        {
+            let mut temp_accounts = Vec::new();
+            $(
+								match $type {
+									AT::R => temp_accounts.push(AccountMeta::new_readonly($account, false)),
+									AT::W => temp_accounts.push(AccountMeta::new($account, false)),
+									AT::RS => temp_accounts.push(AccountMeta::new_readonly($account, true)),
+									AT::WS => temp_accounts.push(AccountMeta::new($account, true)),
+								}
+						)*
+            temp_accounts
+        }
+    };
 }
 
-pub fn grent(program_id: &Pubkey) -> Result<Instruction, ProgramError> {
-	no_accounts_instruction(program_id, CustomInstruction::GetRent {})
+#[macro_export]
+macro_rules! instruction_handler {
+		($instruction_name:ident, $fn_name:ident $(, ($account:ident, $type:expr))*) => {
+			pub fn $fn_name(program_id: &Pubkey $(, $account: &Pubkey)*) -> Result<Instruction, ProgramError> {
+				let accounts = accounts!($(*$account, $type)*);
+
+				Ok(Instruction {
+						program_id: *program_id,
+						accounts,
+						data: CustomInstruction::$instruction_name {}.try_to_vec().unwrap(),
+				})
+			}
+		};
 }
 
-pub fn gclock(program_id: &Pubkey) -> Result<Instruction, ProgramError> {
-	no_accounts_instruction(program_id, CustomInstruction::GetClock {})
+#[macro_export]
+macro_rules! instruction {
+		(no_accounts, $instruction_name:ident, $fn_name:ident) => {
+			instruction_handler!($instruction_name, $fn_name);
+		};
+		(single_readonly_account, $instruction_name:ident, $fn_name:ident) => {
+			instruction_handler!($instruction_name, $fn_name, (account, AT::R));
+		};
 }
 
-pub fn gaccs(program_id: &Pubkey, account: &Pubkey) -> Result<Instruction, ProgramError> {
-	single_readonly_account_instruction(program_id, CustomInstruction::GetAccounts {}, account)
-}
+instruction!(no_accounts, GetRent, get_rent);
 
-pub fn gacc(program_id: &Pubkey, account: &Pubkey) -> Result<Instruction, ProgramError> {
-	single_readonly_account_instruction(program_id, CustomInstruction::GetAccount {}, account)
-}
+instruction!(no_accounts, GetClock, get_clock);
 
-pub fn apack(program_id: &Pubkey, account: &Pubkey) -> Result<Instruction, ProgramError> {
-	single_readonly_account_instruction(program_id, CustomInstruction::PackAccount {}, account)
-}
+instruction!(single_readonly_account, GetAccounts, get_accounts);
 
-pub fn aunpack(program_id: &Pubkey, account: &Pubkey) -> Result<Instruction, ProgramError> {
-	single_readonly_account_instruction(program_id, CustomInstruction::UnpackAccount {}, account)
-}
+instruction!(single_readonly_account, GetAccount, get_account);
 
-pub fn chrent(program_id: &Pubkey, account: &Pubkey) -> Result<Instruction, ProgramError> {
-	single_readonly_account_instruction(program_id, CustomInstruction::CheckRent {}, account)
-}
+instruction!(single_readonly_account, PackAccount, pack_account);
+
+instruction!(single_readonly_account, UnpackAccount, unpack_account);
+
+instruction!(single_readonly_account, CheckRent, check_rent);

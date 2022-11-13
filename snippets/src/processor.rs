@@ -2,6 +2,19 @@ use crate::{core::*, instruction::CustomInstruction};
 use borsh::BorshDeserialize;
 use solana_program::{account_info::AccountInfo, entrypoint::ProgramResult, pubkey::Pubkey, msg, program_error::ProgramError};
 
+// macro_rules! process {
+//     ($(($instruction_name:ident, $module_name:ident),)) => {
+//         match instruction {
+//             $(
+//                 CustomInstruction::$instruction_name {} => {
+//                     msg!("Instruction: {}", stringify!($instruction_name));
+//                     core::$module_name::processor()
+//                 }
+//             )+
+//         }
+//     };
+// }
+
 /// Program state handler.
 pub struct Processor {}
 impl Processor {
@@ -11,35 +24,35 @@ impl Processor {
         input: &[u8],
     ) -> ProgramResult {
         let instruction = CustomInstruction::try_from_slice(input).map_err(|_| ProgramError::InvalidInstructionData)?;
-
+    
         match instruction {
             CustomInstruction::GetRent {} => {
                 msg!("Instruction: GetRent");
-                grent::processor()
+                get_rent::processor()
             }
             CustomInstruction::GetClock {} => {
                 msg!("Instruction: GetClock");
-                gclock::processor()
+                get_clock::processor()
             }
             CustomInstruction::GetAccounts {} => {
                 msg!("Instruction: GetAccounts");
-                gaccs::processor(accounts)
+                get_accounts::processor(accounts)
             }
             CustomInstruction::GetAccount {} => {
                 msg!("Instruction: GetAccount");
-                gacc::processor(accounts)
+                get_account::processor(accounts)
             }
             CustomInstruction::PackAccount {} => {
                 msg!("Instruction: PackAccount");
-                apack::processor(accounts)
+                pack_account::processor(accounts)
             }
             CustomInstruction::UnpackAccount {} => {
                 msg!("Instruction: UnpackAccount");
-                aunpack::processor(accounts)
+                unpack_account::processor(accounts)
             }
             CustomInstruction::CheckRent {} => {
                 msg!("Instruction: CheckRent");
-                chrent::processor(accounts)
+                check_rent::processor(accounts)
             }
         }
     }

@@ -15,7 +15,7 @@ use solana_program::program_error::ProgramError;
 use solana_program::program_pack::Pack;
 use solana_program::sysvar::Sysvar;
 
-fn processor(accounts: &[AccountInfo]) -> ProgramResult {
+pub fn processor(accounts: &[AccountInfo]) -> ProgramResult {
     let account_info_iter = &mut accounts.iter();
     let __account___info = next_account_info(account_info_iter)?;
 

@@ -10,7 +10,7 @@ use solana_program::entrypoint::ProgramResult;
 use solana_program::sysvar::clock::Clock;
 use solana_program::sysvar::Sysvar;
 
-fn processor() -> ProgramResult {
+pub fn processor() -> ProgramResult {
     /* snippet */
     let __clock__ = Clock::get()?;
     /* snippet */

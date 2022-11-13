@@ -10,7 +10,7 @@ use solana_program::entrypoint::ProgramResult;
 /// snippet requires
 use solana_program::account_info::next_account_info;
 
-fn processor(accounts: &[AccountInfo]) -> ProgramResult {
+pub fn processor(accounts: &[AccountInfo]) -> ProgramResult {
     let account_info_iter = &mut accounts.iter();
 
     /* snippet */

@@ -12,7 +12,7 @@ use solana_program::entrypoint::ProgramResult;
 use solana_program::program::invoke;
 use spl_token::instruction::approve;
 
-fn processor(accounts: &[AccountInfo], __amount__: u64) -> ProgramResult {
+pub fn processor(accounts: &[AccountInfo], __amount__: u64) -> ProgramResult {
     let account_info_iter = &mut accounts.iter();
     let __account___info = next_account_info(account_info_iter)?;
     let __token___info = next_account_info(account_info_iter)?;

@@ -2,9 +2,10 @@ mod consts;
 
 use json::{object, JsonValue};
 use std::collections::HashMap;
+use std::env;
 use std::fs::{read_dir, File, read_to_string};
 use std::io::{self, BufRead};
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use crate::consts::*;
 
 fn parse_config(contents: String, config_name: &str) -> String {
@@ -46,7 +47,7 @@ enum Reading {
     NONE,
 }
 
-fn generate_snippet(filepath: String) -> (String, JsonValue) {
+fn generate_snippet(filepath: PathBuf) -> (String, JsonValue) {
     let mut inputs = HashMap::new();
     let mut config = object! {
         prefix: [],
@@ -111,28 +112,53 @@ where
     Ok(io::BufReader::new(file).lines())
 }
 
+fn get_dirs<'a>(dir: &'a Path) -> io::Result<Vec<PathBuf>> {
+    let mut paths = vec![];
+    if dir.is_dir() {
+        for entry in read_dir(dir)? {
+            let entry = entry?;
+            let path = entry.path();
+            if path.is_dir() {
+                paths.extend(get_dirs(&path)?)
+            } else {
+                let dir = path.to_str().unwrap();
+                if dir.contains("mod.rs") {
+                    continue;
+                } 
+                paths.push(path)
+            }
+        }
+    }
+    Ok(paths)
+}
+
 fn main() -> std::io::Result<()> {
+    let args: Vec<String> = env::args().collect();
+
+    if args.len() < 3 {
+        println!("usage: cargo run <path to snippets directory> <path to extension package.json>");
+        return Ok(());
+    }
+
+    let snippets_path = &args[1];
+    let extension_config_path = &args[2];
+    
     let mut snippets = object! {};
 
-    let paths = read_dir(SNIPPETS_DIR).unwrap();
+    let paths = get_dirs(Path::new(snippets_path))?;
 
     for path in paths {
-        let path_buf = path.unwrap().path();
-        let filepath = path_buf.to_str().unwrap();
-        if filepath.contains("mod.rs") {
-            continue;
-        };
-        let (title, config) = generate_snippet(filepath.into());
+        let (title, config) = generate_snippet(path);
         snippets[title] = config;
     }
 
-    let extension_config_contents = read_to_string(EXTENSION_CONFIG_DIR).unwrap();
+    let extension_config_contents = read_to_string(extension_config_path).unwrap();
 
     let mut extension_config = json::parse(&extension_config_contents).unwrap(); 
 
     extension_config["contributes"]["configurationDefaults"]["rust-analyzer.completion.snippets.custom"] = snippets;
 
-    let mut extension_config_file = File::create(EXTENSION_CONFIG_DIR)?;
+    let mut extension_config_file = File::create(extension_config_path)?;
 
     extension_config.write_pretty(&mut extension_config_file, 2).ok();
     

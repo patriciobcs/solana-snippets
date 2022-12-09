@@ -9,5 +9,3 @@ pub const _PROCESSOR_REQUIRES: &str = "/// processor requires";
 pub const _INSTRUCTION_REQUIRES: &str = "#[instruction_requires]";
 pub const SNIPPET_REQUIRES: &str = "/// snippet requires";
 pub const SNIPPET_TAG: &str = "/* snippet */";
-pub const SNIPPETS_DIR: &str = "../snippets/src/core";
-pub const EXTENSION_CONFIG_DIR: &str = "../package.json";

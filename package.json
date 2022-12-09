@@ -16,20 +16,6 @@
     "configurationDefaults": {
       "rust-analyzer.completion.autoimport.enable": true,
       "rust-analyzer.completion.snippets.custom": {
-        "Get Clock Sysvar": {
-          "prefix": [
-            "gclock"
-          ],
-          "body": [
-            "let ${1:clock} = Clock::get()?;"
-          ],
-          "requires": [
-            "solana_program::sysvar::clock::Clock",
-            "solana_program::sysvar::Sysvar"
-          ],
-          "description": "Gets the Clock Sysvar",
-          "scope": "expr"
-        },
         "Burn Tokens": {
           "prefix": [
             "tkb"
@@ -58,49 +44,6 @@
           "description": "Burn tokens using the Token Program",
           "scope": "expr"
         },
-        "Get Account": {
-          "prefix": [
-            "gacc"
-          ],
-          "body": [
-            "let ${1:account}_info = next_account_info(account_info_iter)?;"
-          ],
-          "requires": [
-            "solana_program::account_info::next_account_info"
-          ],
-          "description": "Get next account in the accounts iterator",
-          "scope": "expr"
-        },
-        "Set PDA Bump": {
-          "prefix": [
-            "sbump"
-          ],
-          "body": [
-            "${1:account}.bump = *ctx",
-            "    .bumps",
-            "    .get(\"${1:account}\")",
-            "    .expect(ProgramError::InvalidAccountData.into());"
-          ],
-          "requires": [
-            "solana_program::ProgramError"
-          ],
-          "description": "Sets a PDA bump on an Account",
-          "scope": "expr"
-        },
-        "Get Rent Sysvar": {
-          "prefix": [
-            "grent"
-          ],
-          "body": [
-            "let ${1:rent} = Rent::get()?;"
-          ],
-          "requires": [
-            "solana_program::sysvar::rent::Rent",
-            "solana_program::sysvar::Sysvar"
-          ],
-          "description": "Gets the Rent Sysvar",
-          "scope": "expr"
-        },
         "Init Associated Token Account": {
           "prefix": [
             "tki"
@@ -125,42 +68,6 @@
             "spl_token::instruction::initialize_account"
           ],
           "description": "Initialize an associated token account using the Token Program",
-          "scope": "expr"
-        },
-        "Transfer Native SOL": {
-          "prefix": [
-            "tsol"
-          ],
-          "body": [
-            "invoke(",
-            "    &transfer(${1:sender}_info.key, ${2:receiver}_info.key, ${3:amount}),",
-            "    &[",
-            "        ${1:sender}_info.clone(),",
-            "        ${2:receiver}_info.clone(),",
-            "        ${4:system_program}_info.clone(),",
-            "    ],",
-            ")?;"
-          ],
-          "requires": [
-            "solana_program::program::invoke",
-            "solana_program::system_instruction::transfer"
-          ],
-          "description": "Transfer native SOL using System Program",
-          "scope": "expr"
-        },
-        "Unpack Account": {
-          "prefix": [
-            "aunpack"
-          ],
-          "body": [
-            "let mut ${1:account} = ${2:Account}::unpack(&${1:account}_info.data.borrow())?;"
-          ],
-          "requires": [
-            "crate::state::__Account__",
-            "solana_program::account_info::next_account_info",
-            "solana_program::program_pack::Pack"
-          ],
-          "description": "Unpacks an Account Info",
           "scope": "expr"
         },
         "Revoke Tokens Delegation": {
@@ -217,24 +124,6 @@
           "description": "Transfer tokens using the Token Program",
           "scope": "expr"
         },
-        "Check Rent Exempt": {
-          "prefix": [
-            "chrent"
-          ],
-          "body": [
-            "if !rent.is_exempt(${1:account}_info.lamports(), ${2:Account}::LEN) {",
-            "    return Err(ProgramError::InvalidAccountData.into());",
-            "}"
-          ],
-          "requires": [
-            "crate::state::__Account__",
-            "solana_program::program_error::ProgramError",
-            "solana_program::program_pack::Pack",
-            "solana_program::sysvar::Sysvar"
-          ],
-          "description": "Check if an account is rent exempt",
-          "scope": "expr"
-        },
         "Delegate Tokens": {
           "prefix": [
             "tka"
@@ -263,6 +152,101 @@
           "description": "Delegate tokens using the Token Program",
           "scope": "expr"
         },
+        "Get Clock Sysvar": {
+          "prefix": [
+            "gclock"
+          ],
+          "body": [
+            "let ${1:clock} = Clock::get()?;"
+          ],
+          "requires": [
+            "solana_program::sysvar::clock::Clock",
+            "solana_program::sysvar::Sysvar"
+          ],
+          "description": "Gets the Clock Sysvar",
+          "scope": "expr"
+        },
+        "Get Account": {
+          "prefix": [
+            "gacc"
+          ],
+          "body": [
+            "let ${1:account}_info = next_account_info(account_info_iter)?;"
+          ],
+          "requires": [
+            "solana_program::account_info::next_account_info"
+          ],
+          "description": "Get next account in the accounts iterator",
+          "scope": "expr"
+        },
+        "Get Rent Sysvar": {
+          "prefix": [
+            "grent"
+          ],
+          "body": [
+            "let ${1:rent} = Rent::get()?;"
+          ],
+          "requires": [
+            "solana_program::sysvar::rent::Rent",
+            "solana_program::sysvar::Sysvar"
+          ],
+          "description": "Gets the Rent Sysvar",
+          "scope": "expr"
+        },
+        "Transfer Native SOL": {
+          "prefix": [
+            "tsol"
+          ],
+          "body": [
+            "invoke(",
+            "    &transfer(${1:sender}_info.key, ${2:receiver}_info.key, ${3:amount}),",
+            "    &[",
+            "        ${1:sender}_info.clone(),",
+            "        ${2:receiver}_info.clone(),",
+            "        ${4:system_program}_info.clone(),",
+            "    ],",
+            ")?;"
+          ],
+          "requires": [
+            "solana_program::program::invoke",
+            "solana_program::system_instruction::transfer"
+          ],
+          "description": "Transfer native SOL using System Program",
+          "scope": "expr"
+        },
+        "Unpack Account": {
+          "prefix": [
+            "aunpack"
+          ],
+          "body": [
+            "let mut ${1:account} = ${2:Account}::unpack(&${1:account}_info.data.borrow())?;"
+          ],
+          "requires": [
+            "crate::state::__Account__",
+            "solana_program::account_info::next_account_info",
+            "solana_program::program_pack::Pack"
+          ],
+          "description": "Unpacks an Account Info",
+          "scope": "expr"
+        },
+        "Check Rent Exempt": {
+          "prefix": [
+            "chrent"
+          ],
+          "body": [
+            "if !rent.is_exempt(${1:account}_info.lamports(), ${2:Account}::LEN) {",
+            "    return Err(ProgramError::InvalidAccountData.into());",
+            "}"
+          ],
+          "requires": [
+            "crate::state::__Account__",
+            "solana_program::program_error::ProgramError",
+            "solana_program::program_pack::Pack",
+            "solana_program::sysvar::Sysvar"
+          ],
+          "description": "Check if an account is rent exempt",
+          "scope": "expr"
+        },
         "Get Accounts Iterator": {
           "prefix": [
             "gaccs"
@@ -283,8 +267,8 @@
   "scripts": {
     "vscode:prepublish": "yarn compile",
     "gen": "yarn test && yarn compile",
-    "compile": "cd compiler && cargo run && cd ..",
-    "test": "cd snippets && cargo test-sbf && cd ..",
+    "compile": "cd compiler && cargo run ../snippets/src/core ../package.json",
+    "test": "cd snippets && cargo test-sbf",
     "build": "vsce package",
     "publish": "vsce publish"
   },

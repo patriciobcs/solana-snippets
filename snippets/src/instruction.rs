@@ -4,13 +4,14 @@ use solana_program::{instruction::{Instruction, AccountMeta}, program_error::Pro
 
 #[derive(Clone, Debug, BorshSerialize, BorshDeserialize, PartialEq)]
 pub enum CustomInstruction  {
-		GetRent {},
-		GetClock {},
-		GetAccounts {},
-		GetAccount {},
-		PackAccount {},
-		UnpackAccount {},
-		CheckRent {},
+	CheckRent {},
+	GetAccount {},
+	GetAccounts {},
+	GetClock {},
+	GetRent {},
+	PackAccount {},
+	// TODO: TransferSol
+	UnpackAccount {},
 }
 
 pub enum AT {

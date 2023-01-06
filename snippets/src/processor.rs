@@ -56,6 +56,10 @@ impl Processor {
                 msg!("Instruction: UnpackAccount");
                 unpack_account::processor(accounts)
             }
+            CustomInstruction::TransferSol { amount } => {
+                msg!("Instruction: TransferSol");
+                transfer_sol::processor(accounts, amount)
+            }
         }
     }
 }

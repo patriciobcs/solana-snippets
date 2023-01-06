@@ -7,4 +7,4 @@ pub mod get_account;
 pub mod get_accounts;
 pub mod get_clock;
 pub mod get_rent;
-pub mod trasfer_sol;
+pub mod transfer_sol;

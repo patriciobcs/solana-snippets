@@ -59,4 +59,29 @@ macro_rules! test_instruction {
             banks_client.process_transaction(transaction).await.unwrap();
         }
     };
+    (transfer_sol) => {
+        #[tokio::test]
+        async fn transfer_sol() {
+            let pt = solana_program_test::ProgramTest::new(
+                "snippets",
+                snippets::id(),
+                solana_program_test::processor!(snippets::processor::Processor::process),
+            );
+            let (mut banks_client, payer, recent_blockhash) = pt.start().await;
+
+            let receiver = solana_sdk::signature::Keypair::new();
+
+            let transaction = solana_sdk::transaction::Transaction::new_signed_with_payer(
+                &[
+                    snippets::instruction::transfer_sol(&snippets::id(), &payer.pubkey(), &receiver.pubkey(), &solana_program::system_program::id(), 100000)
+                        .unwrap(),
+                ],
+                Some(&payer.pubkey()),
+                &[&payer],
+                recent_blockhash,
+            );
+            banks_client.process_transaction(transaction).await.unwrap();
+
+        }
+    };
 }

@@ -17,3 +17,5 @@ test_instruction!(single_readonly_account, pack_account);
 test_instruction!(single_readonly_account, unpack_account);
 
 test_instruction!(single_readonly_account, check_rent);
+
+// test_instruction!(transfer_sol);

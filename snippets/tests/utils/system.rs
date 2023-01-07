@@ -1,87 +1,61 @@
 #![cfg(feature = "test-sbf")]
 
-#[macro_export]
-macro_rules! test_instruction {
-    (no_accounts, $instruction_name:ident) => {
-        #[tokio::test]
-        async fn $instruction_name() {
-            let pt = solana_program_test::ProgramTest::new(
-                "snippets",
-                snippets::id(),
-                solana_program_test::processor!(snippets::processor::Processor::process),
-            );
-            let (mut banks_client, payer, recent_blockhash) = pt.start().await;
-            let transaction = solana_sdk::transaction::Transaction::new_signed_with_payer(
-                &[snippets::instruction::$instruction_name(&snippets::id()).unwrap()],
-                Some(&payer.pubkey()),
-                &[&payer],
-                recent_blockhash,
-            );
-            banks_client.process_transaction(transaction).await.unwrap();
-        }
-    };
-    (single_readonly_account, $instruction_name:ident) => {
-        #[tokio::test]
-        async fn $instruction_name() {
-            let pt = solana_program_test::ProgramTest::new(
-                "snippets",
-                snippets::id(),
-                solana_program_test::processor!(snippets::processor::Processor::process),
-            );
-            let (mut banks_client, payer, recent_blockhash) = pt.start().await;
+use solana_program_test::ProgramTestContext;
+use solana_program_test::BanksClientError;
+use solana_sdk::pubkey::Pubkey;
+use solana_sdk::signature::Keypair;
+use solana_sdk::signer::Signer;
+use solana_sdk::system_instruction;
+use solana_sdk::transaction::Transaction;
+use solana_sdk::account::Account;
 
-            let account = solana_sdk::signature::Keypair::new();
-            let rent = banks_client.get_rent().await.unwrap();
-            let account_rent = rent.minimum_balance(snippets::state::__Account__::LEN);
-            let transaction = solana_sdk::transaction::Transaction::new_signed_with_payer(
-                &[solana_program::system_instruction::create_account(
-                    &payer.pubkey(),
-                    &account.pubkey(),
-                    account_rent,
-                    snippets::state::__Account__::LEN as u64,
-                    &snippets::id(),
-                )],
-                Some(&payer.pubkey()),
-                &[&payer, &account],
-                recent_blockhash,
-            );
-            banks_client.process_transaction(transaction).await.unwrap();
+pub async fn transfer_lamports(
+    client: &mut ProgramTestContext,
+    wallet: &Keypair,
+    to: &Pubkey,
+    amount: u64,
+) -> Result<(), BanksClientError> {
+    let tx = Transaction::new_signed_with_payer(
+        &[system_instruction::transfer(&wallet.pubkey(), to, amount)],
+        Some(&wallet.pubkey()),
+        &[wallet],
+        client.last_blockhash,
+    );
 
-            let transaction = solana_sdk::transaction::Transaction::new_signed_with_payer(
-                &[
-                    snippets::instruction::$instruction_name(&snippets::id(), &account.pubkey())
-                        .unwrap(),
-                ],
-                Some(&payer.pubkey()),
-                &[&payer],
-                recent_blockhash,
-            );
-            banks_client.process_transaction(transaction).await.unwrap();
-        }
-    };
-    (transfer_sol) => {
-        #[tokio::test]
-        async fn transfer_sol() {
-            let pt = solana_program_test::ProgramTest::new(
-                "snippets",
-                snippets::id(),
-                solana_program_test::processor!(snippets::processor::Processor::process),
-            );
-            let (mut banks_client, payer, recent_blockhash) = pt.start().await;
+    client.banks_client.process_transaction(tx).await?;
 
-            let receiver = solana_sdk::signature::Keypair::new();
+    Ok(())
+}
 
-            let transaction = solana_sdk::transaction::Transaction::new_signed_with_payer(
-                &[
-                    snippets::instruction::transfer_sol(&snippets::id(), &payer.pubkey(), &receiver.pubkey(), &solana_program::system_program::id(), 100000)
-                        .unwrap(),
-                ],
-                Some(&payer.pubkey()),
-                &[&payer],
-                recent_blockhash,
-            );
-            banks_client.process_transaction(transaction).await.unwrap();
+pub async fn airdrop(
+    context: &mut ProgramTestContext,
+    receiver: &Pubkey,
+    amount: u64,
+) -> Result<(), BanksClientError> {
+    let tx = Transaction::new_signed_with_payer(
+        &[system_instruction::transfer(
+            &context.payer.pubkey(),
+            receiver,
+            amount,
+        )],
+        Some(&context.payer.pubkey()),
+        &[&context.payer],
+        context.last_blockhash,
+    );
 
-        }
-    };
+    context.banks_client.process_transaction(tx).await.unwrap();
+    Ok(())
+}
+
+pub fn clone_keypair(keypair: &Keypair) -> Keypair {
+    Keypair::from_bytes(&keypair.to_bytes()).unwrap()
+}
+
+pub async fn get_account_data(context: &mut ProgramTestContext, pubkey: &Pubkey) -> Account {
+    context
+        .banks_client
+        .get_account(*pubkey)
+        .await
+        .expect("account not found")
+        .expect("account empty")
 }

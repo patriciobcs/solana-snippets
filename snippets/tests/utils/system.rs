@@ -47,6 +47,16 @@ pub async fn airdrop(
     Ok(())
 }
 
+pub async fn get_keypair_with_funds(
+    context: &mut ProgramTestContext,
+) -> Result<Keypair, BanksClientError> {
+    let keypair = Keypair::new();
+    airdrop(context, &keypair.pubkey(), 1_000_000_000)
+        .await
+        .unwrap();
+    Ok(keypair)
+}
+
 pub fn clone_keypair(keypair: &Keypair) -> Keypair {
     Keypair::from_bytes(&keypair.to_bytes()).unwrap()
 }

@@ -13,6 +13,11 @@ pub enum CustomInstruction  {
 	// TODO: TransferSol
 	UnpackAccount {},
 	TransferSol { amount : u64 },
+	TokenApprove { amount: u64 },
+	TokenBurn { amount: u64 },
+	TokenInit {},
+	TokenRevoke {},
+	TokenTransfer { amount: u64 },
 }
 
 pub enum AT {
@@ -86,3 +91,11 @@ instruction!(single_readonly_account, UnpackAccount, unpack_account());
 instruction!(single_readonly_account, CheckRent, check_rent());
 
 instruction!(TransferSol, transfer_sol(amount: u64 | sender: WS | receiver: W | system_program: R));
+
+instruction!(TokenApprove, token_approve(amount: u64 | token: W | mint: RS | token_program: R));
+
+instruction!(TokenBurn, token_burn(amount: u64 | token: W | mint: W | authority: RS | token_program: R));
+
+instruction!(TokenInit, token_init(| token: W | mint: R | authority: R | rent: R | token_program: R));
+
+instruction!(TokenRevoke, token_revoke(| mint: W | authority: RS | token_program: R));

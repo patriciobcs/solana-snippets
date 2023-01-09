@@ -1,4 +1,4 @@
-use crate::{core::{system::*}, instruction::CustomInstruction};
+use crate::{core::{system::*, token::*}, instruction::CustomInstruction};
 use borsh::BorshDeserialize;
 use solana_program::{account_info::AccountInfo, entrypoint::ProgramResult, pubkey::Pubkey, msg, program_error::ProgramError};
 
@@ -51,7 +51,6 @@ impl Processor {
                 msg!("Instruction: PackAccount");
                 pack_account::processor(accounts)
             }
-            // TODO: TransferSol
             CustomInstruction::UnpackAccount {} => {
                 msg!("Instruction: UnpackAccount");
                 unpack_account::processor(accounts)
@@ -59,6 +58,26 @@ impl Processor {
             CustomInstruction::TransferSol { amount } => {
                 msg!("Instruction: TransferSol");
                 transfer_sol::processor(accounts, amount)
+            }
+            CustomInstruction::TokenApprove { amount } => {
+                msg!("Instruction: TokenApprove");
+                token_approve::processor(accounts, amount)
+            }
+            CustomInstruction::TokenBurn { amount } => {
+                msg!("Instruction: TokenBurn");
+                token_burn::processor(accounts, amount)
+            }
+            CustomInstruction::TokenInit { } => {
+                msg!("Instruction: TokenInit");
+                token_init::processor(accounts)
+            }
+            CustomInstruction::TokenRevoke { } => {
+                msg!("Instruction: TokenRevoke");
+                token_revoke::processor(accounts)
+            }
+            CustomInstruction::TokenTransfer { amount } => {
+                msg!("Instruction: TokenTransfer");
+                token_transfer::processor(accounts, amount)
             }
         }
     }

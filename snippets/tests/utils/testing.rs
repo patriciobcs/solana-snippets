@@ -30,17 +30,25 @@ macro_rules! call_instruction {
 }
 
 #[macro_export]
+macro_rules! test {
+    ($instruction_name:ident => $body:block) => {
+        #[tokio::test]
+        async fn $instruction_name() {
+            $body
+        }
+    }
+}
+
+#[macro_export]
 macro_rules! test_instruction {
     (no_accounts, $instruction_name:ident) => {
-        #[tokio::test]
-        async fn $instruction_name() {
+        test!($instruction_name => {
             let mut context = get_program_context!(snippets);
             call_instruction!(context, snippets::instruction::$instruction_name(&snippets::id()).unwrap(); signed by [&context.payer]);
-        }
+        });
     };
     (single_readonly_account, $instruction_name:ident) => {
-        #[tokio::test]
-        async fn $instruction_name() {
+        test!($instruction_name => {
             let mut context = get_program_context!(snippets);
 
             let account = solana_sdk::signature::Keypair::new();
@@ -61,27 +69,6 @@ macro_rules! test_instruction {
                 &account.pubkey()).unwrap();
                 signed by [&context.payer]
             );
-        }
-    };
-    (transfer_sol) => {
-        #[tokio::test]
-        async fn transfer_sol() {
-            let mut context = get_program_context!(snippets);
-
-            let receiver = solana_sdk::signature::Keypair::new();
-            let payer_key = context.payer.pubkey();
-
-            utils::system::airdrop(&mut context, &payer_key, 10000000).await.unwrap();
-            utils::system::airdrop(&mut context, &receiver.pubkey(), 10000000).await.unwrap();
-
-            call_instruction!(context, snippets::instruction::transfer_sol(
-                &snippets::id(), 
-                &payer_key, 
-                &receiver.pubkey(), 
-                &solana_program::system_program::id(), 
-                100000).unwrap();
-                signed by [&context.payer]
-            );
-        }
+        });
     };
 }

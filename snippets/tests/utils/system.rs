@@ -47,7 +47,7 @@ pub async fn airdrop(
     Ok(())
 }
 
-pub async fn get_keypair_with_funds(
+pub async fn get_funded_keypair(
     context: &mut ProgramTestContext,
 ) -> Result<Keypair, BanksClientError> {
     let keypair = Keypair::new();

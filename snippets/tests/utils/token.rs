@@ -85,7 +85,7 @@ pub async fn get_token_account(
 
 pub async fn create_associated_token_account(
     context: &mut ProgramTestContext,
-    wallet: &Keypair,
+    wallet: &Pubkey,
     token_mint: &Pubkey,
 ) -> Result<Pubkey, BanksClientError> {
     let recent_blockhash = context.last_blockhash;
@@ -94,7 +94,7 @@ pub async fn create_associated_token_account(
         &[
             spl_associated_token_account::instruction::create_associated_token_account(
                 &context.payer.pubkey(),
-                &wallet.pubkey(),
+                &wallet,
                 token_mint,
                 &spl_token::id(),
             ),
@@ -108,7 +108,7 @@ pub async fn create_associated_token_account(
     context.banks_client.process_transaction(tx).await.unwrap();
 
     Ok(spl_associated_token_account::get_associated_token_address(
-        &wallet.pubkey(),
+        &wallet,
         token_mint,
     ))
 }
@@ -116,7 +116,7 @@ pub async fn create_associated_token_account(
 pub async fn create_mint(
     context: &mut ProgramTestContext,
     mint: &Keypair,
-    manager: &Pubkey,
+    authority: &Pubkey,
     freeze_authority: Option<&Pubkey>,
 ) -> Result<(), BanksClientError> {
     let rent = context.banks_client.get_rent().await.unwrap();
@@ -133,7 +133,7 @@ pub async fn create_mint(
             spl_token::instruction::initialize_mint(
                 &spl_token::id(),
                 &mint.pubkey(),
-                manager,
+                authority,
                 freeze_authority,
                 0,
             )
@@ -153,7 +153,7 @@ pub async fn transfer(
     from: &Keypair,
     to: &Keypair,
 ) -> Result<(), BanksClientError> {
-    let to_token_account = create_associated_token_account(context, to, mint).await?;
+    let to_token_account = create_associated_token_account(context, &to.pubkey(), mint).await?;
 
     let from_token_account =
         spl_associated_token_account::get_associated_token_address(&from.pubkey(), mint);

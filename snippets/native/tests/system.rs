@@ -1,6 +1,7 @@
 #![cfg(feature = "test-sbf")]
 
 mod utils;
+mod token;
 use solana_sdk::{signature::Signer, program_pack::Pack};
 use solana_program_test::tokio;
 use utils::system::{get_funded_keypair};

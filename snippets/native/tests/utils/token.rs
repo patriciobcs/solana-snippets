@@ -152,6 +152,7 @@ pub async fn transfer(
     mint: &Pubkey,
     from: &Keypair,
     to: &Keypair,
+    amount: u64,
 ) -> Result<(), BanksClientError> {
     let to_token_account = create_associated_token_account(context, &to.pubkey(), mint).await?;
 
@@ -165,7 +166,7 @@ pub async fn transfer(
             &to_token_account,
             &from.pubkey(),
             &[&from.pubkey()],
-            1,
+            amount,
         )
         .unwrap()],
         Some(&from.pubkey()),
@@ -174,4 +175,22 @@ pub async fn transfer(
     );
 
     context.banks_client.process_transaction(tx).await
+}
+
+pub async fn create_mint_token_pair(
+    context: &mut ProgramTestContext,
+    amount: u64,
+) -> Result<(Keypair, Pubkey), BanksClientError> {
+    let mint = Keypair::new();
+	let authority = context.payer.pubkey(); 
+
+	create_mint(context, &mint, &authority, Some(&authority)).await.unwrap();
+    
+	let ata = create_associated_token_account(context, &authority, &mint.pubkey()).await.unwrap();
+
+    if amount > 0 {
+        mint_tokens(context, &mint.pubkey(), &ata, amount, &authority, None).await.unwrap();
+    }
+
+    Ok((mint, ata))
 }

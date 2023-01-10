@@ -17,6 +17,7 @@ pub fn processor(accounts: &[AccountInfo]) -> ProgramResult {
     let __token___info = next_account_info(account_info_iter)?;
     let __mint___info = next_account_info(account_info_iter)?;
     let __authority___info = next_account_info(account_info_iter)?;
+    let __rent___info = next_account_info(account_info_iter)?;
 
     /* snippet */
     invoke(
@@ -30,6 +31,7 @@ pub fn processor(accounts: &[AccountInfo]) -> ProgramResult {
             __token___info.clone(),
             __mint___info.clone(),
             __authority___info.clone(),
+            __rent___info.clone(),
         ],
     )?;
     /* snippet */

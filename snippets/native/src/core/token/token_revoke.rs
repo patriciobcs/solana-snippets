@@ -15,9 +15,7 @@ use spl_token::instruction::revoke;
 pub fn processor(accounts: &[AccountInfo]) -> ProgramResult {
     let account_info_iter = &mut accounts.iter();
     let __token___info = next_account_info(account_info_iter)?;
-    let __delegate___info = next_account_info(account_info_iter)?;
     let __authority___info = next_account_info(account_info_iter)?;
-    let __rent__info = next_account_info(account_info_iter)?;
 
     /* snippet */
     invoke(
@@ -29,9 +27,7 @@ pub fn processor(accounts: &[AccountInfo]) -> ProgramResult {
         )?,
         &[
             __token___info.clone(),
-            __delegate___info.clone(),
             __authority___info.clone(),
-            __rent__info.clone(),
         ],
     )?;
     /* snippet */

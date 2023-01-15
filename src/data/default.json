@@ -1,0 +1,161 @@
+{
+  "id": 1,
+  "parentId": -1,
+  "lastId": 10,
+  "type": 0,
+  "label": "snippets",
+  "children": [
+    {
+      "id": 2,
+      "parentId": 1,
+      "type": 1,
+      "label": "Solana",
+      "children": [
+        {
+          "prefix": [
+            "gclock"
+          ],
+          "body": [
+            "let ${1:clock} = Clock::get()?;"
+          ],
+          "requires": [
+            "solana_program::sysvar::clock::Clock",
+            "solana_program::sysvar::Sysvar"
+          ],
+          "description": "Gets the Clock Sysvar",
+          "scope": "expr",
+          "label": "Get Clock Sysvar",
+          "id": 3,
+          "parentId": 2,
+          "type": 3,
+          "children": []
+        },
+        {
+          "prefix": [
+            "gacc"
+          ],
+          "body": [
+            "let ${1:account}_info = next_account_info(account_info_iter)?;"
+          ],
+          "requires": [
+            "solana_program::account_info::next_account_info"
+          ],
+          "description": "Get next account in the accounts iterator",
+          "scope": "expr",
+          "label": "Get Account",
+          "id": 4,
+          "parentId": 2,
+          "type": 3,
+          "children": []
+        },
+        {
+          "prefix": [
+            "tsol"
+          ],
+          "body": [
+            "invoke(",
+            "    &transfer(${1:sender}_info.key, ${2:receiver}_info.key, ${3:amount}),",
+            "    &[",
+            "        ${1:sender}_info.clone(),",
+            "        ${2:receiver}_info.clone(),",
+            "        ${4:system_program}_info.clone(),",
+            "    ],",
+            ")?;"
+          ],
+          "requires": [
+            "solana_program::program::invoke",
+            "solana_program::system_instruction::transfer"
+          ],
+          "description": "Transfer native SOL using System Program",
+          "scope": "expr",
+          "label": "Transfer Native SOL",
+          "id": 5,
+          "parentId": 2,
+          "type": 3,
+          "children": []
+        },
+        {
+          "prefix": [
+            "grent"
+          ],
+          "body": [
+            "let ${1:rent} = Rent::get()?;"
+          ],
+          "requires": [
+            "solana_program::sysvar::rent::Rent",
+            "solana_program::sysvar::Sysvar"
+          ],
+          "description": "Gets the Rent Sysvar",
+          "scope": "expr",
+          "label": "Get Rent Sysvar",
+          "id": 6,
+          "parentId": 2,
+          "type": 3,
+          "children": []
+        },
+        {
+          "prefix": [
+            "aunpack"
+          ],
+          "body": [
+            "let mut ${1:account} = ${2:Account}::unpack(&${1:account}_info.data.borrow())?;"
+          ],
+          "requires": [
+            "crate::state::__Account__",
+            "solana_program::account_info::next_account_info",
+            "solana_program::program_pack::Pack"
+          ],
+          "description": "Unpacks an Account Info",
+          "scope": "expr",
+          "label": "Unpack Account",
+          "id": 7,
+          "parentId": 2,
+          "type": 3,
+          "children": []
+        },
+        {
+          "prefix": [
+            "chrent"
+          ],
+          "body": [
+            "if !rent.is_exempt(${1:account}_info.lamports(), ${2:Account}::LEN) {",
+            "    return Err(ProgramError::InvalidAccountData.into());",
+            "}"
+          ],
+          "requires": [
+            "crate::state::__Account__",
+            "solana_program::program_error::ProgramError",
+            "solana_program::program_pack::Pack",
+            "solana_program::sysvar::Sysvar"
+          ],
+          "description": "Check if an account is rent exempt",
+          "scope": "expr",
+          "label": "Check Rent Exempt",
+          "id": 8,
+          "parentId": 2,
+          "type": 3,
+          "children": []
+        },
+        {
+          "prefix": [
+            "gaccs"
+          ],
+          "body": [
+            "let account_info_iter = &mut accounts.iter();",
+            "let ${1:account}_info = next_account_info(account_info_iter)?;"
+          ],
+          "requires": [
+            "solana_program::account_info::next_account_info"
+          ],
+          "description": "Start iterator to get accounts of instruction",
+          "scope": "expr",
+          "label": "Get Accounts Iterator",
+          "id": 9,
+          "parentId": 2,
+          "type": 3,
+          "children": []
+        }
+      ]
+    }
+  ]
+}

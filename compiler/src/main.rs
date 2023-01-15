@@ -1,6 +1,6 @@
 mod consts;
 
-use json::{object, JsonValue};
+use json::{object, JsonValue, array};
 use std::collections::HashMap;
 use std::env;
 use std::fs::{read_dir, File, read_to_string};
@@ -132,25 +132,21 @@ fn get_dirs<'a>(dir: &'a Path) -> io::Result<Vec<PathBuf>> {
     Ok(paths)
 }
 
-fn main() -> std::io::Result<()> {
-    let args: Vec<String> = env::args().collect();
-
-    if args.len() < 3 {
-        println!("usage: cargo run <path to snippets directory> <path to extension package.json>");
-        return Ok(());
-    }
-
-    let snippets_path = &args[1];
-    let extension_config_path = &args[2];
-    
+fn get_snippets(snippets_path: &String) -> JsonValue {
     let mut snippets = object! {};
 
-    let paths = get_dirs(Path::new(snippets_path))?;
+    let paths = get_dirs(Path::new(snippets_path)).unwrap();
 
     for path in paths {
         let (title, config) = generate_snippet(path);
         snippets[title] = config;
     }
+
+    return snippets;
+}
+
+fn generate_rust_analyzer_snippets(snippets_path: &String, extension_config_path: &String) {
+    let snippets = get_snippets(snippets_path);
 
     let extension_config_contents = read_to_string(extension_config_path).unwrap();
 
@@ -158,9 +154,66 @@ fn main() -> std::io::Result<()> {
 
     extension_config["contributes"]["configurationDefaults"]["rust-analyzer.completion.snippets.custom"] = snippets;
 
-    let mut extension_config_file = File::create(extension_config_path)?;
+    let mut extension_config_file = File::create(extension_config_path).unwrap();
 
     extension_config.write_pretty(&mut extension_config_file, 2).ok();
+}
+
+fn generate_extension_snippets(snippets_path: &String, output_path: &String) {
+    let ra_snippets = get_snippets(snippets_path);
+    let mut snippets = object! {
+        id: 1,
+        parentId: -1,
+        lastId: 154,
+        "type": 0,
+        label: "snippets",
+        children: []
+    };
+
+    let mut solana_folder = object! {
+        id: 2,
+        parentId: 1,
+        "type": 1,
+        label: "Solana",
+        children: []
+    };
+    
+    let mut id = 3;
+
+    for (key, value) in ra_snippets.entries() {
+        let mut snippet = value.clone();
+
+        snippet["label"] = key.into(); 
+        snippet["id"] = id.into();
+        snippet["parentId"] = 2.into();
+        snippet["type"] = 3.into();
+        snippet["children"] = array![];
+
+        solana_folder["children"].push(snippet).unwrap();
+        id += 1;
+    }
+
+    snippets["lastId"] = id.into();
+    snippets["children"].push(solana_folder).unwrap();
+
+    let mut output_file = File::create(output_path).unwrap();
+
+    snippets.write_pretty(&mut output_file, 2).ok();
+}
+
+fn main() -> std::io::Result<()> {
+    let args: Vec<String> = env::args().collect();
+
+    if args.len() < 4 {
+        println!("usage: cargo run <format> <path to snippets directory> <path to extension package.json or output path>");
+        return Ok(());
+    }
+
+    match &args[1][..] {
+        "ra" => generate_rust_analyzer_snippets(&args[2], &args[3]),       
+        "sp" => generate_extension_snippets(&args[2], &args[3]),       
+        _ => println!("formats: ra and sp")
+    }
     
     Ok(())
 }

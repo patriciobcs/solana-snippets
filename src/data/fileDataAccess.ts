@@ -51,6 +51,10 @@ export class FileDataAccess implements DataAccess {
     fs.writeFileSync(this._dataFile, JSON.stringify(data));
   }
 
+  reset(): void {
+    this.save(DataAccessConsts.defaultRootElement);
+  }
+
   static resolveFilename(folderPath: string): string {
     return path.join(folderPath, FileDataAccess.dataFileName);
   }

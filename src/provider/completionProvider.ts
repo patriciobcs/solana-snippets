@@ -35,7 +35,7 @@ export class SnippetCompletionProvider {
     ) {
       return;
     }
-    let isTriggeredByChar: boolean =
+    const isTriggeredByChar: boolean =
       this.triggerCharacter ===
       document.lineAt(position).text.charAt(position.character - 1);
     // Append workspace snippets if WS is available
@@ -51,8 +51,8 @@ export class SnippetCompletionProvider {
       );
     }
 
-    let vsCodeSnippets: vscode.CompletionItem[] = [];
-    let rustAnalyzerSnippets: any = {};
+    const vsCodeSnippets: vscode.CompletionItem[] = [];
+    const rustAnalyzerSnippets: any = {};
 
     candidates.map((element: Snippet) => {
       switch (element.type) {
@@ -119,7 +119,7 @@ export class SnippetCompletionProvider {
 
   provideRustCompletionItems(snippets: any) {
     console.log("provideRustCompletionItems");
-    let rustAnalyzerCompletionSnippetsCustom =
+    const rustAnalyzerCompletionSnippetsCustom =
       "rust-analyzer.completion.snippets.custom";
     const configuration = vscode.workspace.getConfiguration();
     const currentConfig = configuration.get(

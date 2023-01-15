@@ -76,154 +76,160 @@
       {
         "command": "commonSnippetsCmd.refreshEntry",
         "title": "Refresh Snippets",
-        "category": "Snippets",
+        "category": "Solana Snippets",
         "icon": "$(refresh)"
       },
       {
         "command": "globalSnippetsCmd.openSnippet",
         "title": "Open Snippet",
-        "category": "Snippets"
+        "category": "Solana Snippets"
       },
       {
         "command": "globalSnippetsCmd.openSnippetInTerminal",
         "title": "Open Snippet in Terminal",
-        "category": "Snippets"
+        "category": "Solana Snippets"
       },
       {
         "command": "commonSnippetsCmd.addSnippet",
         "title": "New Snippet",
         "icon": "$(search-new-editor)",
-        "category": "Snippets"
+        "category": "Solana Snippets"
       },
       {
         "command": "globalSnippetsCmd.addSnippet",
         "title": "New Snippet",
         "icon": "$(search-new-editor)",
-        "category": "Snippets"
+        "category": "Solana Snippets"
       },
       {
         "command": "wsSnippetsCmd.addSnippet",
         "title": "New Snippet",
         "icon": "$(search-new-editor)",
-        "category": "Snippets"
+        "category": "Solana Snippets"
       },
       {
         "command": "commonSnippetsCmd.addSnippetFromClipboard",
         "title": "New Snippet from Clipboard",
         "icon": "$(search-new-editor)",
-        "category": "Snippets"
+        "category": "Solana Snippets"
       },
       {
         "command": "globalSnippetsCmd.addSnippetFromClipboard",
         "title": "New Snippet from Clipboard",
         "icon": "$(search-new-editor)",
-        "category": "Snippets"
+        "category": "Solana Snippets"
       },
       {
         "command": "wsSnippetsCmd.addSnippetFromClipboard",
         "title": "New Snippet from Clipboard",
         "icon": "$(search-new-editor)",
-        "category": "Snippets"
+        "category": "Solana Snippets"
       },
       {
         "command": "commonSnippetsCmd.addSnippetFolder",
         "title": "Add Folder",
         "icon": "$(new-folder)",
-        "category": "Snippets"
+        "category": "Solana Snippets"
       },
       {
         "command": "globalSnippetsCmd.addSnippetFolder",
         "title": "Add Folder",
         "icon": "$(new-folder)",
-        "category": "Snippets"
+        "category": "Solana Snippets"
       },
       {
         "command": "wsSnippetsCmd.addSnippetFolder",
         "title": "Add Folder",
         "icon": "$(new-folder)",
-        "category": "Snippets"
+        "category": "Solana Snippets"
       },
       {
         "command": "globalSnippetsCmd.editSnippet",
         "title": "Edit Snippet",
         "icon": "$(edit)",
-        "category": "Snippets"
+        "category": "Solana Snippets"
       },
       {
         "command": "wsSnippetsCmd.editSnippet",
         "title": "Edit Snippet",
         "icon": "$(edit)",
-        "category": "Snippets"
+        "category": "Solana Snippets"
       },
       {
         "command": "globalSnippetsCmd.editSnippetFolder",
         "title": "Edit Folder",
-        "category": "Snippets"
+        "category": "Solana Snippets"
       },
       {
         "command": "wsSnippetsCmd.editSnippetFolder",
         "title": "Edit Folder",
-        "category": "Snippets"
+        "category": "Solana Snippets"
       },
       {
         "command": "globalSnippetsCmd.deleteSnippet",
         "title": "Delete Snippet",
         "icon": "$(remove)",
-        "category": "Snippets"
+        "category": "Solana Snippets"
       },
       {
         "command": "wsSnippetsCmd.deleteSnippet",
         "title": "Delete Snippet",
         "icon": "$(remove)",
-        "category": "Snippets"
+        "category": "Solana Snippets"
       },
       {
         "command": "globalSnippetsCmd.deleteSnippetFolder",
         "title": "Delete Folder",
         "icon": "$(remove)",
-        "category": "Snippets"
+        "category": "Solana Snippets"
       },
       {
         "command": "wsSnippetsCmd.deleteSnippetFolder",
         "title": "Delete Folder",
         "icon": "$(remove)",
-        "category": "Snippets"
+        "category": "Solana Snippets"
       },
       {
         "command": "globalSnippetsCmd.moveSnippetUp",
         "title": "Move Snippet Up",
         "icon": "$(marker-navigation-previous)",
-        "category": "Snippets"
+        "category": "Solana Snippets"
       },
       {
         "command": "wsSnippetsCmd.moveSnippetUp",
         "title": "Move Snippet Up",
         "icon": "$(marker-navigation-previous)",
-        "category": "Snippets"
+        "category": "Solana Snippets"
       },
       {
         "command": "globalSnippetsCmd.moveSnippetDown",
         "title": "Move Snippet Down",
         "icon": "$(marker-navigation-next)",
-        "category": "Snippets"
+        "category": "Solana Snippets"
       },
       {
         "command": "wsSnippetsCmd.moveSnippetDown",
         "title": "Move Snippet Down",
         "icon": "$(marker-navigation-next)",
-        "category": "Snippets"
+        "category": "Solana Snippets"
       },
       {
         "command": "globalSnippetsCmd.exportSnippets",
         "title": "Export Snippets",
         "icon": "$(cloud-upload)",
-        "category": "Snippets"
+        "category": "Solana Snippets"
       },
       {
         "command": "globalSnippetsCmd.importSnippets",
         "title": "Import Snippets",
         "icon": "$(cloud-download)",
-        "category": "Snippets"
+        "category": "Solana Snippets"
+      },
+      {
+        "command": "globalSnippetsCmd.resetSnippets",
+        "title": "Reset Snippets",
+        "icon": "$(timeline-open)",
+        "category": "Solana Snippets"
       }
     ],
     "menus": {
@@ -343,12 +349,17 @@
         {
           "command": "globalSnippetsCmd.importSnippets",
           "when": "view == snippetsExplorer",
-          "group": "other@3"
+          "group": "other@2"
         },
         {
           "command": "globalSnippetsCmd.exportSnippets",
           "when": "view == snippetsExplorer",
-          "group": "other@2"
+          "group": "other@3"
+        },
+        {
+          "command": "globalSnippetsCmd.resetSnippets",
+          "when": "view == snippetsExplorer",
+          "group": "other@4"
         },
         {
           "command": "wsSnippetsCmd.addSnippetFromClipboard",
@@ -547,7 +558,7 @@
     "watch": "webpack --watch --devtool nosources-source-map --config ./build/node-extension.webpack.config.js",
     "package": "webpack --mode production --config ./build/node-extension.webpack.config.js",
     "gen": "yarn test && yarn compile",
-    "cargo": "cd compiler && cargo run ../snippets/src/core ../package.json",
+    "cargo": "cargo run --manifest-path compiler/Cargo.toml sp snippets/native/src/core/system src/data/default.json",
     "test": "cd snippets && cargo test-sbf",
     "build": "vsce package",
     "publish": "vsce publish",

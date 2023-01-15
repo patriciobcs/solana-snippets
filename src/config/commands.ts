@@ -27,6 +27,7 @@ export const enum CommandsConsts {
   globalMoveSnippetDown = "globalSnippetsCmd.moveSnippetDown",
   globalExportSnippets = "globalSnippetsCmd.exportSnippets",
   globalImportSnippets = "globalSnippetsCmd.importSnippets",
+  globalResetSnippets = "globalSnippetsCmd.resetSnippets",
   // WS commands
   wsAddSnippet = "wsSnippetsCmd.addSnippet",
   wsAddSnippetFromClipboard = "wsSnippetsCmd.addSnippetFromClipboard",
@@ -44,7 +45,7 @@ export async function commonAddSnippet(
   wsSnippetsProvider: SnippetsProvider,
   workspaceSnippetsAvailable: boolean
 ) {
-  var text: string | undefined;
+  let text: string | undefined;
 
   const editor = vscode.window.activeTextEditor;
   // If no editor is open or editor has no text, get value from user
@@ -93,7 +94,7 @@ export async function addSnippet(
   snippetsProvider: SnippetsProvider,
   node: any
 ) {
-  var text: string | undefined;
+  let text: string | undefined;
 
   const editor = vscode.window.activeTextEditor;
   // If no editor is open or editor has no text, get value from user
@@ -143,7 +144,7 @@ export async function commonAddSnippetFromClipboard(
   wsSnippetsProvider: SnippetsProvider,
   workspaceSnippetsAvailable: boolean
 ) {
-  let clipboardContent = await vscode.env.clipboard.readText();
+  const clipboardContent = await vscode.env.clipboard.readText();
   if (!clipboardContent || clipboardContent.trim() === "") {
     vscode.window.showWarningMessage(Labels.noClipboardContent);
     return;
@@ -180,7 +181,7 @@ export async function addSnippetFromClipboard(
   snippetsProvider: SnippetsProvider,
   node: any
 ) {
-  let clipboardContent = await vscode.env.clipboard.readText();
+  const clipboardContent = await vscode.env.clipboard.readText();
   if (!clipboardContent || clipboardContent.trim() === "") {
     vscode.window.showWarningMessage(Labels.noClipboardContent);
     return;
@@ -324,11 +325,14 @@ export async function importSnippets(snippetsProvider: SnippetsProvider) {
                   vscode.window.showInformationMessage(Labels.snippetsImported);
                 } else {
                   vscode.window.showErrorMessage(Labels.snippetsNotImported);
-                }
-              case Labels.discardImport:
-                break;
+                } break;
+              case Labels.discardImport: break;
             }
           });
       }
     });
+}
+
+export function resetSnippets(snippetsProvider: SnippetsProvider) {
+  snippetsProvider.resetSnippets();
 }

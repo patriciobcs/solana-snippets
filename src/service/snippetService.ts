@@ -1,7 +1,9 @@
 import { DataAccess } from "../data/dataAccess";
 import { FileDataAccess } from "../data/fileDataAccess";
 import { Snippet } from "../types/snippet";
+import defaultSnippetsRaw from "../data/default.json";
 
+const defaultSnippets = defaultSnippetsRaw as Snippet;
 export class SnippetService {
   private _rootSnippet: Snippet;
 
@@ -15,7 +17,7 @@ export class SnippetService {
     parentId: number,
     currentElt: Snippet
   ): Snippet | undefined {
-    var i, currentChild, result;
+    let i, currentChild, result;
 
     if (parentId === currentElt.id) {
       return currentElt;
@@ -91,7 +93,7 @@ export class SnippetService {
   getAllSnippets(): Snippet[] {
     // Sync snippets
     this._rootSnippet = this.loadSnippets();
-    let snippets: Snippet[] = [];
+    const snippets: Snippet[] = [];
     SnippetService.flatten(this._rootSnippet.children, snippets);
     return snippets;
   }
@@ -202,8 +204,13 @@ export class SnippetService {
       ),
       Snippet.rootParentId
     );
-    let newSnippets: Snippet = new FileDataAccess(destinationPath).load();
+    const newSnippets: Snippet = new FileDataAccess(destinationPath).load();
     this._rootSnippet.children = newSnippets.children;
     this._rootSnippet.lastId = newSnippets.lastId;
+  }
+
+  async resetSnippets() {
+    this._dataAccess.reset();
+    this.refresh();
   }
 }

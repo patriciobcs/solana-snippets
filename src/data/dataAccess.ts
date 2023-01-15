@@ -15,4 +15,5 @@ export interface DataAccess {
   hasNoChild(): boolean;
   load(): Snippet;
   save(data: Snippet): void;
+  reset(): void;
 }

@@ -58,7 +58,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   // Refresh UI when updating workspace setting
   vscode.workspace.onDidChangeConfiguration((event) => {
-    let affected = event.affectsConfiguration(
+    const affected = event.affectsConfiguration(
       `${snippetsConfigKey}.${useWorkspaceFolderKey}`
     );
     if (affected) {
@@ -74,7 +74,7 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   // Add snippets explorer UI
-  let snippetsExplorer = vscode.window.createTreeView("snippetsExplorer", {
+  const snippetsExplorer = vscode.window.createTreeView("snippetsExplorer", {
     treeDataProvider: snippetsProvider,
     showCollapseAll: true,
   });
@@ -85,17 +85,17 @@ export function activate(context: vscode.ExtensionContext) {
   // Core
 
   // Initialize generic completion item provider
-  let triggerCharacter: any =
+  const triggerCharacter: any =
     vscode.workspace.getConfiguration(snippetsConfigKey).get("triggerKey") ||
     "sol";
 
-  let snippetCompletionProvider = new SnippetCompletionProvider(
+  const snippetCompletionProvider = new SnippetCompletionProvider(
     triggerCharacter,
     snippetService,
     workspaceSnippetsAvailable
   );
 
-  let registerCIPSnippets: any = () =>
+  const registerCIPSnippets: any = () =>
     (cipDisposable = vscode.languages.registerCompletionItemProvider(
       "*",
       snippetCompletionProvider,
@@ -141,7 +141,7 @@ export function activate(context: vscode.ExtensionContext) {
       // - File not found
       // - User didn't request to ignore this phase (information persisted at workspace level)
       const ignoreCreateSnippetsFileKey = "ignoreCreateSnippetsFile";
-      let ignoreCreateSnippetsFile = context.workspaceState.get<boolean>(
+      const ignoreCreateSnippetsFile = context.workspaceState.get<boolean>(
         ignoreCreateSnippetsFileKey
       );
 
@@ -237,7 +237,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   // Commands
   const registerCommand = (commands: any[]) => {
-    for (let [command, callback] of commands) {
+    for (const [command, callback] of commands) {
       context.subscriptions.push(
         vscode.commands.registerCommand(command, callback)
       );
@@ -582,7 +582,26 @@ export function activate(context: vscode.ExtensionContext) {
       async () =>
         handleCommand(() => commands.importSnippets(snippetsProvider)),
     ],
+    // Reset
+    [
+      commands.CommandsConsts.globalResetSnippets,
+      () =>
+        handleCommand(() => {
+          vscode.window
+            .showInformationMessage(
+              `Do you really want to reset the snippets?`,
+              Labels.confirmationYes,
+              Labels.confirmationNo
+            )
+            .then((answer) => {
+              if (answer === Labels.confirmationYes) {
+                commands.resetSnippets(snippetsProvider);
+              }
+            });
+        }),
+    ],
   ]);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-function
 export function deactivate() {}

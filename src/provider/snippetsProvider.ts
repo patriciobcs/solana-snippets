@@ -43,7 +43,7 @@ export class SnippetsProvider implements vscode.TreeDataProvider<Snippet> {
   }
 
   addSnippet(name: string, snippet: string, parentId: number) {
-    let lastId = this._snippetService.incrementLastId();
+    const lastId = this._snippetService.incrementLastId();
 
     this._snippetService.addSnippet({
       id: lastId,
@@ -58,7 +58,7 @@ export class SnippetsProvider implements vscode.TreeDataProvider<Snippet> {
   }
 
   addSnippetFolder(name: string, parentId: number) {
-    let lastId = this._snippetService.incrementLastId();
+    const lastId = this._snippetService.incrementLastId();
 
     this._snippetService.addSnippet({
       id: lastId,
@@ -101,7 +101,7 @@ export class SnippetsProvider implements vscode.TreeDataProvider<Snippet> {
   }
 
   private snippetToTreeItem(snippet: Snippet): vscode.TreeItem {
-    let treeItem = new vscode.TreeItem(
+    const treeItem = new vscode.TreeItem(
       snippet.label,
       Snippet.isFolder(snippet)
         ? vscode.TreeItemCollapsibleState.Expanded
@@ -221,5 +221,10 @@ export class SnippetsProvider implements vscode.TreeDataProvider<Snippet> {
       parentElt.children !== undefined &&
       parentElt.children.length > 0
     );
+  }
+
+  resetSnippets(): void {
+    this._snippetService.resetSnippets();
+    this.refresh();
   }
 }

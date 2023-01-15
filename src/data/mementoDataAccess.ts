@@ -1,20 +1,21 @@
 import { Memento } from "vscode";
 import { Snippet } from "../types/snippet";
 import { DataAccess, DataAccessConsts } from "./dataAccess";
-import defaultSnippetsRaw from "./model.json";
+import defaultSnippetsRaw from "./default.json";
 
 const defaultSnippets = defaultSnippetsRaw as Snippet;
 
 export class MementoDataAccess implements DataAccess {
   static snippetsMementoPrefix = "snippetsData";
   private _storageManager: StorageManager;
+  private _reset = false;
 
   constructor(memento: Memento) {
     this._storageManager = new StorageManager(memento);
   }
 
   hasNoChild(): boolean {
-    let rootElt =
+    const rootElt =
       this._storageManager.getValue<Snippet>(
         MementoDataAccess.snippetsMementoPrefix
       ) || DataAccessConsts.defaultRootElement;
@@ -31,13 +32,11 @@ export class MementoDataAccess implements DataAccess {
       this.save(rawData);
     }
 
-    // TODO: Find a better way to handle this (testing)
-    if (!rawData.children || rawData.children.length === 0) {
+    if (this._reset || !rawData.children || rawData.children.length === 0) {
       this.save(defaultSnippets);
       rawData = defaultSnippets;
+      this._reset = false;
     }
-
-    console.log("memento", rawData);
 
     return rawData;
   }
@@ -47,6 +46,10 @@ export class MementoDataAccess implements DataAccess {
       MementoDataAccess.snippetsMementoPrefix,
       data
     );
+  }
+
+  reset(): void {
+    this._reset = true;
   }
 }
 

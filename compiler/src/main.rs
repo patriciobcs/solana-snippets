@@ -193,7 +193,7 @@ fn generate_extension_snippets(snippets_path: &String, output_path: &String) {
         id += 1;
     }
 
-    snippets["lastId"] = id.into();
+    snippets["lastId"] = (id - 1).into();
     snippets["children"].push(solana_folder).unwrap();
 
     let mut output_file = File::create(output_path).unwrap();

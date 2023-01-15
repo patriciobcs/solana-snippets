@@ -1,0 +1,49 @@
+{
+  "id": 1,
+  "parentId": -1,
+  "lastId": 154,
+  "type": 0,
+  "label": "snippets",
+  "children": [
+    {
+      "id": 2,
+      "parentId": 1,
+      "type": 1,
+      "label": "Folder Sample",
+      "children": [
+        {
+          "id": 3,
+          "parentId": 2,
+          "type": 2,
+          "label": "VS Code Sample",
+          "content": ["// This is a sample snippet to generate a comment"],
+          "description": "VSCode sample snippet to generate comment"
+        },
+        {
+          "id": 4,
+          "parentId": 2,
+          "type": 3,
+          "label": "RA Sample",
+          "content": ["let buf = Vec::with_capacity(size_of::<u8>());"],
+          "requires": ["std::mem::size_of"],
+          "description": "Rust Analyzer sample snippet to get bytes buffer",
+          "scope": "expr"
+        },
+        {
+          "id": 5,
+          "parentId": 2,
+          "type": 4,
+          "label": "Terminal Sample",
+          "content": ["echo \"Hello World\""]
+        },
+        {
+          "id": 6,
+          "parentId": 2,
+          "type": 5,
+          "label": "Comment Sample",
+          "content": ["This is a comment!"]
+        }
+      ]
+    }
+  ]
+}

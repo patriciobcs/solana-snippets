@@ -1,3 +1,10 @@
 {
-	"editor.insertSpaces": false
+	"editor.insertSpaces": false,
+	"typescript.tsc.autoDetect": "off",
+	"files.exclude": {
+    "out": false 
+  },
+  "search.exclude": {
+    "out": true 
+  }
 }

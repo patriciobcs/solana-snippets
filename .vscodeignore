@@ -3,3 +3,15 @@ snippets/**
 scaffold/**
 resources/*.gif
 build.sh
+.vscode/**
+.gitignore
+.yarnrc
+vsc-extension-quickstart.md
+**/tsconfig.json
+**/.eslintrc.json
+.vscode-test/**
+out/test/**
+src/**
+**/*.map
+**/*.ts
+out/**

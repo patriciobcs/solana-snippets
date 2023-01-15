@@ -1,6 +1,6 @@
 /// title: Get Account
 /// description: Get next account in the accounts iterator
-/// platform: native, anchor
+/// platform: native
 /// prefix: gacc
 
 /// processor requires

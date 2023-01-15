@@ -1,4 +1,4 @@
-use solana_program::{entrypoint::ProgramResult, account_info::AccountInfo, pubkey::Pubkey, msg};
+use solana_program::{entrypoint::ProgramResult, account_info::{AccountInfo, next_account_info}, pubkey::Pubkey, msg};
 
 /// Program state handler.
 pub struct Processor {}

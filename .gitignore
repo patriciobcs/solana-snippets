@@ -1,2 +1,7 @@
 **/target
 *.vsix
+build
+node_modules
+.vscode-test/
+out
+dist

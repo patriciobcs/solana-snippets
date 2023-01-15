@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; style-src {{cspSource}}; script-src {{cspSource}}"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{snippet.label}}</title>
+    <link rel="stylesheet" href="{{resetCssUri}}" />
+    <link rel="stylesheet" href="{{cssUri}}" />
+  </head>
+
+  <body>
+    <form name="edit-snippet-form">
+      <div class="no-m"><label for="snippet-label">Label</label></div>
+      <div>
+        <input
+          type="text"
+          id="snippet-label"
+          value="{{snippet.label}}"
+          required
+        />
+      </div>
+      <div class="no-m">
+        <label for="snippet-description">Description</label>
+      </div>
+      <div>
+        <input
+          type="text"
+          id="snippet-description"
+          value="{{snippet.description}}"
+        />
+      </div>
+      <div>
+        <label for="snippet-content">Content</label>
+        <div class="popup" name="_snippets_syntax">
+          <input
+            type="checkbox"
+            id="snippet-resolveSyntax"
+            name="_snippets_resolve_syntax"
+            value="{{snippet.resolveSyntax}}"
+          />
+          <label for="snippet-resolveSyntax"> Resolve Snippet Syntax</label>
+          <a href="{{docsUrl}}" target="_blank">Check Snippet Syntax Docs</a>
+        </div>
+      </div>
+      <div>
+        <textarea name="snippet-content" rows="10" required>
+{{snippet.content}}</textarea
+        >
+      </div>
+      <div class="no-m"><label for="snippet-requires">Requires</label></div>
+      <div>
+        <textarea name="snippet-requires" rows="10">
+{{snippet.requires}}</textarea
+        >
+      </div>
+      <div><input type="submit" value="Save" /></div>
+    </form>
+  </body>
+
+  <script src="{{jsUri}}"></script>
+</html>

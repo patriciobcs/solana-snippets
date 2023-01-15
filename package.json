@@ -2,275 +2,577 @@
   "name": "solana-snippets",
   "displayName": "Solana Snippets",
   "description": "Extension to quickly write and customize well tested Solana snippets.",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "publisher": "patriciobcs",
+  "license": "MIT",
+  "author": {
+    "name": "Patricio"
+  },
   "icon": "resources/logo.png",
-  "repository": "https://github.com/patriciobcs/solana-snippets",
+  "repository": {
+    "type": "git",
+    "urls": "https://github.com/patriciobcs/solana-snippets.git"
+  },
+  "homepage": "https://github.com/patriciobcs/solana-snippets/blob/main/README.md",
+  "bugs": {
+    "url": "https://github.com/patriciobcs/solana-snippets/issues"
+  },
   "engines": {
     "vscode": "^1.28.0"
   },
   "categories": [
-    "Snippets"
+    "Snippets",
+    "Testing",
+    "Other"
   ],
+  "keywords": [
+    "Solana",
+    "Anchor",
+    "Web3",
+    "Snippets",
+    "Snippet",
+    "Rust",
+    "Rust Analyzer",
+    "Testing",
+    "Terminal",
+    "Commands",
+    "Guides",
+    "Documentation",
+    "Collection",
+    "Example",
+    "Samples"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onView:snippetsExplorer",
+    "onView:wsSnippetsExplorer"
+  ],
+  "main": "./dist/extension",
   "contributes": {
+    "viewsWelcome": [
+      {
+        "view": "snippetsExplorer",
+        "contents": "Solana Snippets"
+      },
+      {
+        "view": "wsSnippetsExplorer",
+        "when": "config.snippets.useWorkspaceFolder && snippets.workspaceState != fileAvailable",
+        "contents": "In order to use snippets in current workspace, you should initialize `snippets.json` file inside folder `.vscode`.\n[Request to Initialize File](command:miscCmd.requestWSConfig)"
+      },
+      {
+        "view": "wsSnippetsExplorer",
+        "when": "snippets.workspaceState == fileAvailable",
+        "contents": "Snippets in current workspace are available. Save some code locally.\n[Add Snippet](command:wsSnippetsCmd.addSnippet)\n[Add Snippet Folder](command:wsSnippetsCmd.addSnippetFolder)"
+      }
+    ],
     "configurationDefaults": {
-      "rust-analyzer.completion.autoimport.enable": true,
-      "rust-analyzer.completion.snippets.custom": {
-        "Burn Tokens": {
-          "prefix": [
-            "tkb"
-          ],
-          "body": [
-            "invoke(",
-            "    &burn(",
-            "        &spl_token::ID,",
-            "        ${1:token}_info.key,",
-            "        ${2:mint}_info.key,",
-            "        ${3:authority}_info.key,",
-            "        &[],",
-            "        ${4:amount},",
-            "    )?,",
-            "    &[",
-            "        ${1:token}_info.clone(),",
-            "        ${2:mint}_info.clone(),",
-            "        ${3:authority}_info.clone(),",
-            "    ],",
-            ")?;"
-          ],
-          "requires": [
-            "solana_program::program::invoke",
-            "spl_token::instruction::burn"
-          ],
-          "description": "Burn tokens using the Token Program",
-          "scope": "expr"
+      "rust-analyzer.completion.autoimport.enable": true
+    },
+    "commands": [
+      {
+        "command": "miscCmd.requestWSConfig",
+        "title": "Init WS Config"
+      },
+      {
+        "command": "commonSnippetsCmd.refreshEntry",
+        "title": "Refresh Snippets",
+        "category": "Snippets",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "globalSnippetsCmd.openSnippet",
+        "title": "Open Snippet",
+        "category": "Snippets"
+      },
+      {
+        "command": "globalSnippetsCmd.openSnippetInTerminal",
+        "title": "Open Snippet in Terminal",
+        "category": "Snippets"
+      },
+      {
+        "command": "commonSnippetsCmd.addSnippet",
+        "title": "New Snippet",
+        "icon": "$(search-new-editor)",
+        "category": "Snippets"
+      },
+      {
+        "command": "globalSnippetsCmd.addSnippet",
+        "title": "New Snippet",
+        "icon": "$(search-new-editor)",
+        "category": "Snippets"
+      },
+      {
+        "command": "wsSnippetsCmd.addSnippet",
+        "title": "New Snippet",
+        "icon": "$(search-new-editor)",
+        "category": "Snippets"
+      },
+      {
+        "command": "commonSnippetsCmd.addSnippetFromClipboard",
+        "title": "New Snippet from Clipboard",
+        "icon": "$(search-new-editor)",
+        "category": "Snippets"
+      },
+      {
+        "command": "globalSnippetsCmd.addSnippetFromClipboard",
+        "title": "New Snippet from Clipboard",
+        "icon": "$(search-new-editor)",
+        "category": "Snippets"
+      },
+      {
+        "command": "wsSnippetsCmd.addSnippetFromClipboard",
+        "title": "New Snippet from Clipboard",
+        "icon": "$(search-new-editor)",
+        "category": "Snippets"
+      },
+      {
+        "command": "commonSnippetsCmd.addSnippetFolder",
+        "title": "Add Folder",
+        "icon": "$(new-folder)",
+        "category": "Snippets"
+      },
+      {
+        "command": "globalSnippetsCmd.addSnippetFolder",
+        "title": "Add Folder",
+        "icon": "$(new-folder)",
+        "category": "Snippets"
+      },
+      {
+        "command": "wsSnippetsCmd.addSnippetFolder",
+        "title": "Add Folder",
+        "icon": "$(new-folder)",
+        "category": "Snippets"
+      },
+      {
+        "command": "globalSnippetsCmd.editSnippet",
+        "title": "Edit Snippet",
+        "icon": "$(edit)",
+        "category": "Snippets"
+      },
+      {
+        "command": "wsSnippetsCmd.editSnippet",
+        "title": "Edit Snippet",
+        "icon": "$(edit)",
+        "category": "Snippets"
+      },
+      {
+        "command": "globalSnippetsCmd.editSnippetFolder",
+        "title": "Edit Folder",
+        "category": "Snippets"
+      },
+      {
+        "command": "wsSnippetsCmd.editSnippetFolder",
+        "title": "Edit Folder",
+        "category": "Snippets"
+      },
+      {
+        "command": "globalSnippetsCmd.deleteSnippet",
+        "title": "Delete Snippet",
+        "icon": "$(remove)",
+        "category": "Snippets"
+      },
+      {
+        "command": "wsSnippetsCmd.deleteSnippet",
+        "title": "Delete Snippet",
+        "icon": "$(remove)",
+        "category": "Snippets"
+      },
+      {
+        "command": "globalSnippetsCmd.deleteSnippetFolder",
+        "title": "Delete Folder",
+        "icon": "$(remove)",
+        "category": "Snippets"
+      },
+      {
+        "command": "wsSnippetsCmd.deleteSnippetFolder",
+        "title": "Delete Folder",
+        "icon": "$(remove)",
+        "category": "Snippets"
+      },
+      {
+        "command": "globalSnippetsCmd.moveSnippetUp",
+        "title": "Move Snippet Up",
+        "icon": "$(marker-navigation-previous)",
+        "category": "Snippets"
+      },
+      {
+        "command": "wsSnippetsCmd.moveSnippetUp",
+        "title": "Move Snippet Up",
+        "icon": "$(marker-navigation-previous)",
+        "category": "Snippets"
+      },
+      {
+        "command": "globalSnippetsCmd.moveSnippetDown",
+        "title": "Move Snippet Down",
+        "icon": "$(marker-navigation-next)",
+        "category": "Snippets"
+      },
+      {
+        "command": "wsSnippetsCmd.moveSnippetDown",
+        "title": "Move Snippet Down",
+        "icon": "$(marker-navigation-next)",
+        "category": "Snippets"
+      },
+      {
+        "command": "globalSnippetsCmd.exportSnippets",
+        "title": "Export Snippets",
+        "icon": "$(cloud-upload)",
+        "category": "Snippets"
+      },
+      {
+        "command": "globalSnippetsCmd.importSnippets",
+        "title": "Import Snippets",
+        "icon": "$(cloud-download)",
+        "category": "Snippets"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "miscCmd.requestWSConfig",
+          "when": "false"
         },
-        "Init Associated Token Account": {
-          "prefix": [
-            "tki"
-          ],
-          "body": [
-            "invoke(",
-            "    &initialize_account(",
-            "        &spl_token::ID,",
-            "        ${1:token}_info.key,",
-            "        ${2:mint}_info.key,",
-            "        ${3:authority}_info.key,",
-            "    )?,",
-            "    &[",
-            "        ${1:token}_info.clone(),",
-            "        ${2:mint}_info.clone(),",
-            "        ${3:authority}_info.clone(),",
-            "    ],",
-            ")?;"
-          ],
-          "requires": [
-            "solana_program::program::invoke",
-            "spl_token::instruction::initialize_account"
-          ],
-          "description": "Initialize an associated token account using the Token Program",
-          "scope": "expr"
+        {
+          "command": "commonSnippetsCmd.refreshEntry",
+          "when": "false"
         },
-        "Revoke Tokens Delegation": {
-          "prefix": [
-            "tkr"
-          ],
-          "body": [
-            "invoke(",
-            "    &revoke(",
-            "        &spl_token::ID,",
-            "        ${1:token}_info.key,",
-            "        ${2:authority}_info.key,",
-            "        &[],",
-            "    )?,",
-            "    &[",
-            "        ${1:token}_info.clone(),",
-            "        ${3:delegate}_info.clone(),",
-            "        ${2:authority}_info.clone(),",
-            "    ],",
-            ")?;"
-          ],
-          "requires": [
-            "solana_program::program::invoke",
-            "spl_token::instruction::revoke"
-          ],
-          "description": "Revoke the delegation of any tokens using the Token Program",
-          "scope": "expr"
+        {
+          "command": "globalSnippetsCmd.addSnippet",
+          "when": "false"
         },
-        "Transfer Tokens": {
-          "prefix": [
-            "tkt"
-          ],
-          "body": [
-            "invoke(",
-            "    &transfer(",
-            "        &spl_token::ID,",
-            "        ${1:sender}_info.key,",
-            "        ${2:receiver}_info.key,",
-            "        ${3:authority}_info.key,",
-            "        &[],",
-            "        ${4:amount},",
-            "    )?,",
-            "    &[",
-            "        ${1:sender}_info.clone(),",
-            "        ${2:receiver}_info.clone(),",
-            "        ${3:authority}_info.clone(),",
-            "    ],",
-            ")?;"
-          ],
-          "requires": [
-            "solana_program::program::invoke",
-            "spl_token::instruction::transfer"
-          ],
-          "description": "Transfer tokens using the Token Program",
-          "scope": "expr"
+        {
+          "command": "wsSnippetsCmd.addSnippet",
+          "when": "false"
         },
-        "Delegate Tokens": {
-          "prefix": [
-            "tka"
-          ],
-          "body": [
-            "invoke(",
-            "    &approve(",
-            "        &spl_token::ID,",
-            "        ${1:token}_info.key,",
-            "        ${2:delegate}_info.key,",
-            "        ${3:authority}_info.key,",
-            "        &[],",
-            "        ${4:amount},",
-            "    )?,",
-            "    &[",
-            "        ${1:token}_info.clone(),",
-            "        ${2:delegate}_info.clone(),",
-            "        ${3:authority}_info.clone(),",
-            "    ],",
-            ")?;"
-          ],
-          "requires": [
-            "solana_program::program::invoke",
-            "spl_token::instruction::approve"
-          ],
-          "description": "Delegate tokens using the Token Program",
-          "scope": "expr"
+        {
+          "command": "globalSnippetsCmd.addSnippetFromClipboard",
+          "when": "false"
         },
-        "Get Clock Sysvar": {
-          "prefix": [
-            "gclock"
-          ],
-          "body": [
-            "let ${1:clock} = Clock::get()?;"
-          ],
-          "requires": [
-            "solana_program::sysvar::clock::Clock",
-            "solana_program::sysvar::Sysvar"
-          ],
-          "description": "Gets the Clock Sysvar",
-          "scope": "expr"
+        {
+          "command": "wsSnippetsCmd.addSnippetFromClipboard",
+          "when": "false"
         },
-        "Get Account": {
-          "prefix": [
-            "gacc"
-          ],
-          "body": [
-            "let ${1:account}_info = next_account_info(account_info_iter)?;"
-          ],
-          "requires": [
-            "solana_program::account_info::next_account_info"
-          ],
-          "description": "Get next account in the accounts iterator",
-          "scope": "expr"
+        {
+          "command": "globalSnippetsCmd.addSnippetFolder",
+          "when": "false"
         },
-        "Get Rent Sysvar": {
-          "prefix": [
-            "grent"
-          ],
-          "body": [
-            "let ${1:rent} = Rent::get()?;"
-          ],
-          "requires": [
-            "solana_program::sysvar::rent::Rent",
-            "solana_program::sysvar::Sysvar"
-          ],
-          "description": "Gets the Rent Sysvar",
-          "scope": "expr"
+        {
+          "command": "wsSnippetsCmd.addSnippetFolder",
+          "when": "false"
         },
-        "Transfer Native SOL": {
-          "prefix": [
-            "tsol"
-          ],
-          "body": [
-            "invoke(",
-            "    &transfer(${1:sender}_info.key, ${2:receiver}_info.key, ${3:amount}),",
-            "    &[",
-            "        ${1:sender}_info.clone(),",
-            "        ${2:receiver}_info.clone(),",
-            "        ${4:system_program}_info.clone(),",
-            "    ],",
-            ")?;"
-          ],
-          "requires": [
-            "solana_program::program::invoke",
-            "solana_program::system_instruction::transfer"
-          ],
-          "description": "Transfer native SOL using System Program",
-          "scope": "expr"
+        {
+          "command": "globalSnippetsCmd.editSnippet",
+          "when": "false"
         },
-        "Unpack Account": {
-          "prefix": [
-            "aunpack"
-          ],
-          "body": [
-            "let mut ${1:account} = ${2:Account}::unpack(&${1:account}_info.data.borrow())?;"
-          ],
-          "requires": [
-            "crate::state::__Account__",
-            "solana_program::account_info::next_account_info",
-            "solana_program::program_pack::Pack"
-          ],
-          "description": "Unpacks an Account Info",
-          "scope": "expr"
+        {
+          "command": "wsSnippetsCmd.editSnippet",
+          "when": "false"
         },
-        "Check Rent Exempt": {
-          "prefix": [
-            "chrent"
-          ],
-          "body": [
-            "if !rent.is_exempt(${1:account}_info.lamports(), ${2:Account}::LEN) {",
-            "    return Err(ProgramError::InvalidAccountData.into());",
-            "}"
-          ],
-          "requires": [
-            "crate::state::__Account__",
-            "solana_program::program_error::ProgramError",
-            "solana_program::program_pack::Pack",
-            "solana_program::sysvar::Sysvar"
-          ],
-          "description": "Check if an account is rent exempt",
-          "scope": "expr"
+        {
+          "command": "globalSnippetsCmd.editSnippetFolder",
+          "when": "false"
         },
-        "Get Accounts Iterator": {
-          "prefix": [
-            "gaccs"
+        {
+          "command": "wsSnippetsCmd.editSnippetFolder",
+          "when": "false"
+        },
+        {
+          "command": "globalSnippetsCmd.deleteSnippet",
+          "when": "false"
+        },
+        {
+          "command": "wsSnippetsCmd.deleteSnippet",
+          "when": "false"
+        },
+        {
+          "command": "globalSnippetsCmd.deleteSnippetFolder",
+          "when": "false"
+        },
+        {
+          "command": "wsSnippetsCmd.deleteSnippetFolder",
+          "when": "false"
+        },
+        {
+          "command": "globalSnippetsCmd.moveSnippetUp",
+          "when": "false"
+        },
+        {
+          "command": "wsSnippetsCmd.moveSnippetUp",
+          "when": "false"
+        },
+        {
+          "command": "globalSnippetsCmd.moveSnippetDown",
+          "when": "false"
+        },
+        {
+          "command": "wsSnippetsCmd.moveSnippetDown",
+          "when": "false"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "globalSnippetsCmd.addSnippet",
+          "when": "view == snippetsExplorer",
+          "group": "navigation@1"
+        },
+        {
+          "command": "wsSnippetsCmd.addSnippet",
+          "when": "view == wsSnippetsExplorer && snippets.workspaceState == fileAvailable",
+          "group": "navigation@1"
+        },
+        {
+          "command": "globalSnippetsCmd.addSnippetFolder",
+          "when": "view == snippetsExplorer",
+          "group": "navigation@2"
+        },
+        {
+          "command": "wsSnippetsCmd.addSnippetFolder",
+          "when": "view == wsSnippetsExplorer && snippets.workspaceState == fileAvailable",
+          "group": "navigation@2"
+        },
+        {
+          "command": "commonSnippetsCmd.refreshEntry",
+          "when": "view == snippetsExplorer",
+          "group": "navigation@3"
+        },
+        {
+          "command": "globalSnippetsCmd.addSnippetFromClipboard",
+          "when": "view == snippetsExplorer",
+          "group": "other@1"
+        },
+        {
+          "command": "globalSnippetsCmd.importSnippets",
+          "when": "view == snippetsExplorer",
+          "group": "other@3"
+        },
+        {
+          "command": "globalSnippetsCmd.exportSnippets",
+          "when": "view == snippetsExplorer",
+          "group": "other@2"
+        },
+        {
+          "command": "wsSnippetsCmd.addSnippetFromClipboard",
+          "when": "view == wsSnippetsExplorer && snippets.workspaceState == fileAvailable",
+          "group": "other"
+        },
+        {
+          "command": "commonSnippetsCmd.refreshEntry",
+          "when": "view == wsSnippetsExplorer",
+          "group": "navigation@3"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "globalSnippetsCmd.openSnippet",
+          "when": "view == snippetsExplorer && viewItem =~ /^snippet(:\\S+)?$/",
+          "group": "1_snippets@1"
+        },
+        {
+          "command": "globalSnippetsCmd.openSnippetInTerminal",
+          "when": "view == snippetsExplorer && viewItem =~ /^snippetTerminal(:\\S+)?$/",
+          "group": "1_snippets@2"
+        },
+        {
+          "command": "globalSnippetsCmd.addSnippet",
+          "when": "view == snippetsExplorer",
+          "group": "2_snippetManagement@1"
+        },
+        {
+          "command": "wsSnippetsCmd.addSnippet",
+          "when": "view == wsSnippetsExplorer && snippets.workspaceState == fileAvailable",
+          "group": "2_snippetManagement@1"
+        },
+        {
+          "command": "globalSnippetsCmd.addSnippetFromClipboard",
+          "when": "view == snippetsExplorer",
+          "group": "2_snippetManagement@2"
+        },
+        {
+          "command": "wsSnippetsCmd.addSnippetFromClipboard",
+          "when": "view == wsSnippetsExplorer && snippets.workspaceState == fileAvailable",
+          "group": "2_snippetManagement@2"
+        },
+        {
+          "command": "globalSnippetsCmd.editSnippet",
+          "when": "view == snippetsExplorer && viewItem =~ /^snippet(Terminal)?(:\\S+)?$/",
+          "group": "2_snippetManagement@3"
+        },
+        {
+          "command": "wsSnippetsCmd.editSnippet",
+          "when": "view == wsSnippetsExplorer && viewItem =~ /^snippet(Terminal)?(:\\S+)?$/ && snippets.workspaceState == fileAvailable",
+          "group": "2_snippetManagement@3"
+        },
+        {
+          "command": "globalSnippetsCmd.editSnippetFolder",
+          "when": "view == snippetsExplorer && viewItem =~ /^snippetFolder(:\\S+)?$/",
+          "group": "4_folderManagement@2"
+        },
+        {
+          "command": "wsSnippetsCmd.editSnippetFolder",
+          "when": "view == wsSnippetsExplorer && viewItem =~ /^snippetFolder(:\\S+)?$/ && snippets.workspaceState == fileAvailable",
+          "group": "4_folderManagement@2"
+        },
+        {
+          "command": "globalSnippetsCmd.deleteSnippet",
+          "when": "view == snippetsExplorer && viewItem =~ /^snippet(Terminal)?(:\\S+)?$/",
+          "group": "2_snippetManagement@4"
+        },
+        {
+          "command": "wsSnippetsCmd.deleteSnippet",
+          "when": "view == wsSnippetsExplorer && viewItem =~ /^snippet(Terminal)?(:\\S+)?$/ && snippets.workspaceState == fileAvailable",
+          "group": "2_snippetManagement@4"
+        },
+        {
+          "command": "globalSnippetsCmd.deleteSnippetFolder",
+          "when": "view == snippetsExplorer && viewItem =~ /^snippetFolder(:\\S+)?$/",
+          "group": "4_folderManagement@3"
+        },
+        {
+          "command": "wsSnippetsCmd.deleteSnippetFolder",
+          "when": "view == wsSnippetsExplorer && viewItem =~ /^snippetFolder(:\\S+)?$/ && snippets.workspaceState == fileAvailable",
+          "group": "4_folderManagement@3"
+        },
+        {
+          "command": "globalSnippetsCmd.moveSnippetUp",
+          "when": "view == snippetsExplorer && viewItem =~ /^\\S*:(up|up&down)$/",
+          "group": "inline"
+        },
+        {
+          "command": "wsSnippetsCmd.moveSnippetUp",
+          "when": "view == wsSnippetsExplorer && viewItem =~ /^\\S*:(up|up&down)$/ && snippets.workspaceState == fileAvailable",
+          "group": "inline"
+        },
+        {
+          "command": "globalSnippetsCmd.moveSnippetDown",
+          "when": "view == snippetsExplorer && viewItem =~ /^\\S*:(down|up&down)$/",
+          "group": "inline"
+        },
+        {
+          "command": "wsSnippetsCmd.moveSnippetDown",
+          "when": "view == wsSnippetsExplorer && viewItem =~ /^\\S*:(down|up&down)$/ && snippets.workspaceState == fileAvailable",
+          "group": "inline"
+        },
+        {
+          "command": "globalSnippetsCmd.addSnippetFolder",
+          "when": "view == snippetsExplorer",
+          "group": "4_folderManagement@1"
+        },
+        {
+          "command": "wsSnippetsCmd.addSnippetFolder",
+          "when": "view == wsSnippetsExplorer && snippets.workspaceState == fileAvailable",
+          "group": "4_folderManagement@1"
+        },
+        {
+          "command": "globalSnippetsCmd.openSnippet",
+          "when": "view == wsSnippetsExplorer && viewItem =~ /^snippet(:\\S+)?$/",
+          "group": "1_snippets@1"
+        },
+        {
+          "command": "globalSnippetsCmd.openSnippetInTerminal",
+          "when": "view == wsSnippetsExplorer && viewItem =~ /^snippet(:\\S+)?$/",
+          "group": "1_snippets@2"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "commonSnippetsCmd.addSnippet",
+          "when": "editorTextFocus",
+          "group": "snippets@1"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "snippets-explorer",
+          "title": "Snippets",
+          "icon": "resources/icons/dark/logo.svg"
+        }
+      ]
+    },
+    "views": {
+      "snippets-explorer": [
+        {
+          "id": "snippetsExplorer",
+          "name": "Global Snippets"
+        },
+        {
+          "id": "wsSnippetsExplorer",
+          "name": "Workspace Snippets",
+          "when": "config.snippets.useWorkspaceFolder"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Snippets",
+      "properties": {
+        "snippets.useWorkspaceFolder": {
+          "type": "boolean",
+          "default": false,
+          "description": "Use folder `.vscode` in current workspace to save snippets as a `snippets.json` file."
+        },
+        "snippets.showSuggestions": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Show Snippets suggestions when typing `#snippets.triggerKey#`."
+        },
+        "snippets.triggerKey": {
+          "type": "string",
+          "default": ">",
+          "minLength": 0,
+          "maxLength": 1,
+          "markdownDescription": "Character to be typed in order to show Snippets suggestions. `Note: Changes require a window restart to apply`."
+        },
+        "snippets.snippetsLocation": {
+          "deprecationMessage": "This is deprecated, the new default storage is VSCode globalState. This enables to sync snippets accross multiple machines. To keep using the file system as storage unit, consider using `#snippets.useWorkspaceFolder#`.",
+          "type": [
+            "string",
+            "null"
           ],
-          "body": [
-            "let account_info_iter = &mut accounts.iter();",
-            "let ${1:account}_info = next_account_info(account_info_iter)?;"
-          ],
-          "requires": [
-            "solana_program::account_info::next_account_info"
-          ],
-          "description": "Start iterator to get accounts of instruction",
-          "scope": "expr"
+          "default": null,
+          "format": "uri",
+          "description": "Specifies the folder path where to save snippets."
+        },
+        "snippets.confirmBeforeDeletion": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Show a confirmation alert before deleting a snippet/folder."
         }
       }
     }
   },
   "scripts": {
-    "vscode:prepublish": "yarn compile",
+    "vscode:prepublish": "yarn package",
+    "compile": "webpack --devtool nosources-source-map --config ./build/node-extension.webpack.config.js",
+    "watch": "webpack --watch --devtool nosources-source-map --config ./build/node-extension.webpack.config.js",
+    "package": "webpack --mode production --config ./build/node-extension.webpack.config.js",
     "gen": "yarn test && yarn compile",
-    "compile": "cd compiler && cargo run ../snippets/src/core ../package.json",
+    "cargo": "cd compiler && cargo run ../snippets/src/core ../package.json",
     "test": "cd snippets && cargo test-sbf",
     "build": "vsce package",
-    "publish": "vsce publish"
+    "publish": "vsce publish",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.0.0",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^18.11.18",
+    "@types/vscode": "^1.74.0",
+    "@typescript-eslint/eslint-plugin": "^5.48.1",
+    "@typescript-eslint/parser": "^5.48.1",
+    "eslint": "^7.9.0",
+    "glob": "^8.0.3",
+    "mocha": "^10.2.0",
+    "ts-loader": "^9.4.2",
+    "typescript": "^4.9.4",
+    "vscode-test": "^1.6.1",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1",
+    "y18n": ">=5.0.8"
+  },
+  "dependencies": {
+    "@types/mustache": "^4.2.2",
+    "mustache": "^4.2.0"
   },
   "extensionDependencies": [
     "rust-lang.rust-analyzer"

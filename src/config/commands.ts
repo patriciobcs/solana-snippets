@@ -332,7 +332,3 @@ export async function importSnippets(snippetsProvider: SnippetsProvider) {
       }
     });
 }
-
-export function resetSnippets(snippetsProvider: SnippetsProvider) {
-  snippetsProvider.resetSnippets();
-}

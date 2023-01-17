@@ -183,6 +183,9 @@ fn generate_extension_snippets(snippets_path: &String, output_path: &String) {
     for (key, value) in ra_snippets.entries() {
         let mut snippet = value.clone();
 
+        snippet["content"] = snippet["body"].clone();
+        snippet.remove("body");
+
         snippet["label"] = key.into(); 
         snippet["id"] = id.into();
         snippet["parentId"] = 2.into();

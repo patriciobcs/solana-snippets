@@ -209,8 +209,7 @@ export class SnippetService {
     this._rootSnippet.lastId = newSnippets.lastId;
   }
 
-  async resetSnippets() {
+  resetSnippets() {
     this._dataAccess.reset();
-    this.refresh();
   }
 }

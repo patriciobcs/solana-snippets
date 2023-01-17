@@ -585,7 +585,7 @@ export function activate(context: vscode.ExtensionContext) {
     // Reset
     [
       commands.CommandsConsts.globalResetSnippets,
-      () =>
+      async () => 
         handleCommand(() => {
           vscode.window
             .showInformationMessage(
@@ -595,10 +595,10 @@ export function activate(context: vscode.ExtensionContext) {
             )
             .then((answer) => {
               if (answer === Labels.confirmationYes) {
-                commands.resetSnippets(snippetsProvider);
+                snippetsProvider.resetSnippets();
               }
             });
-        }),
+        })
     ],
   ]);
 }

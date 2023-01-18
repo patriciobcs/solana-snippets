@@ -14,6 +14,16 @@ fn parse_config(contents: String, config_name: &str) -> String {
     contents[start_bytes..].trim().into()
 }
 
+trait StringAsComment {
+    fn as_comment(&self) -> String;
+}
+
+impl StringAsComment for str {
+    fn as_comment(&self) -> String {
+        format!("{} {}", ONE_LINE_COMMENT, self)
+    } 
+}
+
 fn parse_body_line(contents: String, inputs: &mut HashMap<String, usize>) -> String {
     let elements: Vec<_> = contents.split("__").collect();
     let mut parsed_contents: String = contents.clone().replacen("    ", "", 1);
@@ -41,38 +51,45 @@ fn parse_requires_line(contents: String) -> String {
 }
 
 enum Reading {
+    TITLE,
     CONFIG,
     REQUIRES,
-    SNIPPET,
+    CONTENT,
     NONE,
 }
 
-fn generate_snippet(filepath: PathBuf) -> (String, JsonValue) {
-    let mut inputs = HashMap::new();
-    let mut config = object! {
-        prefix: [],
-        body: [],
-        requires: [],
-        description: "",
-        scope: "expr",
-    };
-    let mut title: String = "".into();
-    let mut reading = Reading::CONFIG;
-
-    if let Ok(lines) = read_lines(filepath) {
+fn generate_snippets(filepath: PathBuf) -> Vec<(String, JsonValue)> {
+    let mut snippets = vec![];
+    if let Ok(lines) = read_lines(filepath.clone()) {
+        let mut reading = Reading::TITLE;
+        let mut inputs = HashMap::new();
+        let mut title: Option<String> = None;
+        let mut config: JsonValue = object! {
+            prefix: [],
+            body: [],
+            requires: [],
+            description: "",
+            scope: "expr",
+        };
         for line in lines {
             if let Ok(contents) = line {
                 match reading {
+                    Reading::TITLE => {
+                        if title == None && contents.trim().starts_with(&TITLE.as_comment()) {
+                            title = Some(parse_config(contents, TITLE));
+                            reading = Reading::CONFIG;
+                        }
+                    }
                     Reading::CONFIG => {
                         if contents.trim().len() == 0 {
                             reading = Reading::NONE;
                         } else {
-                            if title.len() == 0 && contents.contains(TITLE) {
-                                title = parse_config(contents, TITLE);
-                            } else if contents.contains(DESCRIPTION) {
+                            if contents.trim().starts_with(&DESCRIPTION.as_comment()) {
                                 config[DESCRIPTION] = parse_config(contents, DESCRIPTION).into();
-                            } else if contents.contains(PREFIX) {
+                            } else if contents.trim().starts_with(&PREFIX.as_comment()) {
                                 config[PREFIX].push(parse_config(contents, PREFIX)).ok();
+                            } else if contents.trim().starts_with(&REQUIRES.as_comment()) {
+                                reading = Reading::REQUIRES;
                             }
                         }
                     }
@@ -83,17 +100,18 @@ fn generate_snippet(filepath: PathBuf) -> (String, JsonValue) {
                             config[REQUIRES].push(parse_requires_line(contents)).ok();
                         }
                     }
-                    Reading::SNIPPET => {
-                        if contents.contains(SNIPPET_TAG) {
+                    Reading::CONTENT => {
+                        if contents.contains(CONTENT_TAG) {
+                            snippets.push((title.clone().unwrap(), config.clone()));
                             reading = Reading::NONE;
                         } else {
                             config[BODY].push(parse_body_line(contents, &mut inputs)).ok();
                         }
                     }
                     Reading::NONE => {
-                        if contents.contains(SNIPPET_TAG) {
-                            reading = Reading::SNIPPET;
-                        } else if contents.contains(SNIPPET_REQUIRES) {
+                        if contents.contains(CONTENT_TAG) {
+                            reading = Reading::CONTENT;
+                        } else if contents.contains(&REQUIRES.as_comment()) {
                             reading = Reading::REQUIRES;
                         }
                     }
@@ -101,7 +119,8 @@ fn generate_snippet(filepath: PathBuf) -> (String, JsonValue) {
             }
         }
     }
-    (title, config)
+    println!("path: {:?} {:?}", filepath, snippets.len());
+    snippets
 }
 
 fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
@@ -114,17 +133,19 @@ where
 
 fn get_dirs<'a>(dir: &'a Path) -> io::Result<Vec<PathBuf>> {
     let mut paths = vec![];
+    let ignore = vec!["target", "node_modules"];
     if dir.is_dir() {
-        for entry in read_dir(dir)? {
+        'outer: for entry in read_dir(dir)? {
             let entry = entry?;
             let path = entry.path();
             if path.is_dir() {
+                for dir in &ignore {
+                    if path.ends_with(dir) {
+                        continue 'outer;
+                    }
+                }
                 paths.extend(get_dirs(&path)?)
             } else {
-                let dir = path.to_str().unwrap();
-                if dir.contains("mod.rs") {
-                    continue;
-                } 
                 paths.push(path)
             }
         }
@@ -138,11 +159,15 @@ fn get_snippets(snippets_path: &String) -> JsonValue {
     let paths = get_dirs(Path::new(snippets_path)).unwrap();
 
     for path in paths {
-        let (title, config) = generate_snippet(path);
-        snippets[title] = config;
+        let generated_snippets = generate_snippets(path);
+        for (title, config) in generated_snippets {
+            snippets[title] = config;
+        }
     }
 
-    return snippets;
+    println!("snippets: {:?}", snippets.len());
+
+    snippets
 }
 
 fn generate_rust_analyzer_snippets(snippets_path: &String, extension_config_path: &String) {

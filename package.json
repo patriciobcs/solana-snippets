@@ -558,7 +558,7 @@
     "watch": "webpack --watch --devtool nosources-source-map --config ./build/node-extension.webpack.config.js",
     "package": "webpack --mode production --config ./build/node-extension.webpack.config.js",
     "gen": "yarn test && yarn compile",
-    "cargo": "cargo run --manifest-path compiler/Cargo.toml sp snippets/native/src/core/system src/data/default.json",
+    "cargo": "cargo run --manifest-path compiler/Cargo.toml sp snippets/ src/data/default.json",
     "test": "cd snippets && cargo test-sbf",
     "build": "vsce package",
     "publish": "vsce publish",

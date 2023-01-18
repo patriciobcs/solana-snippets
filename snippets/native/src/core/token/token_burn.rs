@@ -1,14 +1,13 @@
-/// title: Burn Tokens
-/// description: Burn tokens using the Token Program
-/// platform: native, anchor
-/// prefix: tkb
-
-/// processor requires
 use solana_program::account_info::next_account_info;
 use solana_program::account_info::AccountInfo;
 use solana_program::entrypoint::ProgramResult;
 
-/// snippet requires
+//* title: Burn Tokens
+//* description: Burn tokens using the Token Program
+//* platform: native, anchor
+//* category: token
+//* prefix: tkb
+//* requires
 use solana_program::program::invoke;
 use spl_token::instruction::burn;
 
@@ -18,7 +17,7 @@ pub fn processor(accounts: &[AccountInfo], __amount__: u64) -> ProgramResult {
     let __mint___info = next_account_info(account_info_iter)?;
     let __authority___info = next_account_info(account_info_iter)?;
 
-    /* snippet */
+    /** content **/
     invoke(
         &burn(
             &spl_token::ID,
@@ -34,6 +33,6 @@ pub fn processor(accounts: &[AccountInfo], __amount__: u64) -> ProgramResult {
             __authority___info.clone(),
         ],
     )?;
-    /* snippet */
+    /** content **/
     Ok(())
 }

@@ -70,6 +70,8 @@ fn generate_snippets(filepath: PathBuf) -> Vec<(String, JsonValue)> {
             requires: [],
             description: "",
             scope: "expr",
+            category: "",
+            platform: "",
         };
         for line in lines {
             if let Ok(contents) = line {
@@ -88,9 +90,13 @@ fn generate_snippets(filepath: PathBuf) -> Vec<(String, JsonValue)> {
                                 config[DESCRIPTION] = parse_config(contents, DESCRIPTION).into();
                             } else if contents.trim().starts_with(&PREFIX.as_comment()) {
                                 config[PREFIX].push(parse_config(contents, PREFIX)).ok();
+                            } else if contents.trim().starts_with(&CATEGORY.as_comment()) {
+                                config[CATEGORY] = parse_config(contents, CATEGORY).into();
+                            } else if contents.trim().starts_with(&PLATFORM.as_comment()) {
+                                config[PLATFORM] = parse_config(contents, PLATFORM).into();
                             } else if contents.trim().starts_with(&REQUIRES.as_comment()) {
                                 reading = Reading::REQUIRES;
-                            }
+                            } 
                         }
                     }
                     Reading::REQUIRES => {
@@ -119,7 +125,6 @@ fn generate_snippets(filepath: PathBuf) -> Vec<(String, JsonValue)> {
             }
         }
     }
-    println!("path: {:?} {:?}", filepath, snippets.len());
     snippets
 }
 
@@ -165,8 +170,6 @@ fn get_snippets(snippets_path: &String) -> JsonValue {
         }
     }
 
-    println!("snippets: {:?}", snippets.len());
-
     snippets
 }
 
@@ -202,6 +205,8 @@ fn generate_extension_snippets(snippets_path: &String, output_path: &String) {
         label: "Solana",
         children: []
     };
+
+    let mut categories = object! {};
     
     let mut id = 3;
 
@@ -212,13 +217,36 @@ fn generate_extension_snippets(snippets_path: &String, output_path: &String) {
         snippet.remove("body");
 
         snippet["label"] = key.into(); 
-        snippet["id"] = id.into();
-        snippet["parentId"] = 2.into();
         snippet["type"] = 3.into();
         snippet["children"] = array![];
+        let category = snippet[CATEGORY].as_str().unwrap().trim().to_owned();
+        snippet["parentId"] = if !categories.has_key(snippet[CATEGORY].as_str().unwrap()) {
+            let label = category[0..1].to_uppercase() + &category[1..];
+            categories[snippet[CATEGORY].as_str().unwrap()] = object! {
+                id: id,
+                parentId: 2,
+                "type": 1,
+                label: label,
+                children: []
+            };
+            id += 1;
+            (id - 1).into()
+        } else {
+            categories[snippet[CATEGORY].as_str().unwrap()]["id"].clone()
+        };
+        snippet["id"] = id.into();
+        snippet.remove(CATEGORY);
+        snippet.remove(PREFIX);
+        snippet.remove(PLATFORM);
+        snippet.remove("scope");
 
-        solana_folder["children"].push(snippet).unwrap();
+        categories[category]["children"].push(snippet.clone()).unwrap();
+
         id += 1;
+    }
+
+    for (_, value) in categories.entries() {
+        solana_folder["children"].push(value.clone()).unwrap();
     }
 
     snippets["lastId"] = (id - 1).into();

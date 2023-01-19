@@ -3,6 +3,7 @@ use solana_program::entrypoint::ProgramResult;
 //* title: Get Clock Sysvar
 //* description: Gets the Clock Sysvar
 //* platform: native, anchor
+//* category: system
 //* prefix: gclock
 //* requires
 use solana_program::sysvar::clock::Clock;

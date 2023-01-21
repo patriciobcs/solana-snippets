@@ -18,7 +18,7 @@ pub fn processor(accounts: &[AccountInfo]) -> ProgramResult {
     let __authority___info = next_account_info(account_info_iter)?;
     let __rent___info = next_account_info(account_info_iter)?;
 
-    /** content **/
+    /*/* content */*/
     invoke(
         &initialize_account(
             &spl_token::ID,
@@ -33,6 +33,6 @@ pub fn processor(accounts: &[AccountInfo]) -> ProgramResult {
             __rent___info.clone(),
         ],
     )?;
-    /** content **/
+    /*/* content */*/
     Ok(())
 }

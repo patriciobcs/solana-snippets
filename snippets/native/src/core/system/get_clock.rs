@@ -10,8 +10,8 @@ use solana_program::sysvar::clock::Clock;
 use solana_program::sysvar::Sysvar;
 
 pub fn processor() -> ProgramResult {
-    /** content **/
+    /*/* content */*/
     let __clock__ = Clock::get()?;
-    /** content **/
+    /*/* content */*/
     Ok(())
 }

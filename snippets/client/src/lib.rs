@@ -1,4 +1,4 @@
-#![cfg(feature = "test-sbf")]
+pub mod utils;
 
 #[macro_export]
 macro_rules! get_program_context {
@@ -41,31 +41,31 @@ macro_rules! test {
 
 #[macro_export]
 macro_rules! test_instruction {
-    (no_accounts, $instruction_name:ident) => {
+    (no_accounts, $package:ident::$instruction_name:ident) => {
         test!($instruction_name => {
-            let mut context = get_program_context!(snippets);
-            call_instruction!(context, snippets::instruction::$instruction_name(&snippets::id()).unwrap(); signed by [&context.payer]);
+            let mut context = get_program_context!($package);
+            call_instruction!(context, $package::instruction::$instruction_name(&$package::id()).unwrap(); signed by [&context.payer]);
         });
     };
-    (single_readonly_account, $instruction_name:ident) => {
+    (single_readonly_account, $package:ident::$instruction_name:ident) => {
         test!($instruction_name => {
-            let mut context = get_program_context!(snippets);
+            let mut context = get_program_context!($package);
 
             let account = solana_sdk::signature::Keypair::new();
             let rent = context.banks_client.get_rent().await.unwrap();
-            let account_rent = rent.minimum_balance(snippets::state::__Account__::LEN);
+            let account_rent = rent.minimum_balance($package::state::__Account__::LEN);
 
             call_instruction!(context, solana_program::system_instruction::create_account(
                 &context.payer.pubkey(), 
                 &account.pubkey(), 
                 account_rent, 
-                snippets::state::__Account__::LEN as u64, 
-                &snippets::id()); 
+                $package::state::__Account__::LEN as u64, 
+                &$package::id()); 
                 signed by [&context.payer, &account]
             );
 
-            call_instruction!(context, snippets::instruction::$instruction_name(
-                &snippets::id(), 
+            call_instruction!(context, $package::instruction::$instruction_name(
+                &$package::id(), 
                 &account.pubkey()).unwrap();
                 signed by [&context.payer]
             );

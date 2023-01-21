@@ -8,4 +8,4 @@ pub const CATEGORY: &str = "category";
 pub const PLATFORM: &str = "platform";
 pub const BODY: &str = "body";
 pub const REQUIRES: &str = "requires";
-pub const CONTENT_TAG: &str = "/** content **/";
+pub const CONTENT_TAG: &str = "/*/* content */*/";

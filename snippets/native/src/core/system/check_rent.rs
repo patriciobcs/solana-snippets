@@ -20,10 +20,10 @@ pub fn processor(accounts: &[AccountInfo]) -> ProgramResult {
 
     let rent = Rent::get()?;
 
-    /** content **/
+    /*/* content */*/
     if !rent.is_exempt(__account___info.lamports(), __Account__::LEN) {
         return Err(ProgramError::InvalidAccountData.into());
     }
-    /** content **/
+    /*/* content */*/
     Ok(())
 }

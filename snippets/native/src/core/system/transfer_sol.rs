@@ -17,7 +17,7 @@ pub fn processor(accounts: &[AccountInfo], __amount__: u64) -> ProgramResult {
     let __receiver___info = next_account_info(account_info_iter)?;
     let __system_program___info = next_account_info(account_info_iter)?;
 
-    /** content **/
+    /*/* content */*/
     invoke(
         &transfer(__sender___info.key, __receiver___info.key, __amount__),
         &[
@@ -26,6 +26,6 @@ pub fn processor(accounts: &[AccountInfo], __amount__: u64) -> ProgramResult {
             __system_program___info.clone(),
         ],
     )?;
-    /** content **/
+    /*/* content */*/
     Ok(())
 }

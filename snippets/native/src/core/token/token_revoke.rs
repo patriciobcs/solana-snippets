@@ -16,7 +16,7 @@ pub fn processor(accounts: &[AccountInfo]) -> ProgramResult {
     let __token___info = next_account_info(account_info_iter)?;
     let __authority___info = next_account_info(account_info_iter)?;
 
-    /** content **/
+    /*/* content */*/
     invoke(
         &revoke(
             &spl_token::ID,
@@ -29,6 +29,6 @@ pub fn processor(accounts: &[AccountInfo]) -> ProgramResult {
             __authority___info.clone(),
         ],
     )?;
-    /** content **/
+    /*/* content */*/
     Ok(())
 }

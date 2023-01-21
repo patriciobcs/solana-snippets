@@ -10,9 +10,9 @@ use solana_program::entrypoint::ProgramResult;
 use solana_program::account_info::next_account_info;
 
 pub fn processor(accounts: &[AccountInfo]) -> ProgramResult {
-    /** content **/
+    /*/* content */*/
     let account_info_iter = &mut accounts.iter();
     let __account___info = next_account_info(account_info_iter)?;
-    /** content **/
+    /*/* content */*/
     Ok(())
 }

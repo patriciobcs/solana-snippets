@@ -17,7 +17,7 @@ pub fn processor(accounts: &[AccountInfo], __amount__: u64) -> ProgramResult {
     let __receiver___info = next_account_info(account_info_iter)?;
     let __authority___info = next_account_info(account_info_iter)?;
 
-    /** content **/
+    /*/* content */*/
     invoke(
         &transfer(
             &spl_token::ID,
@@ -33,6 +33,6 @@ pub fn processor(accounts: &[AccountInfo], __amount__: u64) -> ProgramResult {
             __authority___info.clone(),
         ],
     )?;
-    /** content **/
+    /*/* content */*/
     Ok(())
 }

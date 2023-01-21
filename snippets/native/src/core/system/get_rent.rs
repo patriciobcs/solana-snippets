@@ -10,8 +10,8 @@ use solana_program::sysvar::rent::Rent;
 use solana_program::sysvar::Sysvar;
 
 pub fn processor() -> ProgramResult {
-    /** content **/
+    /*/* content */*/
     let __rent__ = Rent::get()?;
-    /** content **/
+    /*/* content */*/
     Ok(())
 }

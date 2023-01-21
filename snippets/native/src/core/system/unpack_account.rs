@@ -15,8 +15,8 @@ pub fn processor(accounts: &[AccountInfo]) -> ProgramResult {
     let account_info_iter = &mut accounts.iter();
     let __account___info = next_account_info(account_info_iter)?;
 
-    /** content **/
+    /*/* content */*/
     let mut __account__ = __Account__::unpack(&__account___info.data.borrow())?;
-    /** content **/
+    /*/* content */*/
     Ok(())
 }

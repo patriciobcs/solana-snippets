@@ -1,16 +1,13 @@
 #![cfg(feature = "test-sbf")]
 
-// use solana_sdk::{signature::Signer, program_pack::Pack};
 use solana_program_test::tokio;
-use solana_sdk::signer::keypair::Keypair;
 use solana_sdk::signature::Signer;
-use crate::utils::token::{get_mint, mint_tokens, create_associated_token_account, create_mint, create_mint_token_pair};
-use crate::{test, call_instruction, get_program_context};
+use solana_client::utils::token::{mint_tokens, create_mint_token_pair};
+use solana_client::{test, call_instruction, get_program_context};
 
 test!(token_burn => {
-	let mut context = get_program_context!(snippets);
+	let mut context = get_program_context!(solana_native);
 
-	let mint = Keypair::new();
 	let authority = context.payer.pubkey(); 
 	let amount = 100000;
 
@@ -18,8 +15,8 @@ test!(token_burn => {
 
 	mint_tokens(&mut context, &mint.pubkey(), &ata, amount, &authority, None).await.unwrap();
 
-	call_instruction!(context, snippets::instruction::token_burn(
-				&snippets::id(), 
+	call_instruction!(context, solana_native::instruction::token_burn(
+				&solana_native::id(), 
 				&ata, 
 				&mint.pubkey(), 
 				&authority, 

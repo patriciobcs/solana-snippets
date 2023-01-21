@@ -16,8 +16,8 @@ pub fn processor(accounts: &[AccountInfo]) -> ProgramResult {
     let __account___info = next_account_info(account_info_iter)?;
     let __account__ = __Account__ {};
 
-    /** content **/
+    /*/* content */*/
     __Account__::pack(__account__, &mut __account___info.data.borrow_mut())?;
-    /** content **/
+    /*/* content */*/
     Ok(())
 }

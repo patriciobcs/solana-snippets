@@ -1,17 +1,13 @@
 #![cfg(feature = "test-sbf")]
 
 use solana_program_test::tokio;
-use solana_sdk::signer::keypair::Keypair;
 use solana_sdk::pubkey::Pubkey;
 use solana_sdk::signature::Signer;
-use solana_sdk::program_pack::Pack;
-use spl_token::state::Account;
-use crate::utils::token::{get_mint, mint_tokens, create_associated_token_account, create_mint, create_mint_token_pair};
-use crate::utils::system::{create_account};
-use crate::{test, call_instruction, get_program_context};
+use solana_client::utils::token::create_mint_token_pair;
+use solana_client::{test, call_instruction, get_program_context};
 
 test!(token_approve => {
-	let mut context = get_program_context!(snippets);
+	let mut context = get_program_context!(solana_native);
 
 	let amount = 100000;
 	let delegate_amount = amount;
@@ -20,8 +16,8 @@ test!(token_approve => {
 
 	let delegate = Pubkey::new_unique();
 
-	call_instruction!(context, snippets::instruction::token_approve(
-			&snippets::id(), 
+	call_instruction!(context, solana_native::instruction::token_approve(
+			&solana_native::id(), 
 			&ata, 
 			&delegate, 
 			&context.payer.pubkey(), 

@@ -1,17 +1,13 @@
 #![cfg(feature = "test-sbf")]
 
 use solana_program_test::tokio;
-use solana_sdk::signer::keypair::Keypair;
 use solana_sdk::pubkey::Pubkey;
 use solana_sdk::signature::Signer;
-use solana_sdk::program_pack::Pack;
-use spl_token::state::Account;
-use crate::utils::token::{get_mint, mint_tokens, create_associated_token_account, create_mint, create_mint_token_pair};
-use crate::utils::system::{create_account};
-use crate::{test, call_instruction, get_program_context};
+use solana_client::utils::token::{create_associated_token_account, create_mint_token_pair};
+use solana_client::{test, call_instruction, get_program_context};
 
 test!(token_transfer => {
-	let mut context = get_program_context!(snippets);
+	let mut context = get_program_context!(solana_native);
 
 	let amount = 100000;
 
@@ -21,8 +17,8 @@ test!(token_transfer => {
 
 	let to_ata = create_associated_token_account(&mut context, &to, &mint.pubkey()).await.unwrap(); 
 
-	call_instruction!(context, snippets::instruction::token_transfer(
-			&snippets::id(), 
+	call_instruction!(context, solana_native::instruction::token_transfer(
+			&solana_native::id(), 
 			&from_ata, 
 			&to_ata, 
 			&context.payer.pubkey(), 

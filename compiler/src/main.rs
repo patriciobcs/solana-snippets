@@ -70,6 +70,7 @@ fn generate_snippets(filepath: PathBuf) -> Vec<(String, JsonValue)> {
             requires: [],
             description: "",
             scope: "expr",
+            display: "ra",
             category: "",
             platform: "",
         };
@@ -94,6 +95,8 @@ fn generate_snippets(filepath: PathBuf) -> Vec<(String, JsonValue)> {
                                 config[CATEGORY] = parse_config(contents, CATEGORY).into();
                             } else if contents.trim().starts_with(&PLATFORM.as_comment()) {
                                 config[PLATFORM] = parse_config(contents, PLATFORM).into();
+                            } else if contents.trim().starts_with(&DISPLAY.as_comment()) {
+                                config[DISPLAY] = parse_config(contents, DISPLAY).into();
                             } else if contents.trim().starts_with(&REQUIRES.as_comment()) {
                                 reading = Reading::REQUIRES;
                             } 
@@ -249,7 +252,7 @@ fn generate_extension_snippets(snippets_path: &String, output_path: &String) {
 
         snippet["content"] = snippet[BODY].clone();
         snippet["label"] = key.into(); 
-        snippet["type"] = 3.into();
+        snippet["type"] = (if snippet[DISPLAY] == "ra" { 3 } else { 2 }).into();
         snippet["children"] = array![];
         snippet["parentId"] = category_id;
         snippet["id"] = id.into();
@@ -259,6 +262,7 @@ fn generate_extension_snippets(snippets_path: &String, output_path: &String) {
         snippet.remove(PREFIX);
         snippet.remove(PLATFORM);
         snippet.remove(SCOPE);
+        snippet.remove(DISPLAY);
 
         platforms[&platform]["categories"][category]["children"].push(snippet.clone()).unwrap();
 

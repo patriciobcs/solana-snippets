@@ -4,8 +4,8 @@ pub const DESCRIPTION: &str = "description";
 pub const _PLATFORM: &str = "platform";
 pub const PREFIX: &str = "prefix";
 pub const CATEGORY: &str = "category";
-
 pub const PLATFORM: &str = "platform";
+pub const DISPLAY: &str = "display";
 pub const SCOPE: &str = "scope";
 pub const BODY: &str = "body";
 pub const REQUIRES: &str = "requires";

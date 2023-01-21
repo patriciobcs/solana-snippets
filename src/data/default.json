@@ -338,11 +338,11 @@
                   "id": 21
                 },
                 {
-                  "requires": [
-                    "anchor_lang::prelude::*"
-                  ],
+                  "requires": [],
                   "description": "Creates a basic program entrypoint",
                   "content": [
+                    "use anchor_lang::prelude::*;",
+                    "",
                     "#[program]",
                     "pub mod anchor {",
                     "pub use super::*;",
@@ -353,7 +353,7 @@
                     "}"
                   ],
                   "label": "Program",
-                  "type": 3,
+                  "type": 2,
                   "children": [],
                   "parentId": 19,
                   "id": 22

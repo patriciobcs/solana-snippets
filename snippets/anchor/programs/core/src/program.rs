@@ -3,11 +3,11 @@
 //* platform: anchor
 //* category: system
 //* prefix: program
-//* scope: stmt
-//* requires
-use anchor_lang::prelude::*;
+//* display: vscode
 
 /*/* content */*/
+use anchor_lang::prelude::*;
+
 #[program]
 pub mod anchor {
     pub use super::*;

@@ -7,7 +7,6 @@ pub mod anchor {
     use super::*;
 
     pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-
         
         Ok(())
     }

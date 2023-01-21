@@ -4,11 +4,9 @@
 //* category: system
 //* prefix: instruction
 //* requires
-use anchor_lang::prelude::Context;
-use anchor_lang::prelude::Result;
-use anchor_lang::Accounts;
-
 /*/* content */*/
+use anchor_lang::prelude::*
+
 #[derive(Accounts)]
 pub struct __Instruction__ {}
 

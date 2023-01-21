@@ -32,7 +32,7 @@ macro_rules! call_instruction {
 #[macro_export]
 macro_rules! test {
     ($instruction_name:ident => $body:block) => {
-        #[tokio::test]
+        #[solana_program_test::tokio::test]
         async fn $instruction_name() {
             $body
         }
@@ -69,6 +69,33 @@ macro_rules! test_instruction {
                 &account.pubkey()).unwrap();
                 signed by [&context.payer]
             );
+        });
+    };
+}
+
+#[macro_export]
+macro_rules! get_anchor_program_context {
+    ($program:ident) => {{
+        let program = solana_program_test::ProgramTest::new(
+            stringify!($program),
+            $program::id(),
+            solana_program_test::processor!($program::entry),
+        );
+        program.start_with_context().await
+    }};
+}
+
+
+#[macro_export]
+macro_rules! test_anchor_instruction {
+    (no_accounts, $package:ident::$instruction_name:ident::$instruction_symbol:ident) => {
+        test!($instruction_name => {
+            let mut context = get_anchor_program_context!($package);
+            call_instruction!(context, solana_sdk::instruction::Instruction {
+                program_id: $package::id(),
+                accounts: $package::instructions::$instruction_name::$instruction_symbol {}.to_account_metas(None),
+                data: $package::instruction::$instruction_symbol {}.data(),
+            }; signed by [&context.payer]);
         });
     };
 }

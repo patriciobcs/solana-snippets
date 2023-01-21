@@ -1,3 +1,9 @@
+//* title: Transfer Lamports
+//* description: Transfer lamports from one account to another
+//* platform: client
+//* category: system
+//* prefix: transferlamp
+//* requires
 use solana_program_test::ProgramTestContext;
 use solana_program_test::BanksClientError;
 use solana_sdk::pubkey::Pubkey;
@@ -6,19 +12,20 @@ use solana_sdk::signer::Signer;
 use solana_sdk::system_instruction;
 use solana_sdk::transaction::Transaction;
 pub async fn transfer_lamports(
-    client: &mut ProgramTestContext,
-    wallet: &Keypair,
-    to: &Pubkey,
-    amount: u64,
+    context: &mut ProgramTestContext,
+    __from__: &Keypair,
+    __to__: &Pubkey,
+    __amount__: u64,
 ) -> Result<(), BanksClientError> {
+    /*/* content */*/
     let tx = Transaction::new_signed_with_payer(
-        &[system_instruction::transfer(&wallet.pubkey(), to, amount)],
-        Some(&wallet.pubkey()),
-        &[wallet],
-        client.last_blockhash,
+        &[system_instruction::transfer(&__from__.pubkey(), __to__, __amount__)],
+        Some(&__from__.pubkey()),
+        &[__from__],
+        context.last_blockhash,
     );
 
-    client.banks_client.process_transaction(tx).await?;
-
+    context.banks_client.process_transaction(tx).await?;
+    /*/* content */*/   
     Ok(())
 }

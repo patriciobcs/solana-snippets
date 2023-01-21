@@ -1,7 +1,7 @@
 {
   "id": 1,
   "parentId": -1,
-  "lastId": 16,
+  "lastId": 24,
   "type": 0,
   "label": "snippets",
   "children": [
@@ -15,272 +15,430 @@
           "id": 3,
           "parentId": 2,
           "type": 1,
-          "label": "Token",
+          "label": "Native",
           "children": [
             {
-              "requires": [
-                "solana_program::program::invoke",
-                "spl_token::instruction::burn"
-              ],
-              "description": "Burn tokens using the Token Program",
-              "content": [
-                "invoke(",
-                "    &burn(",
-                "        &spl_token::ID,",
-                "        ${1:token}_info.key,",
-                "        ${2:mint}_info.key,",
-                "        ${3:authority}_info.key,",
-                "        &[],",
-                "        ${4:amount},",
-                "    )?,",
-                "    &[",
-                "        ${1:token}_info.clone(),",
-                "        ${2:mint}_info.clone(),",
-                "        ${3:authority}_info.clone(),",
-                "    ],",
-                ")?;"
-              ],
-              "label": "Burn Tokens",
-              "type": 3,
-              "children": [],
+              "id": 4,
               "parentId": 3,
-              "id": 4
+              "type": 1,
+              "label": "Token",
+              "children": [
+                {
+                  "requires": [
+                    "solana_program::program::invoke",
+                    "spl_token::instruction::burn"
+                  ],
+                  "description": "Burn tokens using the Token Program",
+                  "content": [
+                    "invoke(",
+                    "    &burn(",
+                    "        &spl_token::ID,",
+                    "        ${1:token}_info.key,",
+                    "        ${2:mint}_info.key,",
+                    "        ${3:authority}_info.key,",
+                    "        &[],",
+                    "        ${4:amount},",
+                    "    )?,",
+                    "    &[",
+                    "        ${1:token}_info.clone(),",
+                    "        ${2:mint}_info.clone(),",
+                    "        ${3:authority}_info.clone(),",
+                    "    ],",
+                    ")?;"
+                  ],
+                  "label": "Burn Tokens",
+                  "type": 3,
+                  "children": [],
+                  "parentId": 4,
+                  "id": 5
+                },
+                {
+                  "requires": [
+                    "solana_program::program::invoke",
+                    "spl_token::instruction::initialize_account"
+                  ],
+                  "description": "Initialize an associated token account using the Token Program",
+                  "content": [
+                    "invoke(",
+                    "    &initialize_account(",
+                    "        &spl_token::ID,",
+                    "        ${1:token}_info.key,",
+                    "        ${2:mint}_info.key,",
+                    "        ${3:authority}_info.key,",
+                    "    )?,",
+                    "    &[",
+                    "        ${1:token}_info.clone(),",
+                    "        ${2:mint}_info.clone(),",
+                    "        ${3:authority}_info.clone(),",
+                    "        ${4:rent}_info.clone(),",
+                    "    ],",
+                    ")?;"
+                  ],
+                  "label": "Init Associated Token Account",
+                  "type": 3,
+                  "children": [],
+                  "parentId": 4,
+                  "id": 6
+                },
+                {
+                  "requires": [
+                    "solana_program::program::invoke",
+                    "spl_token::instruction::revoke"
+                  ],
+                  "description": "Revoke the delegation of any tokens using the Token Program",
+                  "content": [
+                    "invoke(",
+                    "    &revoke(",
+                    "        &spl_token::ID,",
+                    "        ${1:token}_info.key,",
+                    "        ${2:authority}_info.key,",
+                    "        &[],",
+                    "    )?,",
+                    "    &[",
+                    "        ${1:token}_info.clone(),",
+                    "        ${2:authority}_info.clone(),",
+                    "    ],",
+                    ")?;"
+                  ],
+                  "label": "Revoke Tokens Delegation",
+                  "type": 3,
+                  "children": [],
+                  "parentId": 4,
+                  "id": 7
+                },
+                {
+                  "requires": [
+                    "solana_program::program::invoke",
+                    "spl_token::instruction::transfer"
+                  ],
+                  "description": "Transfer tokens using the Token Program",
+                  "content": [
+                    "invoke(",
+                    "    &transfer(",
+                    "        &spl_token::ID,",
+                    "        ${1:sender}_info.key,",
+                    "        ${2:receiver}_info.key,",
+                    "        ${3:authority}_info.key,",
+                    "        &[],",
+                    "        ${4:amount},",
+                    "    )?,",
+                    "    &[",
+                    "        ${1:sender}_info.clone(),",
+                    "        ${2:receiver}_info.clone(),",
+                    "        ${3:authority}_info.clone(),",
+                    "    ],",
+                    ")?;"
+                  ],
+                  "label": "Transfer Tokens",
+                  "type": 3,
+                  "children": [],
+                  "parentId": 4,
+                  "id": 8
+                },
+                {
+                  "requires": [
+                    "solana_program::program::invoke",
+                    "spl_token::instruction::approve"
+                  ],
+                  "description": "Delegate tokens using the Token Program",
+                  "content": [
+                    "invoke(",
+                    "    &approve(",
+                    "        &spl_token::ID,",
+                    "        ${1:token}_info.key,",
+                    "        ${2:delegate}_info.key,",
+                    "        ${3:authority}_info.key,",
+                    "        &[],",
+                    "        ${4:amount},",
+                    "    )?,",
+                    "    &[",
+                    "        ${1:token}_info.clone(),",
+                    "        ${2:delegate}_info.clone(),",
+                    "        ${3:authority}_info.clone(),",
+                    "    ],",
+                    ")?;"
+                  ],
+                  "label": "Delegate Tokens",
+                  "type": 3,
+                  "children": [],
+                  "parentId": 4,
+                  "id": 9
+                }
+              ]
             },
             {
-              "requires": [
-                "solana_program::program::invoke",
-                "spl_token::instruction::initialize_account"
-              ],
-              "description": "Initialize an associated token account using the Token Program",
-              "content": [
-                "invoke(",
-                "    &initialize_account(",
-                "        &spl_token::ID,",
-                "        ${1:token}_info.key,",
-                "        ${2:mint}_info.key,",
-                "        ${3:authority}_info.key,",
-                "    )?,",
-                "    &[",
-                "        ${1:token}_info.clone(),",
-                "        ${2:mint}_info.clone(),",
-                "        ${3:authority}_info.clone(),",
-                "        ${4:rent}_info.clone(),",
-                "    ],",
-                ")?;"
-              ],
-              "label": "Init Associated Token Account",
-              "type": 3,
-              "children": [],
+              "id": 10,
               "parentId": 3,
-              "id": 5
-            },
-            {
-              "requires": [
-                "solana_program::program::invoke",
-                "spl_token::instruction::revoke"
-              ],
-              "description": "Revoke the delegation of any tokens using the Token Program",
-              "content": [
-                "invoke(",
-                "    &revoke(",
-                "        &spl_token::ID,",
-                "        ${1:token}_info.key,",
-                "        ${2:authority}_info.key,",
-                "        &[],",
-                "    )?,",
-                "    &[",
-                "        ${1:token}_info.clone(),",
-                "        ${2:authority}_info.clone(),",
-                "    ],",
-                ")?;"
-              ],
-              "label": "Revoke Tokens Delegation",
-              "type": 3,
-              "children": [],
-              "parentId": 3,
-              "id": 6
-            },
-            {
-              "requires": [
-                "solana_program::program::invoke",
-                "spl_token::instruction::transfer"
-              ],
-              "description": "Transfer tokens using the Token Program",
-              "content": [
-                "invoke(",
-                "    &transfer(",
-                "        &spl_token::ID,",
-                "        ${1:sender}_info.key,",
-                "        ${2:receiver}_info.key,",
-                "        ${3:authority}_info.key,",
-                "        &[],",
-                "        ${4:amount},",
-                "    )?,",
-                "    &[",
-                "        ${1:sender}_info.clone(),",
-                "        ${2:receiver}_info.clone(),",
-                "        ${3:authority}_info.clone(),",
-                "    ],",
-                ")?;"
-              ],
-              "label": "Transfer Tokens",
-              "type": 3,
-              "children": [],
-              "parentId": 3,
-              "id": 7
-            },
-            {
-              "requires": [
-                "solana_program::program::invoke",
-                "spl_token::instruction::approve"
-              ],
-              "description": "Delegate tokens using the Token Program",
-              "content": [
-                "invoke(",
-                "    &approve(",
-                "        &spl_token::ID,",
-                "        ${1:token}_info.key,",
-                "        ${2:delegate}_info.key,",
-                "        ${3:authority}_info.key,",
-                "        &[],",
-                "        ${4:amount},",
-                "    )?,",
-                "    &[",
-                "        ${1:token}_info.clone(),",
-                "        ${2:delegate}_info.clone(),",
-                "        ${3:authority}_info.clone(),",
-                "    ],",
-                ")?;"
-              ],
-              "label": "Delegate Tokens",
-              "type": 3,
-              "children": [],
-              "parentId": 3,
-              "id": 8
+              "type": 1,
+              "label": "System",
+              "children": [
+                {
+                  "requires": [
+                    "solana_program::sysvar::clock::Clock",
+                    "solana_program::sysvar::Sysvar"
+                  ],
+                  "description": "Gets the Clock Sysvar",
+                  "content": [
+                    "let ${1:clock} = Clock::get()?;"
+                  ],
+                  "label": "Get Clock Sysvar",
+                  "type": 3,
+                  "children": [],
+                  "parentId": 10,
+                  "id": 11
+                },
+                {
+                  "requires": [
+                    "solana_program::account_info::next_account_info"
+                  ],
+                  "description": "Get next account in the accounts iterator",
+                  "content": [
+                    "let ${1:account}_info = next_account_info(account_info_iter)?;"
+                  ],
+                  "label": "Get Account",
+                  "type": 3,
+                  "children": [],
+                  "parentId": 10,
+                  "id": 12
+                },
+                {
+                  "requires": [
+                    "solana_program::program::invoke",
+                    "solana_program::system_instruction::transfer"
+                  ],
+                  "description": "Transfer native SOL using System Program",
+                  "content": [
+                    "invoke(",
+                    "    &transfer(${1:sender}_info.key, ${2:receiver}_info.key, ${3:amount}),",
+                    "    &[",
+                    "        ${1:sender}_info.clone(),",
+                    "        ${2:receiver}_info.clone(),",
+                    "        ${4:system_program}_info.clone(),",
+                    "    ],",
+                    ")?;"
+                  ],
+                  "label": "Transfer Native SOL",
+                  "type": 3,
+                  "children": [],
+                  "parentId": 10,
+                  "id": 13
+                },
+                {
+                  "requires": [
+                    "solana_program::sysvar::rent::Rent",
+                    "solana_program::sysvar::Sysvar"
+                  ],
+                  "description": "Gets the Rent Sysvar",
+                  "content": [
+                    "let ${1:rent} = Rent::get()?;"
+                  ],
+                  "label": "Get Rent Sysvar",
+                  "type": 3,
+                  "children": [],
+                  "parentId": 10,
+                  "id": 14
+                },
+                {
+                  "requires": [
+                    "crate::state::__Account__",
+                    "solana_program::account_info::next_account_info",
+                    "solana_program::program_pack::Pack"
+                  ],
+                  "description": "Unpacks an Account Info",
+                  "content": [
+                    "let mut ${1:account} = ${2:Account}::unpack(&${1:account}_info.data.borrow())?;"
+                  ],
+                  "label": "Unpack Account",
+                  "type": 3,
+                  "children": [],
+                  "parentId": 10,
+                  "id": 15
+                },
+                {
+                  "requires": [
+                    "crate::state::__Account__",
+                    "solana_program::program_error::ProgramError",
+                    "solana_program::program_pack::Pack",
+                    "solana_program::sysvar::Sysvar"
+                  ],
+                  "description": "Check if an account is rent exempt",
+                  "content": [
+                    "if !rent.is_exempt(${1:account}_info.lamports(), ${2:Account}::LEN) {",
+                    "    return Err(ProgramError::InvalidAccountData.into());",
+                    "}"
+                  ],
+                  "label": "Check Rent Exempt",
+                  "type": 3,
+                  "children": [],
+                  "parentId": 10,
+                  "id": 16
+                },
+                {
+                  "requires": [
+                    "solana_program::account_info::next_account_info"
+                  ],
+                  "description": "Start iterator to get accounts of instruction",
+                  "content": [
+                    "let account_info_iter = &mut accounts.iter();",
+                    "let ${1:account}_info = next_account_info(account_info_iter)?;"
+                  ],
+                  "label": "Get Accounts Iterator",
+                  "type": 3,
+                  "children": [],
+                  "parentId": 10,
+                  "id": 17
+                }
+              ]
             }
           ]
         },
         {
-          "id": 9,
+          "id": 18,
           "parentId": 2,
           "type": 1,
-          "label": "System",
+          "label": "Client",
           "children": [
             {
-              "requires": [
-                "solana_program::sysvar::clock::Clock",
-                "solana_program::sysvar::Sysvar"
-              ],
-              "description": "Gets the Clock Sysvar",
-              "content": [
-                "let ${1:clock} = Clock::get()?;"
-              ],
-              "label": "Get Clock Sysvar",
-              "type": 3,
-              "children": [],
-              "parentId": 9,
-              "id": 10
-            },
-            {
-              "requires": [
-                "solana_program::account_info::next_account_info"
-              ],
-              "description": "Get next account in the accounts iterator",
-              "content": [
-                "let ${1:account}_info = next_account_info(account_info_iter)?;"
-              ],
-              "label": "Get Account",
-              "type": 3,
-              "children": [],
-              "parentId": 9,
-              "id": 11
-            },
-            {
-              "requires": [
-                "solana_program::program::invoke",
-                "solana_program::system_instruction::transfer"
-              ],
-              "description": "Transfer native SOL using System Program",
-              "content": [
-                "invoke(",
-                "    &transfer(${1:sender}_info.key, ${2:receiver}_info.key, ${3:amount}),",
-                "    &[",
-                "        ${1:sender}_info.clone(),",
-                "        ${2:receiver}_info.clone(),",
-                "        ${4:system_program}_info.clone(),",
-                "    ],",
-                ")?;"
-              ],
-              "label": "Transfer Native SOL",
-              "type": 3,
-              "children": [],
-              "parentId": 9,
-              "id": 12
-            },
-            {
-              "requires": [
-                "solana_program::sysvar::rent::Rent",
-                "solana_program::sysvar::Sysvar"
-              ],
-              "description": "Gets the Rent Sysvar",
-              "content": [
-                "let ${1:rent} = Rent::get()?;"
-              ],
-              "label": "Get Rent Sysvar",
-              "type": 3,
-              "children": [],
-              "parentId": 9,
-              "id": 13
-            },
-            {
-              "requires": [
-                "crate::state::__Account__",
-                "solana_program::account_info::next_account_info",
-                "solana_program::program_pack::Pack"
-              ],
-              "description": "Unpacks an Account Info",
-              "content": [
-                "let mut ${1:account} = ${2:Account}::unpack(&${1:account}_info.data.borrow())?;"
-              ],
-              "label": "Unpack Account",
-              "type": 3,
-              "children": [],
-              "parentId": 9,
-              "id": 14
-            },
-            {
-              "requires": [
-                "crate::state::__Account__",
-                "solana_program::program_error::ProgramError",
-                "solana_program::program_pack::Pack",
-                "solana_program::sysvar::Sysvar"
-              ],
-              "description": "Check if an account is rent exempt",
-              "content": [
-                "if !rent.is_exempt(${1:account}_info.lamports(), ${2:Account}::LEN) {",
-                "    return Err(ProgramError::InvalidAccountData.into());",
-                "}"
-              ],
-              "label": "Check Rent Exempt",
-              "type": 3,
-              "children": [],
-              "parentId": 9,
-              "id": 15
-            },
-            {
-              "requires": [
-                "solana_program::account_info::next_account_info"
-              ],
-              "description": "Start iterator to get accounts of instruction",
-              "content": [
-                "let account_info_iter = &mut accounts.iter();",
-                "let ${1:account}_info = next_account_info(account_info_iter)?;"
-              ],
-              "label": "Get Accounts Iterator",
-              "type": 3,
-              "children": [],
-              "parentId": 9,
-              "id": 16
+              "id": 19,
+              "parentId": 18,
+              "type": 1,
+              "label": "System",
+              "children": [
+                {
+                  "requires": [
+                    "solana_program::system_instruction",
+                    "solana_program_test::ProgramTestContext",
+                    "solana_program_test::BanksClientError",
+                    "solana_sdk::signature::Keypair",
+                    "solana_sdk::signer::Signer",
+                    "solana_sdk::transaction::Transaction"
+                  ],
+                  "description": "Gets the keypair with funds",
+                  "content": [
+                    "  let ${1:keypair} = Keypair::new();",
+                    "  let amount = 1_000_000_000;",
+                    "",
+                    "  let tx = Transaction::new_signed_with_payer(",
+                    "  &[system_instruction::transfer(",
+                    "      &context.payer.pubkey(),",
+                    "      &${1:keypair}.pubkey(),",
+                    "      amount,",
+                    "  )],",
+                    "  Some(&context.payer.pubkey()),",
+                    "  &[&context.payer],",
+                    "  context.last_blockhash,",
+                    "  );",
+                    "",
+                    "  context.banks_client.process_transaction(tx).await.unwrap();"
+                  ],
+                  "label": "Get Funded Keypair",
+                  "type": 3,
+                  "children": [],
+                  "parentId": 19,
+                  "id": 20
+                },
+                {
+                  "requires": [
+                    "solana_sdk::signature::Keypair"
+                  ],
+                  "description": "Clone a keypair",
+                  "content": [
+                    "\tlet ${1:cloned_keypair} = Keypair::from_bytes(&keypair.to_bytes()).unwrap();"
+                  ],
+                  "label": "Clone Keypair",
+                  "type": 3,
+                  "children": [],
+                  "parentId": 19,
+                  "id": 21
+                },
+                {
+                  "requires": [
+                    "solana_program_test::ProgramTestContext",
+                    "solana_program_test::BanksClientError",
+                    "solana_sdk::pubkey::Pubkey",
+                    "solana_sdk::signature::Keypair",
+                    "solana_sdk::signer::Signer",
+                    "solana_sdk::system_instruction",
+                    "solana_sdk::transaction::Transaction"
+                  ],
+                  "description": "Creates an account of size len",
+                  "content": [
+                    "\tlet rent = context.banks_client.get_rent().await.unwrap();",
+                    "\tlet lamports = rent.minimum_balance(${1:len});",
+                    "",
+                    "\tlet tx = Transaction::new_signed_with_payer(",
+                    "\t\t\t&[system_instruction::create_account(",
+                    "\t\t\t\t\t&context.payer.pubkey(),",
+                    "\t\t\t\t\t&${2:account}.pubkey(),",
+                    "\t\t\t\t\tlamports,",
+                    "\t\t\t\t\t${1:len} as u64,",
+                    "\t\t\t\t\t${3:owner},",
+                    "\t\t\t)],",
+                    "\t\t\tSome(&context.payer.pubkey()),",
+                    "\t\t\t&[&context.payer, &${2:account}],",
+                    "\t\t\tcontext.last_blockhash,",
+                    "\t);",
+                    "",
+                    "\tcontext.banks_client.process_transaction(tx).await.unwrap();"
+                  ],
+                  "label": "Create Account",
+                  "type": 3,
+                  "children": [],
+                  "parentId": 19,
+                  "id": 22
+                },
+                {
+                  "requires": [
+                    "solana_program_test::ProgramTestContext",
+                    "solana_sdk::pubkey::Pubkey",
+                    "solana_sdk::account::Account"
+                  ],
+                  "description": "Gets the data of an account",
+                  "content": [
+                    "\tlet ${1:account_data} = context",
+                    "\t\t\t.banks_client",
+                    "\t\t\t.get_account(*${2:pubkey})",
+                    "\t\t\t.await",
+                    "\t\t\t.expect(\"account not found\")",
+                    "\t\t\t.expect(\"account empty\");"
+                  ],
+                  "label": "Get Account Data",
+                  "type": 3,
+                  "children": [],
+                  "parentId": 19,
+                  "id": 23
+                },
+                {
+                  "requires": [
+                    "solana_program_test::ProgramTestContext",
+                    "solana_program_test::BanksClientError",
+                    "solana_sdk::pubkey::Pubkey",
+                    "solana_sdk::signer::Signer",
+                    "solana_sdk::system_instruction",
+                    "solana_sdk::transaction::Transaction"
+                  ],
+                  "description": "Airdrop an account",
+                  "content": [
+                    "\tlet tx = Transaction::new_signed_with_payer(",
+                    "\t\t\t&[system_instruction::transfer(",
+                    "\t\t\t\t\t&context.payer.pubkey(),",
+                    "\t\t\t\t\t${1:receiver},",
+                    "\t\t\t\t\t${2:amount},",
+                    "\t\t\t)],",
+                    "\t\t\tSome(&context.payer.pubkey()),",
+                    "\t\t\t&[&context.payer],",
+                    "\t\t\tcontext.last_blockhash,",
+                    "\t);",
+                    "",
+                    "\tcontext.banks_client.process_transaction(tx).await.unwrap();"
+                  ],
+                  "label": "Airdrop",
+                  "type": 3,
+                  "children": [],
+                  "parentId": 19,
+                  "id": 24
+                }
+              ]
             }
           ]
         }

@@ -206,25 +206,36 @@ fn generate_extension_snippets(snippets_path: &String, output_path: &String) {
         children: []
     };
 
-    let mut categories = object! {};
+    let mut platforms = object! {};
     
     let mut id = 3;
 
     for (key, value) in ra_snippets.entries() {
         let mut snippet = value.clone();
-
-        snippet["content"] = snippet["body"].clone();
-        snippet.remove("body");
-
-        snippet["label"] = key.into(); 
-        snippet["type"] = 3.into();
-        snippet["children"] = array![];
         let category = snippet[CATEGORY].as_str().unwrap().trim().to_owned();
-        snippet["parentId"] = if !categories.has_key(snippet[CATEGORY].as_str().unwrap()) {
-            let label = category[0..1].to_uppercase() + &category[1..];
-            categories[snippet[CATEGORY].as_str().unwrap()] = object! {
+        let platform = snippet[PLATFORM].as_str().unwrap().trim().split(",").into_iter().next().unwrap().to_owned();
+
+        let platform_id = if !platforms.has_key(&platform) {
+            let label = platform[0..1].to_uppercase() + &platform[1..];
+            platforms[&platform] = object! {
                 id: id,
                 parentId: 2,
+                "type": 1,
+                label: label,
+                children: [],
+                categories: {},
+            };
+            id += 1;
+            id - 1
+        } else {
+            platforms[&platform]["id"].as_i32().unwrap()
+        };
+
+        let category_id = if !platforms[&platform]["categories"].has_key(snippet[CATEGORY].as_str().unwrap()) {
+            let label = category[0..1].to_uppercase() + &category[1..];
+            platforms[&platform]["categories"][snippet[CATEGORY].as_str().unwrap()] = object! {
+                id: id,
+                parentId: platform_id,
                 "type": 1,
                 label: label,
                 children: []
@@ -232,21 +243,36 @@ fn generate_extension_snippets(snippets_path: &String, output_path: &String) {
             id += 1;
             (id - 1).into()
         } else {
-            categories[snippet[CATEGORY].as_str().unwrap()]["id"].clone()
+            platforms[&platform]["categories"][snippet[CATEGORY].as_str().unwrap()]["id"].clone()
         };
+
+
+        snippet["content"] = snippet[BODY].clone();
+        snippet["label"] = key.into(); 
+        snippet["type"] = 3.into();
+        snippet["children"] = array![];
+        snippet["parentId"] = category_id;
         snippet["id"] = id.into();
+        
+        snippet.remove(BODY);
         snippet.remove(CATEGORY);
         snippet.remove(PREFIX);
         snippet.remove(PLATFORM);
-        snippet.remove("scope");
+        snippet.remove(SCOPE);
 
-        categories[category]["children"].push(snippet.clone()).unwrap();
+        platforms[&platform]["categories"][category]["children"].push(snippet.clone()).unwrap();
 
         id += 1;
     }
 
-    for (_, value) in categories.entries() {
-        solana_folder["children"].push(value.clone()).unwrap();
+    for (_, platform) in platforms.entries_mut() {
+        let mut children = array![];
+        for (_, category) in platform["categories"].entries() {
+            children.push(category.clone()).unwrap();
+        }
+        platform["children"] = children;
+        platform.remove("categories");
+        solana_folder["children"].push(platform.clone()).unwrap();
     }
 
     snippets["lastId"] = (id - 1).into();

@@ -13,11 +13,11 @@ pub async fn create_mint_token_pair(
     amount: u64,
 ) -> Result<(Keypair, Pubkey), BanksClientError> {
     let mint = Keypair::new();
-	let authority = context.payer.pubkey(); 
+    let authority = context.payer.pubkey(); 
 
-	create_mint(context, &mint, &authority, Some(&authority)).await.unwrap();
+    create_mint(context, &mint, &authority, Some(&authority)).await.unwrap();
     
-	let ata = create_associated_token_account(context, &authority, &mint.pubkey()).await.unwrap();
+    let ata = create_associated_token_account(context, &authority, &mint.pubkey()).await.unwrap();
 
     if amount > 0 {
         mint_tokens(context, &mint.pubkey(), &ata, amount, &authority, None).await.unwrap();

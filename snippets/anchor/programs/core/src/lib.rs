@@ -16,13 +16,13 @@ declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
 //         }
 //     };
 // }
+// instruction!(initialize(ctx: Context<Initialize>));
 
 #[program]
 pub mod anchor {
     pub use super::*;
 
-    // instruction!(initialize(ctx: Context<Initialize>));
-    pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-        instructions::initialize::processor(ctx)
+    pub fn get_bump(ctx: Context<GetBump>) -> Result<()> {
+        instructions::get_bump::processor(ctx)
     }
 }

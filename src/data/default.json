@@ -1,7 +1,7 @@
 {
   "id": 1,
   "parentId": -1,
-  "lastId": 24,
+  "lastId": 29,
   "type": 0,
   "label": "snippets",
   "children": [
@@ -296,11 +296,81 @@
           "id": 18,
           "parentId": 2,
           "type": 1,
-          "label": "Client",
+          "label": "Anchor",
           "children": [
             {
               "id": 19,
               "parentId": 18,
+              "type": 1,
+              "label": "System",
+              "children": [
+                {
+                  "requires": [],
+                  "description": "Get the bump of an account",
+                  "content": [
+                    "${1:pda}.bump = *ctx.bumps.get(\"${1:pda}\").unwrap();"
+                  ],
+                  "label": "Get Bump",
+                  "type": 3,
+                  "children": [],
+                  "parentId": 19,
+                  "id": 20
+                },
+                {
+                  "requires": [
+                    "anchor_lang::prelude::Context",
+                    "anchor_lang::prelude::Result",
+                    "anchor_lang::Accounts"
+                  ],
+                  "description": "Template for an instruction context and its processor",
+                  "content": [
+                    "#[derive(Accounts)]",
+                    "pub struct ${1:Instruction} {}",
+                    "",
+                    "pub fn processor(_ctx: Context<${1:Instruction}>) -> Result<()> {",
+                    "Ok(())",
+                    "}"
+                  ],
+                  "label": "Instruction",
+                  "type": 3,
+                  "children": [],
+                  "parentId": 19,
+                  "id": 21
+                },
+                {
+                  "requires": [
+                    "anchor_lang::prelude::*"
+                  ],
+                  "description": "Creates a basic program entrypoint",
+                  "content": [
+                    "#[program]",
+                    "pub mod anchor {",
+                    "pub use super::*;",
+                    "",
+                    "pub fn ${1:instruction}(ctx: Context<${2:Instruction}>) -> Result<()> {",
+                    "    instructions::${1:instruction}::processor(ctx)",
+                    "}",
+                    "}"
+                  ],
+                  "label": "Program",
+                  "type": 3,
+                  "children": [],
+                  "parentId": 19,
+                  "id": 22
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 23,
+          "parentId": 2,
+          "type": 1,
+          "label": "Client",
+          "children": [
+            {
+              "id": 24,
+              "parentId": 23,
               "type": 1,
               "label": "System",
               "children": [
@@ -315,27 +385,27 @@
                   ],
                   "description": "Gets the keypair with funds",
                   "content": [
-                    "  let ${1:keypair} = Keypair::new();",
-                    "  let amount = 1_000_000_000;",
+                    "let ${1:keypair} = Keypair::new();",
+                    "let amount = 1_000_000_000;",
                     "",
-                    "  let tx = Transaction::new_signed_with_payer(",
-                    "  &[system_instruction::transfer(",
-                    "      &context.payer.pubkey(),",
-                    "      &${1:keypair}.pubkey(),",
-                    "      amount,",
-                    "  )],",
-                    "  Some(&context.payer.pubkey()),",
-                    "  &[&context.payer],",
-                    "  context.last_blockhash,",
-                    "  );",
+                    "let tx = Transaction::new_signed_with_payer(",
+                    "    &[system_instruction::transfer(",
+                    "        &context.payer.pubkey(),",
+                    "        &${1:keypair}.pubkey(),",
+                    "        amount,",
+                    "    )],",
+                    "    Some(&context.payer.pubkey()),",
+                    "    &[&context.payer],",
+                    "    context.last_blockhash,",
+                    ");",
                     "",
-                    "  context.banks_client.process_transaction(tx).await.unwrap();"
+                    "context.banks_client.process_transaction(tx).await.unwrap();"
                   ],
                   "label": "Get Funded Keypair",
                   "type": 3,
                   "children": [],
-                  "parentId": 19,
-                  "id": 20
+                  "parentId": 24,
+                  "id": 25
                 },
                 {
                   "requires": [
@@ -343,13 +413,13 @@
                   ],
                   "description": "Clone a keypair",
                   "content": [
-                    "\tlet ${1:cloned_keypair} = Keypair::from_bytes(&keypair.to_bytes()).unwrap();"
+                    "let ${1:cloned_keypair} = Keypair::from_bytes(&keypair.to_bytes()).unwrap();"
                   ],
                   "label": "Clone Keypair",
                   "type": 3,
                   "children": [],
-                  "parentId": 19,
-                  "id": 21
+                  "parentId": 24,
+                  "id": 26
                 },
                 {
                   "requires": [
@@ -363,29 +433,29 @@
                   ],
                   "description": "Creates an account of size len",
                   "content": [
-                    "\tlet rent = context.banks_client.get_rent().await.unwrap();",
-                    "\tlet lamports = rent.minimum_balance(${1:len});",
+                    "let rent = context.banks_client.get_rent().await.unwrap();",
+                    "let lamports = rent.minimum_balance(${1:len});",
                     "",
-                    "\tlet tx = Transaction::new_signed_with_payer(",
-                    "\t\t\t&[system_instruction::create_account(",
-                    "\t\t\t\t\t&context.payer.pubkey(),",
-                    "\t\t\t\t\t&${2:account}.pubkey(),",
-                    "\t\t\t\t\tlamports,",
-                    "\t\t\t\t\t${1:len} as u64,",
-                    "\t\t\t\t\t${3:owner},",
-                    "\t\t\t)],",
-                    "\t\t\tSome(&context.payer.pubkey()),",
-                    "\t\t\t&[&context.payer, &${2:account}],",
-                    "\t\t\tcontext.last_blockhash,",
-                    "\t);",
+                    "let tx = Transaction::new_signed_with_payer(",
+                    "    &[system_instruction::create_account(",
+                    "        &context.payer.pubkey(),",
+                    "        &${2:account}.pubkey(),",
+                    "        lamports,",
+                    "        ${1:len} as u64,",
+                    "        ${3:owner},",
+                    "    )],",
+                    "    Some(&context.payer.pubkey()),",
+                    "    &[&context.payer, &${2:account}],",
+                    "    context.last_blockhash,",
+                    ");",
                     "",
-                    "\tcontext.banks_client.process_transaction(tx).await.unwrap();"
+                    "context.banks_client.process_transaction(tx).await.unwrap();"
                   ],
                   "label": "Create Account",
                   "type": 3,
                   "children": [],
-                  "parentId": 19,
-                  "id": 22
+                  "parentId": 24,
+                  "id": 27
                 },
                 {
                   "requires": [
@@ -395,18 +465,18 @@
                   ],
                   "description": "Gets the data of an account",
                   "content": [
-                    "\tlet ${1:account_data} = context",
-                    "\t\t\t.banks_client",
-                    "\t\t\t.get_account(*${2:pubkey})",
-                    "\t\t\t.await",
-                    "\t\t\t.expect(\"account not found\")",
-                    "\t\t\t.expect(\"account empty\");"
+                    "let ${1:account_data} = context",
+                    "    .banks_client",
+                    "    .get_account(*${2:pubkey})",
+                    "    .await",
+                    "    .expect(\"account not found\")",
+                    "    .expect(\"account empty\");"
                   ],
                   "label": "Get Account Data",
                   "type": 3,
                   "children": [],
-                  "parentId": 19,
-                  "id": 23
+                  "parentId": 24,
+                  "id": 28
                 },
                 {
                   "requires": [
@@ -419,24 +489,24 @@
                   ],
                   "description": "Airdrop an account",
                   "content": [
-                    "\tlet tx = Transaction::new_signed_with_payer(",
-                    "\t\t\t&[system_instruction::transfer(",
-                    "\t\t\t\t\t&context.payer.pubkey(),",
-                    "\t\t\t\t\t${1:receiver},",
-                    "\t\t\t\t\t${2:amount},",
-                    "\t\t\t)],",
-                    "\t\t\tSome(&context.payer.pubkey()),",
-                    "\t\t\t&[&context.payer],",
-                    "\t\t\tcontext.last_blockhash,",
-                    "\t);",
+                    "let tx = Transaction::new_signed_with_payer(",
+                    "    &[system_instruction::transfer(",
+                    "        &context.payer.pubkey(),",
+                    "        ${1:receiver},",
+                    "        ${2:amount},",
+                    "    )],",
+                    "    Some(&context.payer.pubkey()),",
+                    "    &[&context.payer],",
+                    "    context.last_blockhash,",
+                    ");",
                     "",
-                    "\tcontext.banks_client.process_transaction(tx).await.unwrap();"
+                    "context.banks_client.process_transaction(tx).await.unwrap();"
                   ],
                   "label": "Airdrop",
                   "type": 3,
                   "children": [],
-                  "parentId": 19,
-                  "id": 24
+                  "parentId": 24,
+                  "id": 29
                 }
               ]
             }

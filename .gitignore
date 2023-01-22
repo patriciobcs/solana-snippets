@@ -1,4 +1,5 @@
-**/target
+**/target/**
+**/target/**
 *.vsix
 build
 node_modules

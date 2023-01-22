@@ -1,13 +1,14 @@
 mod consts;
 mod snippets_parser;
 mod idl_parser;
+mod utils;
 
 use json::{object, array};
 use std::env;
 use std::fs::{File, read_to_string};
 use std::os::unix::prelude::FileExt;
 use crate::snippets_parser::get_snippets;
-use crate::idl_parser::{get_interface_from_idl_single_snippet, get_interface_from_idl_snippets};
+use crate::idl_parser::{get_interface_from_idl_single_snippet, get_interface_from_idl_snippets, scan_programs_idls_and_generate_interfaces};
 use crate::consts::*;
 
 fn generate_rust_analyzer_snippets(snippets_path: &String, extension_config_path: &String) {
@@ -139,11 +140,6 @@ pub fn generate_idl_snippets(idl_path: &String, output_path: &String, program_id
 fn main() -> std::io::Result<()> {
     let args: Vec<String> = env::args().collect();
 
-    if args.len() < 4 {
-        println!("usage: cargo run <format> <path to snippets directory> <path to extension package.json or output path>");
-        return Ok(());
-    }
-
     match &args[1][..] {
         "ra" => generate_rust_analyzer_snippets(&args[2], &args[3]),       
         "sp" => generate_extension_snippets(&args[2], &args[3]),
@@ -154,7 +150,8 @@ fn main() -> std::io::Result<()> {
                 args[4].clone()
             };
             generate_idl_snippets(&args[2], &args[3], &program_id)
-        },       
+        },
+        "idls" => scan_programs_idls_and_generate_interfaces(&args[2]),       
         _ => println!("formats: ra and sp")
     }
     

@@ -1483,6 +1483,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "escrow"
+version = "0.1.0"
+dependencies = [
+ "anchor-lang",
+ "anchor-spl",
+ "spl-token",
+]
+
+[[package]]
 name = "etcd-client"
 version = "0.8.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"

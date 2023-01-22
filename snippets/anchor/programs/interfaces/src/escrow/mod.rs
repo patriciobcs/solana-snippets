@@ -1,2 +1,2 @@
-mod multiple;
-mod single;
+pub mod multiple;
+pub mod single;

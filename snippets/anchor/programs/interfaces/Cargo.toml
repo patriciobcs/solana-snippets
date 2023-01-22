@@ -9,10 +9,9 @@ name = "escrow"
 
 [features]
 no-entrypoint = []
-no-idl = []
-no-log-ix-name = []
 cpi = ["no-entrypoint"]
-default = []
+default = ["cpi"]
+devnet = []
 
 [dependencies]
 anchor-lang = "0.26.0"

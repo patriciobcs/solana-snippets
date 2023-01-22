@@ -1,9 +1,9 @@
 use json::{object, JsonValue};
 use std::collections::HashMap;
-use std::fs::{File, read_dir};
+use std::fs::File;
 use std::io::{self, BufRead};
 use std::path::{Path, PathBuf};
-use crate::consts::*;
+use crate::{consts::*, utils::get_dirs};
 
 fn parse_config(contents: String, config_name: &str) -> String {
     let start_tag = config_name.to_string() + ":";
@@ -140,28 +140,6 @@ fn generate_snippets(filepath: PathBuf) -> Vec<(String, JsonValue)> {
         }
     }
     snippets
-}
-
-fn get_dirs<'a>(dir: &'a Path) -> io::Result<Vec<PathBuf>> {
-    let mut paths = vec![];
-    let ignore = vec!["target", "node_modules"];
-    if dir.is_dir() {
-        'outer: for entry in read_dir(dir)? {
-            let entry = entry?;
-            let path = entry.path();
-            if path.is_dir() {
-                for dir in &ignore {
-                    if path.ends_with(dir) {
-                        continue 'outer;
-                    }
-                }
-                paths.extend(get_dirs(&path)?)
-            } else {
-                paths.push(path)
-            }
-        }
-    }
-    Ok(paths)
 }
 
 pub fn get_snippets(snippets_path: &String) -> JsonValue {

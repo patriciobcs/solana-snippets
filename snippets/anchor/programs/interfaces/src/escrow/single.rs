@@ -1,4 +1,4 @@
-//* title: Escrow Interface
+//* title: All Escrow Interfaces
 //* description: Creates the interface of the escrow program
 //* platform: anchor
 //* category: interfaces
@@ -8,7 +8,7 @@
 /*/* content */*/
 use anchor_lang::prelude::*;
 
-declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
+declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnP");
 
 #[derive(Accounts)]
 pub struct InitializeEscrow<'info> {

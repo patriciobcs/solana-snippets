@@ -1,4 +1,7 @@
+use std::{fs::{read_to_string, File}, path::Path, os::unix::prelude::FileExt};
+
 use json::JsonValue;
+use crate::utils::get_dirs;
 
 // function the convert camelCase to snake_case
 fn camel_to_snake_case(s: &str) -> String {
@@ -24,9 +27,16 @@ fn capitalize_first_letter(s: &str) -> String {
 }
 
 pub fn get_instruction_account_content(account_idl: &JsonValue) -> String {
-	let mut content = String::new();
-
 	let name = camel_to_snake_case(account_idl["name"].as_str().unwrap());
+	
+	if account_idl.has_key("accounts") {
+		let capitalized_name = capitalize_first_letter(account_idl["name"].as_str().unwrap());
+		return format!("  pub {}: {}<'info>,\n", name, capitalized_name);
+	}
+	
+	let mut content = String::new();
+	
+	
 	let is_mut = account_idl["isMut"].as_bool().unwrap();
 	let is_signer = account_idl["isSigner"].as_bool().unwrap();
 
@@ -50,9 +60,15 @@ pub fn get_instruction_account_content(account_idl: &JsonValue) -> String {
 
 pub fn get_instruction_content(instruction_idl: &JsonValue) -> String {
 	let mut content = String::new();
+	let accounts = instruction_idl["accounts"].members();
+
+	for account in accounts.clone() {
+		if account.has_key("accounts") {
+			content.push_str(&get_instruction_content(account));
+		}
+	}
 
 	let name = capitalize_first_letter(instruction_idl["name"].as_str().unwrap());
-	let accounts = instruction_idl["accounts"].members();
 	let _args = instruction_idl["args"].members();
 
 	content.push_str(&format!("#[derive(Accounts)]\npub struct {}<'info> {{\n", name));
@@ -85,7 +101,11 @@ pub fn get_account_content(account_idl: &JsonValue) -> String {
 
 	for field in fields {
 		let name = camel_to_snake_case(field["name"].as_str().unwrap());
-		let ty = convert_to_rust_type(field["type"].as_str().unwrap());
+		let ty = if field["type"].has_key("defined") {
+			field["type"]["defined"].as_str().unwrap().to_string()
+		} else { 
+			convert_to_rust_type(field["type"].as_str().unwrap())
+		};
 
 		content.push_str(&format!("  pub {}: {},\n", name, ty));
 	}
@@ -169,6 +189,30 @@ pub fn get_interface_from_idl_snippets(idl: &JsonValue, program_id: &String) -> 
 		content.push_str("/*/* content */*/\n\n");
 	}
 
-
 	content
+}
+
+pub fn scan_programs_idls_and_generate_interfaces(programs_path: &String) {
+	for idl_path in get_dirs(&Path::new(programs_path)).unwrap() {
+		if !idl_path.ends_with("idl.json") { continue; }
+
+		let idl_file = read_to_string(idl_path.clone()).unwrap();
+    let idl = json::parse(&idl_file).unwrap();
+
+		let output_path = idl_path.parent().unwrap().to_str().unwrap();
+
+		let id_path = format!("{}/id.txt", output_path);
+
+		let program_id = read_to_string(id_path).unwrap().trim().to_string();
+
+		let main_interface_content = get_interface_from_idl_single_snippet(&idl, &program_id);
+
+    let main_interface_output_file = File::create(format!("{}/single.rs", output_path)).unwrap();
+    main_interface_output_file.write_all_at(main_interface_content.as_bytes(), 0).ok();
+
+    let interfaces_content = get_interface_from_idl_snippets(&idl, &program_id);
+
+    let interfaces_output_file = File::create(format!("{}/multiple.rs", output_path)).unwrap();
+    interfaces_output_file.write_all_at(interfaces_content.as_bytes(), 0).ok();
+	}
 }

@@ -1,229 +1,5 @@
 use json::JsonValue;
 
-// IDL:
-// {
-//   "version": "0.1.0",
-//   "name": "escrow",
-//   "instructions": [
-//     {
-//       "name": "initializeEscrow",
-//       "accounts": [
-//         {
-//           "name": "initializer",
-//           "isMut": true,
-//           "isSigner": true
-//         },
-//         {
-//           "name": "initializerDepositTokenAccount",
-//           "isMut": true,
-//           "isSigner": false
-//         },
-//         {
-//           "name": "initializerReceiveTokenAccount",
-//           "isMut": false,
-//           "isSigner": false
-//         },
-//         {
-//           "name": "escrowAccount",
-//           "isMut": true,
-//           "isSigner": true
-//         },
-//         {
-//           "name": "systemProgram",
-//           "isMut": false,
-//           "isSigner": false
-//         },
-//         {
-//           "name": "tokenProgram",
-//           "isMut": false,
-//           "isSigner": false
-//         }
-//       ],
-//       "args": [
-//         {
-//           "name": "initializerAmount",
-//           "type": "u64"
-//         },
-//         {
-//           "name": "takerAmount",
-//           "type": "u64"
-//         }
-//       ]
-//     },
-//     {
-//       "name": "cancelEscrow",
-//       "accounts": [
-//         {
-//           "name": "initializer",
-//           "isMut": false,
-//           "isSigner": false
-//         },
-//         {
-//           "name": "pdaDepositTokenAccount",
-//           "isMut": true,
-//           "isSigner": false
-//         },
-//         {
-//           "name": "pdaAccount",
-//           "isMut": false,
-//           "isSigner": false
-//         },
-//         {
-//           "name": "escrowAccount",
-//           "isMut": true,
-//           "isSigner": false
-//         },
-//         {
-//           "name": "tokenProgram",
-//           "isMut": false,
-//           "isSigner": false
-//         }
-//       ],
-//       "args": []
-//     },
-//     {
-//       "name": "exchange",
-//       "accounts": [
-//         {
-//           "name": "taker",
-//           "isMut": false,
-//           "isSigner": true
-//         },
-//         {
-//           "name": "takerDepositTokenAccount",
-//           "isMut": true,
-//           "isSigner": false
-//         },
-//         {
-//           "name": "takerReceiveTokenAccount",
-//           "isMut": true,
-//           "isSigner": false
-//         },
-//         {
-//           "name": "pdaDepositTokenAccount",
-//           "isMut": true,
-//           "isSigner": false
-//         },
-//         {
-//           "name": "initializerReceiveTokenAccount",
-//           "isMut": true,
-//           "isSigner": false
-//         },
-//         {
-//           "name": "initializerMainAccount",
-//           "isMut": true,
-//           "isSigner": false
-//         },
-//         {
-//           "name": "escrowAccount",
-//           "isMut": true,
-//           "isSigner": false
-//         },
-//         {
-//           "name": "pdaAccount",
-//           "isMut": false,
-//           "isSigner": false
-//         },
-//         {
-//           "name": "tokenProgram",
-//           "isMut": false,
-//           "isSigner": false
-//         }
-//       ],
-//       "args": []
-//     }
-//   ],
-//   "accounts": [
-//     {
-//       "name": "EscrowAccount",
-//       "type": {
-//         "kind": "struct",
-//         "fields": [
-//           {
-//             "name": "initializerKey",
-//             "type": "publicKey"
-//           },
-//           {
-//             "name": "initializerDepositTokenAccount",
-//             "type": "publicKey"
-//           },
-//           {
-//             "name": "initializerReceiveTokenAccount",
-//             "type": "publicKey"
-//           },
-//           {
-//             "name": "initializerAmount",
-//             "type": "u64"
-//           },
-//           {
-//             "name": "takerAmount",
-//             "type": "u64"
-//           }
-//         ]
-//       }
-//     }
-//   ]
-// }
-//
-// Interface:
-// use anchor_lang::prelude::*;
-
-// declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
-
-// #[derive(Accounts)]
-// pub struct InitializeEscrow<'info> {
-//     #[account(mut, signer)]
-//     pub initializer: AccountInfo<'info>,
-//     #[account(mut)]
-//     pub initializer_deposit_token_account: AccountInfo<'info>,
-//     pub initializer_receive_token_account: AccountInfo<'info>,
-//     #[account(mut)]
-//     pub escrow_account: AccountInfo<'info>,
-//     pub system_program: AccountInfo<'info>,
-//     pub token_program: AccountInfo<'info>,
-// }
-
-// #[derive(Accounts)]
-// pub struct Exchange<'info> {
-//     pub taker: AccountInfo<'info>,
-//     #[account(mut)]
-//     pub taker_deposit_token_account: AccountInfo<'info>,
-//     #[account(mut)]
-//     pub taker_receive_token_account: AccountInfo<'info>,
-//     #[account(mut)]
-//     pub pda_deposit_token_account: AccountInfo<'info>,
-//     #[account(mut)]
-//     pub initializer_receive_token_account: AccountInfo<'info>,
-//     #[account(mut)]
-//     pub initializer_main_account: AccountInfo<'info>,
-//     #[account(mut)]
-//     pub escrow_account: AccountInfo<'info>,
-//     pub pda_account: AccountInfo<'info>,
-//     pub token_program: AccountInfo<'info>,
-// }
-
-// #[derive(Accounts)]
-// pub struct CancelEscrow<'info> {
-//     pub initializer: AccountInfo<'info>,
-//     #[account(mut)]
-//     pub pda_deposit_token_account: AccountInfo<'info>,
-//     pub pda_account: AccountInfo<'info>,
-//     #[account(mut)]
-//     pub escrow_account: AccountInfo<'info>,
-//     pub token_program: AccountInfo<'info>,
-// }
-
-// #[account]
-// pub struct EscrowAccount {
-//     pub initializer_key: Pubkey,
-//     pub initializer_deposit_token_account: Pubkey,
-//     pub initializer_receive_token_account: Pubkey,
-//     pub initializer_amount: u64,
-//     pub taker_amount: u64,
-// }
-
-// TODO: Create snippet that generates an derive snippet (#[derive(Account)]) each instruction of the given IDL
-
 // function the convert camelCase to snake_case
 fn camel_to_snake_case(s: &str) -> String {
 	let mut result = String::new();
@@ -298,15 +74,6 @@ pub fn convert_to_rust_type(ty: &str) -> String {
 	}
 }
 
-// #[account]
-// pub struct EscrowAccount {
-//     pub initializer_key: Pubkey,
-//     pub initializer_deposit_token_account: Pubkey,
-//     pub initializer_receive_token_account: Pubkey,
-//     pub initializer_amount: u64,
-//     pub taker_amount: u64,
-// }
-// 
 // function that converts the idl to the struct of the account of the given IDL
 pub fn get_account_content(account_idl: &JsonValue) -> String {
 	let mut content = String::new();
@@ -328,12 +95,19 @@ pub fn get_account_content(account_idl: &JsonValue) -> String {
 	content
 }
 
-// TODO: Create snippet that generates an all the derive snippets
-// TODO: Create snippet that generates the id of the program
-// TODO: Create an snippets that create a file with all the instructions
-// TODO: Create an snippets that generates an accounts snippet (#[account]) each instruction of the given IDL
-pub fn get_interface_from_idl(idl: &JsonValue, program_id: &String) -> String {
-	let mut content = String::from("use anchor_lang::prelude::*;\n\n");
+pub fn get_interface_from_idl_single_snippet(idl: &JsonValue, program_id: &String) -> String {
+	let name = idl["name"].as_str().unwrap();
+
+	let mut content = format!("//* title: All {} Interfaces
+//* description: Creates the interface of the {} program
+//* platform: anchor
+//* category: interfaces
+//* prefix: program
+//* display: vscode
+
+/*/* content */*/\n", capitalize_first_letter(name), name);
+	
+	content.push_str("use anchor_lang::prelude::*;\n\n");
 	
 	content.push_str(&format!("declare_id!(\"{}\");\n\n", program_id)); 
 	
@@ -347,6 +121,54 @@ pub fn get_interface_from_idl(idl: &JsonValue, program_id: &String) -> String {
 	for account in accounts {
 		content.push_str(&get_account_content(account));
 	}
+
+	content.push_str("/*/* content */*/\n\n");
+
+	content
+}
+
+pub fn get_interface_from_idl_snippets(idl: &JsonValue, program_id: &String) -> String {
+	let name = idl["name"].as_str().unwrap();
+
+	let mut content = String::from("use anchor_lang::prelude::*;\n\n");
+	
+	content.push_str(&format!("declare_id!(\"{}\");\n\n", program_id)); 
+	
+	let instructions = idl["instructions"].members();
+	let accounts = idl["accounts"].members();
+	
+	for instruction in instructions {
+		let instruction_name = instruction["name"].as_str().unwrap();
+		content.push_str(&format!("//* title: {capitalized_instruction} {capitalized_program} Interface
+//* description: Creates the interface of the instruction {instruction} of the {program} program
+//* platform: anchor
+//* category: interfaces
+//* prefix: program
+//* display: vscode
+		
+/*/* content */*/\n", capitalized_program = capitalize_first_letter(name), program = name, capitalized_instruction = capitalize_first_letter(instruction_name), instruction = instruction_name));
+			
+		content.push_str(&get_instruction_content(instruction));
+
+		content.push_str("/*/* content */*/\n\n");
+	}
+
+	for account in accounts {
+		let account_name = account["name"].as_str().unwrap();
+		content.push_str(&format!("//* title: {capitalized_instruction} {capitalized_program} Interface
+//* description: Creates the interface of the instruction {instruction} of the {program} program
+//* platform: anchor
+//* category: interfaces
+//* prefix: program
+//* display: vscode
+		
+/*/* content */*/\n", capitalized_program = capitalize_first_letter(name), program = name, capitalized_instruction = capitalize_first_letter(account_name), instruction = account_name));
+			
+		content.push_str(&get_account_content(account));
+
+		content.push_str("/*/* content */*/\n\n");
+	}
+
 
 	content
 }

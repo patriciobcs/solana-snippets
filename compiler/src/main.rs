@@ -7,7 +7,7 @@ use std::env;
 use std::fs::{File, read_to_string};
 use std::os::unix::prelude::FileExt;
 use crate::snippets_parser::get_snippets;
-use crate::idl_parser::get_interface_from_idl;
+use crate::idl_parser::{get_interface_from_idl_single_snippet, get_interface_from_idl_snippets};
 use crate::consts::*;
 
 fn generate_rust_analyzer_snippets(snippets_path: &String, extension_config_path: &String) {
@@ -125,11 +125,15 @@ pub fn generate_idl_snippets(idl_path: &String, output_path: &String, program_id
     let idl_file = read_to_string(idl_path).unwrap();
     let idl = json::parse(&idl_file).unwrap();
 
-    let content = get_interface_from_idl(&idl, &program_id);
+    let main_interface_content = get_interface_from_idl_single_snippet(&idl, &program_id);
 
-    let output_file = File::create(output_path).unwrap();
+    let main_interface_output_file = File::create(format!("{}/single.rs", output_path)).unwrap();
+    main_interface_output_file.write_all_at(main_interface_content.as_bytes(), 0).ok();
 
-    output_file.write_all_at(content.as_bytes(), 0).ok();
+    let interfaces_content = get_interface_from_idl_snippets(&idl, &program_id);
+
+    let interfaces_output_file = File::create(format!("{}/multiple.rs", output_path)).unwrap();
+    interfaces_output_file.write_all_at(interfaces_content.as_bytes(), 0).ok();
 }
 
 fn main() -> std::io::Result<()> {

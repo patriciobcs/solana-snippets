@@ -2,6 +2,14 @@ use anchor_lang::prelude::*;
 
 declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
 
+//* title: InitializeEscrow Escrow Interface
+//* description: Creates the interface of the instruction initializeEscrow of the escrow program
+//* platform: anchor
+//* category: interfaces
+//* prefix: program
+//* display: vscode
+		
+/*/* content */*/
 #[derive(Accounts)]
 pub struct InitializeEscrow<'info> {
   #[account(mut, signer)]
@@ -15,6 +23,16 @@ pub struct InitializeEscrow<'info> {
   pub token_program: AccountInfo<'info>,
 }
 
+/*/* content */*/
+
+//* title: CancelEscrow Escrow Interface
+//* description: Creates the interface of the instruction cancelEscrow of the escrow program
+//* platform: anchor
+//* category: interfaces
+//* prefix: program
+//* display: vscode
+		
+/*/* content */*/
 #[derive(Accounts)]
 pub struct CancelEscrow<'info> {
   pub initializer: AccountInfo<'info>,
@@ -26,6 +44,16 @@ pub struct CancelEscrow<'info> {
   pub token_program: AccountInfo<'info>,
 }
 
+/*/* content */*/
+
+//* title: Exchange Escrow Interface
+//* description: Creates the interface of the instruction exchange of the escrow program
+//* platform: anchor
+//* category: interfaces
+//* prefix: program
+//* display: vscode
+		
+/*/* content */*/
 #[derive(Accounts)]
 pub struct Exchange<'info> {
   #[account(signer)]
@@ -46,6 +74,16 @@ pub struct Exchange<'info> {
   pub token_program: AccountInfo<'info>,
 }
 
+/*/* content */*/
+
+//* title: EscrowAccount Escrow Interface
+//* description: Creates the interface of the instruction EscrowAccount of the escrow program
+//* platform: anchor
+//* category: interfaces
+//* prefix: program
+//* display: vscode
+		
+/*/* content */*/
 #[account]
 pub struct EscrowAccount {
   pub initializer_key: Pubkey,
@@ -54,4 +92,6 @@ pub struct EscrowAccount {
   pub initializer_amount: u64,
   pub taker_amount: u64,
 }
+
+/*/* content */*/
 

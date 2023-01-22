@@ -64,21 +64,23 @@ enum Reading {
 }
 
 fn generate_snippets(filepath: PathBuf) -> Vec<(String, JsonValue)> {
+    let default_config = object! {
+        prefix: [],
+        body: [],
+        requires: [],
+        description: "",
+        scope: "expr",
+        display: "ra",
+        category: "",
+        platform: "",
+    };
     let mut snippets = vec![];
     if let Ok(lines) = read_lines(filepath.clone()) {
         let mut reading = Reading::TITLE;
         let mut inputs = HashMap::new();
         let mut title: Option<String> = None;
-        let mut config: JsonValue = object! {
-            prefix: [],
-            body: [],
-            requires: [],
-            description: "",
-            scope: "expr",
-            display: "ra",
-            category: "",
-            platform: "",
-        };
+        let mut config: JsonValue = default_config.clone();
+
         for line in lines {
             if let Ok(contents) = line {
                 match reading {
@@ -117,7 +119,11 @@ fn generate_snippets(filepath: PathBuf) -> Vec<(String, JsonValue)> {
                     Reading::CONTENT => {
                         if contents.contains(CONTENT_TAG) {
                             snippets.push((title.clone().unwrap(), config.clone()));
-                            reading = Reading::NONE;
+                            reading = Reading::TITLE;
+                            inputs = HashMap::new();
+                            title = None;
+                            config = default_config.clone();
+                    
                         } else {
                             config[BODY].push(parse_body_line(contents, &mut inputs)).ok();
                         }

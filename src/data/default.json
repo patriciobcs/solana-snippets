@@ -1,7 +1,7 @@
 {
   "id": 1,
   "parentId": -1,
-  "lastId": 29,
+  "lastId": 34,
   "type": 0,
   "label": "snippets",
   "children": [
@@ -317,27 +317,6 @@
                   "id": 20
                 },
                 {
-                  "requires": [
-                    "anchor_lang::prelude::Context",
-                    "anchor_lang::prelude::Result",
-                    "anchor_lang::Accounts"
-                  ],
-                  "description": "Template for an instruction context and its processor",
-                  "content": [
-                    "#[derive(Accounts)]",
-                    "pub struct ${1:Instruction} {}",
-                    "",
-                    "pub fn processor(_ctx: Context<${1:Instruction}>) -> Result<()> {",
-                    "Ok(())",
-                    "}"
-                  ],
-                  "label": "Instruction",
-                  "type": 3,
-                  "children": [],
-                  "parentId": 19,
-                  "id": 21
-                },
-                {
                   "requires": [],
                   "description": "Creates a basic program entrypoint",
                   "content": [
@@ -356,21 +335,194 @@
                   "type": 2,
                   "children": [],
                   "parentId": 19,
-                  "id": 22
+                  "id": 21
+                }
+              ]
+            },
+            {
+              "id": 22,
+              "parentId": 18,
+              "type": 1,
+              "label": "Interfaces",
+              "children": [
+                {
+                  "requires": [],
+                  "description": "Creates the interface of the instruction initializeEscrow of the escrow program",
+                  "content": [
+                    "#[derive(Accounts)]",
+                    "pub struct InitializeEscrow<'info> {",
+                    "  #[account(mut, signer)]",
+                    "  pub initializer: AccountInfo<'info>,",
+                    "  #[account(mut)]",
+                    "  pub initializer_deposit_token_account: AccountInfo<'info>,",
+                    "  pub initializer_receive_token_account: AccountInfo<'info>,",
+                    "  #[account(mut, signer)]",
+                    "  pub escrow_account: AccountInfo<'info>,",
+                    "  pub system_program: AccountInfo<'info>,",
+                    "  pub token_program: AccountInfo<'info>,",
+                    "}",
+                    ""
+                  ],
+                  "label": "InitializeEscrow Escrow Interface",
+                  "type": 2,
+                  "children": [],
+                  "parentId": 22,
+                  "id": 23
+                },
+                {
+                  "requires": [],
+                  "description": "Creates the interface of the instruction cancelEscrow of the escrow program",
+                  "content": [
+                    "#[derive(Accounts)]",
+                    "pub struct CancelEscrow<'info> {",
+                    "  pub initializer: AccountInfo<'info>,",
+                    "  #[account(mut)]",
+                    "  pub pda_deposit_token_account: AccountInfo<'info>,",
+                    "  pub pda_account: AccountInfo<'info>,",
+                    "  #[account(mut)]",
+                    "  pub escrow_account: AccountInfo<'info>,",
+                    "  pub token_program: AccountInfo<'info>,",
+                    "}",
+                    ""
+                  ],
+                  "label": "CancelEscrow Escrow Interface",
+                  "type": 2,
+                  "children": [],
+                  "parentId": 22,
+                  "id": 24
+                },
+                {
+                  "requires": [],
+                  "description": "Creates the interface of the instruction exchange of the escrow program",
+                  "content": [
+                    "#[derive(Accounts)]",
+                    "pub struct Exchange<'info> {",
+                    "  #[account(signer)]",
+                    "  pub taker: AccountInfo<'info>,",
+                    "  #[account(mut)]",
+                    "  pub taker_deposit_token_account: AccountInfo<'info>,",
+                    "  #[account(mut)]",
+                    "  pub taker_receive_token_account: AccountInfo<'info>,",
+                    "  #[account(mut)]",
+                    "  pub pda_deposit_token_account: AccountInfo<'info>,",
+                    "  #[account(mut)]",
+                    "  pub initializer_receive_token_account: AccountInfo<'info>,",
+                    "  #[account(mut)]",
+                    "  pub initializer_main_account: AccountInfo<'info>,",
+                    "  #[account(mut)]",
+                    "  pub escrow_account: AccountInfo<'info>,",
+                    "  pub pda_account: AccountInfo<'info>,",
+                    "  pub token_program: AccountInfo<'info>,",
+                    "}",
+                    ""
+                  ],
+                  "label": "Exchange Escrow Interface",
+                  "type": 2,
+                  "children": [],
+                  "parentId": 22,
+                  "id": 25
+                },
+                {
+                  "requires": [],
+                  "description": "Creates the interface of the instruction EscrowAccount of the escrow program",
+                  "content": [
+                    "#[account]",
+                    "pub struct EscrowAccount {",
+                    "  pub initializer_key: Pubkey,",
+                    "  pub initializer_deposit_token_account: Pubkey,",
+                    "  pub initializer_receive_token_account: Pubkey,",
+                    "  pub initializer_amount: u64,",
+                    "  pub taker_amount: u64,",
+                    "}",
+                    ""
+                  ],
+                  "label": "EscrowAccount Escrow Interface",
+                  "type": 2,
+                  "children": [],
+                  "parentId": 22,
+                  "id": 26
+                },
+                {
+                  "requires": [],
+                  "description": "Creates the interface of the escrow program",
+                  "content": [
+                    "use anchor_lang::prelude::*;",
+                    "",
+                    "declare_id!(\"Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS\");",
+                    "",
+                    "#[derive(Accounts)]",
+                    "pub struct InitializeEscrow<'info> {",
+                    "  #[account(mut, signer)]",
+                    "  pub initializer: AccountInfo<'info>,",
+                    "  #[account(mut)]",
+                    "  pub initializer_deposit_token_account: AccountInfo<'info>,",
+                    "  pub initializer_receive_token_account: AccountInfo<'info>,",
+                    "  #[account(mut, signer)]",
+                    "  pub escrow_account: AccountInfo<'info>,",
+                    "  pub system_program: AccountInfo<'info>,",
+                    "  pub token_program: AccountInfo<'info>,",
+                    "}",
+                    "",
+                    "#[derive(Accounts)]",
+                    "pub struct CancelEscrow<'info> {",
+                    "  pub initializer: AccountInfo<'info>,",
+                    "  #[account(mut)]",
+                    "  pub pda_deposit_token_account: AccountInfo<'info>,",
+                    "  pub pda_account: AccountInfo<'info>,",
+                    "  #[account(mut)]",
+                    "  pub escrow_account: AccountInfo<'info>,",
+                    "  pub token_program: AccountInfo<'info>,",
+                    "}",
+                    "",
+                    "#[derive(Accounts)]",
+                    "pub struct Exchange<'info> {",
+                    "  #[account(signer)]",
+                    "  pub taker: AccountInfo<'info>,",
+                    "  #[account(mut)]",
+                    "  pub taker_deposit_token_account: AccountInfo<'info>,",
+                    "  #[account(mut)]",
+                    "  pub taker_receive_token_account: AccountInfo<'info>,",
+                    "  #[account(mut)]",
+                    "  pub pda_deposit_token_account: AccountInfo<'info>,",
+                    "  #[account(mut)]",
+                    "  pub initializer_receive_token_account: AccountInfo<'info>,",
+                    "  #[account(mut)]",
+                    "  pub initializer_main_account: AccountInfo<'info>,",
+                    "  #[account(mut)]",
+                    "  pub escrow_account: AccountInfo<'info>,",
+                    "  pub pda_account: AccountInfo<'info>,",
+                    "  pub token_program: AccountInfo<'info>,",
+                    "}",
+                    "",
+                    "#[account]",
+                    "pub struct EscrowAccount {",
+                    "  pub initializer_key: Pubkey,",
+                    "  pub initializer_deposit_token_account: Pubkey,",
+                    "  pub initializer_receive_token_account: Pubkey,",
+                    "  pub initializer_amount: u64,",
+                    "  pub taker_amount: u64,",
+                    "}",
+                    ""
+                  ],
+                  "label": "Escrow Interface",
+                  "type": 2,
+                  "children": [],
+                  "parentId": 22,
+                  "id": 27
                 }
               ]
             }
           ]
         },
         {
-          "id": 23,
+          "id": 28,
           "parentId": 2,
           "type": 1,
           "label": "Client",
           "children": [
             {
-              "id": 24,
-              "parentId": 23,
+              "id": 29,
+              "parentId": 28,
               "type": 1,
               "label": "System",
               "children": [
@@ -404,8 +556,8 @@
                   "label": "Get Funded Keypair",
                   "type": 3,
                   "children": [],
-                  "parentId": 24,
-                  "id": 25
+                  "parentId": 29,
+                  "id": 30
                 },
                 {
                   "requires": [
@@ -418,8 +570,8 @@
                   "label": "Clone Keypair",
                   "type": 3,
                   "children": [],
-                  "parentId": 24,
-                  "id": 26
+                  "parentId": 29,
+                  "id": 31
                 },
                 {
                   "requires": [
@@ -454,8 +606,8 @@
                   "label": "Create Account",
                   "type": 3,
                   "children": [],
-                  "parentId": 24,
-                  "id": 27
+                  "parentId": 29,
+                  "id": 32
                 },
                 {
                   "requires": [
@@ -475,8 +627,8 @@
                   "label": "Get Account Data",
                   "type": 3,
                   "children": [],
-                  "parentId": 24,
-                  "id": 28
+                  "parentId": 29,
+                  "id": 33
                 },
                 {
                   "requires": [
@@ -505,8 +657,8 @@
                   "label": "Airdrop",
                   "type": 3,
                   "children": [],
-                  "parentId": 24,
-                  "id": 29
+                  "parentId": 29,
+                  "id": 34
                 }
               ]
             }

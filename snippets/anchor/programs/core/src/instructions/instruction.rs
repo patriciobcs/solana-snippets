@@ -5,7 +5,7 @@
 //* display: vscode
 
 /*/* content */*/
-use anchor_lang::prelude::*
+use anchor_lang::prelude::*;
 
 #[derive(Accounts)]
 pub struct __Instruction__ {}

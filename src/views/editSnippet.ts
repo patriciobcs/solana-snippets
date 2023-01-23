@@ -15,10 +15,11 @@ export class EditSnippet extends EditView {
   handleReceivedMessage(message: any): any {
     switch (message.command) {
       case "edit-snippet":
-        const { label, content, description, requires, resolveSyntax } =
-          message.data;
-
-        let snippetChanges: any = { id: this._snippet.id };
+        // eslint-disable-next-line no-case-declarations
+        const { label, content, description, requires, resolveSyntax } = message.data;
+        
+        // eslint-disable-next-line no-case-declarations
+        const snippetChanges: any = { id: this._snippet.id };
 
         if (this._snippet.parentId) {
           snippetChanges.parentId = this._snippet.parentId;

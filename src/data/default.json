@@ -1,7 +1,7 @@
 {
   "id": 1,
   "parentId": -1,
-  "lastId": 130,
+  "lastId": 140,
   "type": 0,
   "label": "snippets",
   "children": [
@@ -494,20 +494,85 @@
                 },
                 {
                   "requires": [],
+                  "description": "Add the Anchor SPL Dex library to your Anchor program (use on the program folder)",
+                  "content": [
+                    "cargo add anchor-spl --features dex"
+                  ],
+                  "label": "Add Anchor SPL",
+                  "type": 4,
+                  "children": [],
+                  "parentId": 12,
+                  "id": 36
+                },
+                {
+                  "requires": [],
                   "description": "Initialize a new Anchor program (edit this snippet with the name you want)",
                   "content": [
-                    "anchor init anchor-program"
+                    "anchor init anchor_program"
                   ],
                   "label": "Init",
                   "type": 4,
                   "children": [],
                   "parentId": 12,
-                  "id": 36
+                  "id": 37
+                },
+                {
+                  "requires": [],
+                  "description": "Change the cluster of your Anchor program to Devnet",
+                  "content": [
+                    "network=\"devnet\"",
+                    "crate_name=$(basename \"$PWD\")",
+                    "anchor build",
+                    "program_id=$(solana address -k \"target/deploy/$crate_name-keypair.json\")",
+                    "sed -i '' -e 's/^declare_id!(\".*\");/declare_id!(\"'${program_id}'\");/g' \"programs/$crate_name/src/lib.rs\"",
+                    "sed -i '' -e 's/^'${crate_name}' = \".*\"/'${crate_name}' = \"'${program_id}'\"/g' Anchor.toml",
+                    "anchor build",
+                    "sed -i '' -e 's/^cluster = \".*\"/cluster = \"'${network}'\"/g' Anchor.toml",
+                    "solana config set --url devnet",
+                    "solana airdrop 4"
+                  ],
+                  "label": "Set Devnet Cluster",
+                  "type": 4,
+                  "children": [],
+                  "parentId": 12,
+                  "id": 38
+                },
+                {
+                  "requires": [],
+                  "description": "Deploy your Anchor program",
+                  "content": [
+                    "anchor test"
+                  ],
+                  "label": "Deploy",
+                  "type": 4,
+                  "children": [],
+                  "parentId": 12,
+                  "id": 39
+                },
+                {
+                  "requires": [],
+                  "description": "Change the cluster of your Anchor program to Localnet",
+                  "content": [
+                    "network=\"devnet\"",
+                    "crate_name=$(basename \"$PWD\")",
+                    "anchor build",
+                    "program_id=$(solana address -k \"target/deploy/$crate_name-keypair.json\")",
+                    "sed -i '' -e 's/^declare_id!(\".*\");/declare_id!(\"'${program_id}'\");/g' \"programs/$crate_name/src/lib.rs\"",
+                    "sed -i '' -e 's/^'${crate_name}' = \".*\"/'${crate_name}' = \"'${program_id}'\"/g' Anchor.toml",
+                    "anchor build",
+                    "sed -i '' -e 's/^cluster = \".*\"/cluster = \"'${network}'\"/g' Anchor.toml",
+                    "solana config set --url \"http://localhost:8899\""
+                  ],
+                  "label": "Set Localnet Cluster",
+                  "type": 4,
+                  "children": [],
+                  "parentId": 12,
+                  "id": 40
                 }
               ]
             },
             {
-              "id": 37,
+              "id": 41,
               "parentId": 11,
               "type": 1,
               "label": "System",
@@ -521,14 +586,14 @@
                   "label": "Get Bump",
                   "type": 3,
                   "children": [],
-                  "parentId": 37,
-                  "id": 38
+                  "parentId": 41,
+                  "id": 42
                 },
                 {
                   "requires": [],
                   "description": "Template for an instruction context and its processor",
                   "content": [
-                    "use anchor_lang::prelude::*",
+                    "use anchor_lang::prelude::*;",
                     "",
                     "#[derive(Accounts)]",
                     "pub struct ${1:Instruction} {}",
@@ -540,8 +605,8 @@
                   "label": "Instruction",
                   "type": 2,
                   "children": [],
-                  "parentId": 37,
-                  "id": 39
+                  "parentId": 41,
+                  "id": 49
                 },
                 {
                   "requires": [],
@@ -565,13 +630,340 @@
                   "label": "Program",
                   "type": 2,
                   "children": [],
-                  "parentId": 37,
-                  "id": 40
+                  "parentId": 41,
+                  "id": 50
                 }
               ]
             },
             {
-              "id": 41,
+              "id": 43,
+              "parentId": 11,
+              "type": 1,
+              "label": "Dex",
+              "children": [
+                {
+                  "requires": [],
+                  "description": "Openbook's structure useful to for CPI",
+                  "content": [
+                    "use anchor_lang::prelude::*;",
+                    "",
+                    "#[derive(Debug, Clone)]",
+                    "pub struct OpenBookDex;",
+                    "",
+                    "impl Id for OpenBookDex {",
+                    "fn id() -> Pubkey {",
+                    "    anchor_spl::dex::ID",
+                    "",
+                    "    // ORIGINAL OPENBOOK DEX CODE BELOW:",
+                    "    // #[cfg(not(feature = \"devnet\"))]",
+                    "    // anchor_lang::solana_program::declare_id!(\"srmqPvymJeFKQ4zGQed1GFppgkRHL9kaELCbyksJtPX\");",
+                    "    //",
+                    "    // #[cfg(feature = \"devnet\")]",
+                    "    // anchor_lang::solana_program::declare_id!(\"EoTcMgcDRTJVZDMZWBoU6rhYHZfkNTVEAfz3uUJRcYGj\");",
+                    "}",
+                    "}"
+                  ],
+                  "label": "Openbook's Struct",
+                  "type": 2,
+                  "children": [],
+                  "parentId": 43,
+                  "id": 44
+                },
+                {
+                  "requires": [],
+                  "description": "Updates an Order PDA that can be executed in the Openbook protocol",
+                  "content": [
+                    "use anchor_lang::{prelude::*, solana_program::system_program};",
+                    "",
+                    "#[derive(Accounts)]",
+                    "#[instruction(swap_amount: u64)]",
+                    "pub struct UpdateOrder<'info> {",
+                    "#[account(",
+                    "\t\t\tmut,",
+                    "\t\t\tseeds = [SEED_ORDER, payer.key().as_ref(), market.key().as_ref()],",
+                    "\t\t\tbump,",
+                    "\t\t\thas_one = market",
+                    "\t)]",
+                    "pub order: Account<'info, Order>,",
+                    "/// CHECK: market",
+                    "pub market: AccountInfo<'info>,",
+                    "#[account(mut)]",
+                    "pub payer: Signer<'info>,",
+                    "#[account(address = system_program::ID)]",
+                    "pub system_program: Program<'info, System>,",
+                    "}",
+                    "",
+                    "pub fn processor<'info>(ctx: Context<UpdateOrder<'info>>, amount: u64) -> Result<()> {",
+                    "let order = &mut ctx.accounts.order;",
+                    "",
+                    "order.amount = amount;",
+                    "",
+                    "Ok(())",
+                    "}"
+                  ],
+                  "label": "Openbook's Update Order",
+                  "type": 2,
+                  "children": [],
+                  "parentId": 43,
+                  "id": 45
+                },
+                {
+                  "requires": [],
+                  "description": "A order that can be executed on the Openbook protocol",
+                  "content": [
+                    "use {",
+                    "\tanchor_lang::{prelude::*, AnchorDeserialize},",
+                    "\tstd::convert::TryFrom,",
+                    "};",
+                    "",
+                    "pub const SEED_ORDER: &[u8] = b\"order\";",
+                    "",
+                    "#[account]",
+                    "#[derive(Debug)]",
+                    "pub struct Order {",
+                    "\tpub market: Pubkey,",
+                    "\tpub payer: Pubkey,",
+                    "\tpub amount: u64,",
+                    "}",
+                    "",
+                    "impl Order {",
+                    "\tpub fn pubkey(payer: Pubkey, market: Pubkey) -> Pubkey {",
+                    "\t\t\tPubkey::find_program_address(",
+                    "\t\t\t\t\t&[SEED_ORDER, payer.as_ref(), market.as_ref()],",
+                    "\t\t\t\t\t&crate::ID,",
+                    "\t\t\t).0",
+                    "\t}",
+                    "}",
+                    "",
+                    "impl TryFrom<Vec<u8>> for Order {",
+                    "\ttype Error = Error;",
+                    "\tfn try_from(data: Vec<u8>) -> std::result::Result<Self, Self::Error> {",
+                    "\t\t\tOrder::try_deserialize(&mut data.as_slice())",
+                    "\t}",
+                    "}",
+                    "",
+                    "pub trait OrderAccount {",
+                    "\tfn new(&mut self, payer: Pubkey, amount: u64, market: Pubkey) -> Result<()>;",
+                    "}",
+                    "",
+                    "impl OrderAccount for Account<'_, Order> {",
+                    "\tfn new(&mut self, payer: Pubkey, amount: u64, market: Pubkey) -> Result<()> {",
+                    "\t\t\tself.payer = payer;",
+                    "\t\t\tself.amount = amount;",
+                    "\t\t\tself.market = market;",
+                    "\t\t\tOk(())",
+                    "\t}",
+                    "}"
+                  ],
+                  "label": "Openbook's Account Order",
+                  "type": 2,
+                  "children": [],
+                  "parentId": 43,
+                  "id": 46
+                },
+                {
+                  "requires": [],
+                  "description": "Create an Order PDA that can be executed in the Openbook protocol",
+                  "content": [
+                    "use {",
+                    "\tanchor_lang::{",
+                    "\t\t\tprelude::*,",
+                    "\t\t\tsolana_program::{system_program, sysvar},",
+                    "\t},",
+                    "\tanchor_spl::token::{self, Mint, TokenAccount},",
+                    "\tstd::mem::size_of,",
+                    "};",
+                    "",
+                    "#[derive(Accounts)]",
+                    "#[instruction(amount: u64)]",
+                    "pub struct CreateOrder<'info> {",
+                    "\t#[account(address = anchor_spl::dex::ID)]",
+                    "\tpub dex_program: Program<'info, OpenBookDex>,",
+                    "\t#[account(",
+                    "\t\t\tinit,",
+                    "\t\t\tseeds = [SEED_ORDER, payer.key().as_ref(), market.key().as_ref()],",
+                    "\t\t\tbump,",
+                    "\t\t\tpayer = payer,",
+                    "\t\t\tspace = 8 + size_of::<Order>(),",
+                    "\t)]",
+                    "\tpub order: Account<'info, Order>,",
+                    "\t/// CHECK: market",
+                    "\tpub market: AccountInfo<'info>,",
+                    "\t/// CHECK: mint_a",
+                    "\tpub mint_a: Account<'info, Mint>,",
+                    "\t#[account(mut)]",
+                    "\tpub payer: Signer<'info>,",
+                    "\t#[account(",
+                    "\t\t\tmut,",
+                    "\t\t\tassociated_token::authority = payer,",
+                    "\t\t\tassociated_token::mint = mint_a,",
+                    "\t)]",
+                    "\tpub payer_mint_a_token_account: Account<'info, TokenAccount>,",
+                    "\t#[account(address = sysvar::rent::ID)]",
+                    "\tpub rent: Sysvar<'info, Rent>,",
+                    "\t#[account(address = system_program::ID)]",
+                    "\tpub system_program: Program<'info, System>,",
+                    "\t#[account(address = anchor_spl::token::ID)]",
+                    "\tpub token_program: Program<'info, anchor_spl::token::Token>,",
+                    "}",
+                    "",
+                    "pub fn processor<'info>(",
+                    "\tctx: Context<'_, '_, '_, 'info, CreateOrder<'info>>,",
+                    "\tamount: u64,",
+                    ") -> Result<()> {",
+                    "\tlet dex_program = &ctx.accounts.dex_program;",
+                    "\tlet order = &mut ctx.accounts.order;",
+                    "\tlet market = &ctx.accounts.market;",
+                    "\tlet payer = &ctx.accounts.payer;",
+                    "\tlet payer_mint_a_token_account = &mut ctx.accounts.payer_mint_a_token_account;",
+                    "\tlet rent = &ctx.accounts.rent;",
+                    "\tlet token_program = &ctx.accounts.token_program;",
+                    "\tlet open_orders = ctx.remaining_accounts.get(0).unwrap();",
+                    "\tlet bump = *ctx.bumps.get(\"order\").unwrap();",
+                    "\torder.new(payer.key(), amount, market.key())?;",
+                    "",
+                    "\ttoken::approve(",
+                    "\t\t\tCpiContext::new(",
+                    "\t\t\t\t\ttoken_program.to_account_info(),",
+                    "\t\t\t\t\ttoken::Approve {",
+                    "\t\t\t\t\t\t\tto: payer_mint_a_token_account.to_account_info(),",
+                    "\t\t\t\t\t\t\tdelegate: order.to_account_info(),",
+                    "\t\t\t\t\t\t\tauthority: payer.to_account_info(),",
+                    "\t\t\t\t\t},",
+                    "\t\t\t),",
+                    "\t\t\tu64::MAX,",
+                    "\t)?;",
+                    "",
+                    "\tanchor_spl::dex::init_open_orders(CpiContext::new_with_signer(",
+                    "\t\t\tdex_program.to_account_info(),",
+                    "\t\t\tanchor_spl::dex::InitOpenOrders {",
+                    "\t\t\t\t\tauthority: order.to_account_info(),",
+                    "\t\t\t\t\tmarket: market.to_account_info(),",
+                    "\t\t\t\t\topen_orders: open_orders.to_account_info(),",
+                    "\t\t\t\t\trent: rent.to_account_info(),",
+                    "\t\t\t},",
+                    "\t\t\t&[&[",
+                    "\t\t\t\t\tSEED_ORDER,",
+                    "\t\t\t\t\torder.payer.as_ref(),",
+                    "\t\t\t\t\torder.market.as_ref(),",
+                    "\t\t\t\t\t&[bump],",
+                    "\t\t\t]],",
+                    "\t))?;",
+                    "",
+                    "\tOk(())",
+                    "}"
+                  ],
+                  "label": "Openbook's Create Order",
+                  "type": 2,
+                  "children": [],
+                  "parentId": 43,
+                  "id": 47
+                },
+                {
+                  "requires": [],
+                  "description": "Execute an Order PDA that can be executed in the Openbook protocol",
+                  "content": [
+                    "use {",
+                    "anchor_lang::{prelude::*, __private::bytemuck::Contiguous, solana_program::{system_program, sysvar}},",
+                    "anchor_spl::{ ",
+                    "    dex::{serum_dex::{instruction::SelfTradeBehavior, matching::{OrderType, Side}}, NewOrderV3},",
+                    "    token::{Token, TokenAccount},",
+                    "},",
+                    "std::num::NonZeroU64,",
+                    "};",
+                    "",
+                    "#[derive(Accounts)]",
+                    "pub struct ExecuteOrder<'info> {",
+                    "#[account(address = anchor_spl::dex::ID)]",
+                    "pub dex_program: Program<'info, OpenBookDex>,",
+                    "#[account(",
+                    "    seeds = [",
+                    "        SEED_ORDER, ",
+                    "        order.payer.key().as_ref(), ",
+                    "        order.market.key().as_ref(), ",
+                    "    ], ",
+                    "    bump,",
+                    ")]",
+                    "pub order: Account<'info, Order>,",
+                    "#[account(mut)]",
+                    "pub payer: Signer<'info>,",
+                    "#[account(",
+                    "    mut,",
+                    "    associated_token::authority = payer,",
+                    "    associated_token::mint = order,",
+                    ")]",
+                    "pub payer_mint_a_token_account: Account<'info, TokenAccount>,",
+                    "#[account(address = sysvar::rent::ID)]",
+                    "pub rent: Sysvar<'info, Rent>,",
+                    "#[account(address = system_program::ID)]",
+                    "pub system_program: Program<'info, System>,",
+                    "#[account(address = anchor_spl::token::ID)]",
+                    "pub token_program: Program<'info, Token>,",
+                    "}",
+                    "",
+                    "pub fn processor<'info>(ctx: Context<'_, '_, '_, 'info, ExecuteOrder<'info>>) -> Result<()> {",
+                    "let dex_program = &ctx.accounts.dex_program;",
+                    "let order = &ctx.accounts.order;",
+                    "let payer_mint_a_token_account= &mut ctx.accounts.payer_mint_a_token_account;",
+                    "let rent = &ctx.accounts.rent;",
+                    "let token_program = &ctx.accounts.token_program;",
+                    "let market = ctx.remaining_accounts.get(0).unwrap();",
+                    "let mint_a_vault = ctx.remaining_accounts.get(1).unwrap();",
+                    "let mint_b_vault = ctx.remaining_accounts.get(2).unwrap();",
+                    "let request_queue = ctx.remaining_accounts.get(3).unwrap();",
+                    "let event_queue = ctx.remaining_accounts.get(4).unwrap();",
+                    "let market_bids = ctx.remaining_accounts.get(5).unwrap();",
+                    "let market_asks = ctx.remaining_accounts.get(6).unwrap();",
+                    "let open_orders = ctx.remaining_accounts.get(7).unwrap();",
+                    "let bump = *ctx.bumps.get(\"order\").unwrap();",
+                    "",
+                    "anchor_spl::dex::new_order_v3(",
+                    "    CpiContext::new_with_signer(",
+                    "        dex_program.to_account_info(),",
+                    "        NewOrderV3 {",
+                    "            market: market.to_account_info(),",
+                    "            coin_vault: mint_b_vault.to_account_info(),",
+                    "            pc_vault: mint_a_vault.to_account_info(),",
+                    "            request_queue: request_queue.to_account_info(),",
+                    "            event_queue: event_queue.to_account_info(),",
+                    "            market_bids: market_bids.to_account_info(),",
+                    "            market_asks: market_asks.to_account_info(),",
+                    "            open_orders: open_orders.to_account_info(),",
+                    "            order_payer_token_account: payer_mint_a_token_account.to_account_info(),",
+                    "            open_orders_authority: order.to_account_info(),",
+                    "            token_program: token_program.to_account_info(),",
+                    "            rent: rent.to_account_info(),",
+                    "        },",
+                    "        &[&[",
+                    "            SEED_ORDER,",
+                    "            order.payer.as_ref(),",
+                    "            order.market.as_ref(),",
+                    "            &[bump],",
+                    "        ]],",
+                    "    ),",
+                    "    Side::Bid,",
+                    "    NonZeroU64::new(NonZeroU64::MAX_VALUE).unwrap(),",
+                    "    NonZeroU64::new(NonZeroU64::MAX_VALUE).unwrap(),",
+                    "    NonZeroU64::new(order.amount).unwrap(),",
+                    "    SelfTradeBehavior::DecrementTake,",
+                    "    OrderType::Limit,",
+                    "    019269,",
+                    "    std::u16::MAX,",
+                    ")?;",
+                    "",
+                    "Ok(())",
+                    "}"
+                  ],
+                  "label": "Openbook's Execute Order",
+                  "type": 2,
+                  "children": [],
+                  "parentId": 43,
+                  "id": 48
+                }
+              ]
+            },
+            {
+              "id": 51,
               "parentId": 11,
               "type": 1,
               "label": "Interfaces",
@@ -592,8 +984,8 @@
                   "label": "Jupiter's Instruction Route",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 42
+                  "parentId": 51,
+                  "id": 52
                 },
                 {
                   "requires": [],
@@ -628,8 +1020,8 @@
                   "label": "Jupiter's Instruction WhirlpoolSwapExactOutput",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 43
+                  "parentId": 51,
+                  "id": 53
                 },
                 {
                   "requires": [],
@@ -651,8 +1043,8 @@
                   "label": "Jupiter's Instruction CreateOpenOrders",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 44
+                  "parentId": 51,
+                  "id": 54
                 },
                 {
                   "requires": [],
@@ -676,8 +1068,8 @@
                   "label": "Jupiter's Instruction MercurialSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 45
+                  "parentId": 51,
+                  "id": 55
                 },
                 {
                   "requires": [],
@@ -709,8 +1101,8 @@
                   "label": "Jupiter's Instruction CykuraSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 46
+                  "parentId": 51,
+                  "id": 56
                 },
                 {
                   "requires": [],
@@ -757,8 +1149,8 @@
                   "label": "Jupiter's Instruction SerumSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 47
+                  "parentId": 51,
+                  "id": 57
                 },
                 {
                   "requires": [],
@@ -787,8 +1179,8 @@
                   "label": "Jupiter's Instruction SaberSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 48
+                  "parentId": 51,
+                  "id": 58
                 },
                 {
                   "requires": [],
@@ -815,8 +1207,8 @@
                   "label": "Jupiter's Instruction SaberAddDecimals",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 49
+                  "parentId": 51,
+                  "id": 59
                 },
                 {
                   "requires": [],
@@ -848,8 +1240,8 @@
                   "label": "Jupiter's Instruction TokenSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 50
+                  "parentId": 51,
+                  "id": 60
                 },
                 {
                   "requires": [],
@@ -880,8 +1272,8 @@
                   "label": "Jupiter's Instruction SenchaSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 51
+                  "parentId": 51,
+                  "id": 61
                 },
                 {
                   "requires": [],
@@ -913,8 +1305,8 @@
                   "label": "Jupiter's Instruction StepSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 52
+                  "parentId": 51,
+                  "id": 62
                 },
                 {
                   "requires": [],
@@ -947,8 +1339,8 @@
                   "label": "Jupiter's Instruction CropperSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 53
+                  "parentId": 51,
+                  "id": 63
                 },
                 {
                   "requires": [],
@@ -993,8 +1385,8 @@
                   "label": "Jupiter's Instruction RaydiumSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 54
+                  "parentId": 51,
+                  "id": 64
                 },
                 {
                   "requires": [],
@@ -1032,8 +1424,8 @@
                   "label": "Jupiter's Instruction CremaSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 55
+                  "parentId": 51,
+                  "id": 65
                 },
                 {
                   "requires": [],
@@ -1069,8 +1461,8 @@
                   "label": "Jupiter's Instruction LifinitySwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 56
+                  "parentId": 51,
+                  "id": 66
                 },
                 {
                   "requires": [],
@@ -1111,8 +1503,8 @@
                   "label": "Jupiter's Instruction MarinadeDeposit",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 57
+                  "parentId": 51,
+                  "id": 67
                 },
                 {
                   "requires": [],
@@ -1147,8 +1539,8 @@
                   "label": "Jupiter's Instruction MarinadeUnstake",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 58
+                  "parentId": 51,
+                  "id": 68
                 },
                 {
                   "requires": [],
@@ -1180,8 +1572,8 @@
                   "label": "Jupiter's Instruction AldrinSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 59
+                  "parentId": 51,
+                  "id": 69
                 },
                 {
                   "requires": [],
@@ -1214,8 +1606,8 @@
                   "label": "Jupiter's Instruction AldrinV2Swap",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 60
+                  "parentId": 51,
+                  "id": 70
                 },
                 {
                   "requires": [],
@@ -1250,8 +1642,8 @@
                   "label": "Jupiter's Instruction WhirlpoolSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 61
+                  "parentId": 51,
+                  "id": 71
                 },
                 {
                   "requires": [],
@@ -1283,8 +1675,8 @@
                   "label": "Jupiter's Instruction InvariantSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 62
+                  "parentId": 51,
+                  "id": 72
                 },
                 {
                   "requires": [],
@@ -1327,8 +1719,8 @@
                   "label": "Jupiter's Instruction MeteoraSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 63
+                  "parentId": 51,
+                  "id": 73
                 },
                 {
                   "requires": [],
@@ -1368,8 +1760,8 @@
                   "label": "Jupiter's Instruction GoosefxSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 64
+                  "parentId": 51,
+                  "id": 74
                 },
                 {
                   "requires": [],
@@ -1404,8 +1796,8 @@
                   "label": "Jupiter's Instruction DeltafiSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 65
+                  "parentId": 51,
+                  "id": 75
                 },
                 {
                   "requires": [],
@@ -1443,8 +1835,8 @@
                   "label": "Jupiter's Instruction BalansolSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 66
+                  "parentId": 51,
+                  "id": 76
                 },
                 {
                   "requires": [],
@@ -1485,8 +1877,8 @@
                   "label": "Jupiter's Instruction MarcoPoloSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 67
+                  "parentId": 51,
+                  "id": 77
                 },
                 {
                   "requires": [],
@@ -1528,8 +1920,8 @@
                   "label": "Jupiter's Instruction DradexSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 68
+                  "parentId": 51,
+                  "id": 78
                 },
                 {
                   "requires": [],
@@ -1565,8 +1957,8 @@
                   "label": "Jupiter's Instruction LifinityV2Swap",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 69
+                  "parentId": 51,
+                  "id": 79
                 },
                 {
                   "requires": [],
@@ -1599,8 +1991,8 @@
                   "label": "Jupiter's Instruction RaydiumClmmSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 70
+                  "parentId": 51,
+                  "id": 80
                 },
                 {
                   "requires": [],
@@ -1616,8 +2008,8 @@
                   "label": "Jupiter's Type AmountWithSlippage",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 71
+                  "parentId": 51,
+                  "id": 81
                 },
                 {
                   "requires": [],
@@ -1633,8 +2025,8 @@
                   "label": "Jupiter's Type SplitLegDeeper",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 72
+                  "parentId": 51,
+                  "id": 82
                 },
                 {
                   "requires": [],
@@ -1650,8 +2042,8 @@
                   "label": "Jupiter's Type SplitLeg",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 73
+                  "parentId": 51,
+                  "id": 83
                 },
                 {
                   "requires": [],
@@ -1660,8 +2052,8 @@
                   "label": "Jupiter's Type SwapInstrution",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 74
+                  "parentId": 51,
+                  "id": 84
                 },
                 {
                   "requires": [],
@@ -1677,8 +2069,8 @@
                   "label": "Jupiter's Type Side",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 75
+                  "parentId": 51,
+                  "id": 85
                 },
                 {
                   "requires": [],
@@ -1695,8 +2087,8 @@
                   "label": "Jupiter's Type SwapLegSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 76
+                  "parentId": 51,
+                  "id": 86
                 },
                 {
                   "requires": [],
@@ -1713,8 +2105,8 @@
                   "label": "Jupiter's Type SwapLegDeeper",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 77
+                  "parentId": 51,
+                  "id": 87
                 },
                 {
                   "requires": [],
@@ -1731,8 +2123,8 @@
                   "label": "Jupiter's Type SwapLeg",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 78
+                  "parentId": 51,
+                  "id": 88
                 },
                 {
                   "requires": [],
@@ -1774,8 +2166,8 @@
                   "label": "Jupiter's Type Swap",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 79
+                  "parentId": 51,
+                  "id": 89
                 },
                 {
                   "requires": [],
@@ -1793,8 +2185,8 @@
                   "label": "Jupiter's Type SwapAction",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 80
+                  "parentId": 51,
+                  "id": 90
                 },
                 {
                   "requires": [],
@@ -2600,8 +2992,8 @@
                   "label": "All Jupiter Interfaces",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 81
+                  "parentId": 51,
+                  "id": 91
                 },
                 {
                   "requires": [],
@@ -2637,8 +3029,8 @@
                   "label": "Marinade Finance's Instruction Initialize",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 82
+                  "parentId": 51,
+                  "id": 92
                 },
                 {
                   "requires": [],
@@ -2656,8 +3048,8 @@
                   "label": "Marinade Finance's Instruction ChangeAuthority",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 83
+                  "parentId": 51,
+                  "id": 93
                 },
                 {
                   "requires": [],
@@ -2685,8 +3077,8 @@
                   "label": "Marinade Finance's Instruction AddValidator",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 84
+                  "parentId": 51,
+                  "id": 94
                 },
                 {
                   "requires": [],
@@ -2710,8 +3102,8 @@
                   "label": "Marinade Finance's Instruction RemoveValidator",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 85
+                  "parentId": 51,
+                  "id": 95
                 },
                 {
                   "requires": [],
@@ -2731,8 +3123,8 @@
                   "label": "Marinade Finance's Instruction SetValidatorScore",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 86
+                  "parentId": 51,
+                  "id": 96
                 },
                 {
                   "requires": [],
@@ -2750,8 +3142,8 @@
                   "label": "Marinade Finance's Instruction ConfigValidatorSystem",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 87
+                  "parentId": 51,
+                  "id": 97
                 },
                 {
                   "requires": [],
@@ -2783,8 +3175,8 @@
                   "label": "Marinade Finance's Instruction Deposit",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 88
+                  "parentId": 51,
+                  "id": 98
                 },
                 {
                   "requires": [],
@@ -2822,8 +3214,8 @@
                   "label": "Marinade Finance's Instruction DepositStakeAccount",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 89
+                  "parentId": 51,
+                  "id": 99
                 },
                 {
                   "requires": [],
@@ -2855,8 +3247,8 @@
                   "label": "Marinade Finance's Instruction LiquidUnstake",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 90
+                  "parentId": 51,
+                  "id": 100
                 },
                 {
                   "requires": [],
@@ -2884,8 +3276,8 @@
                   "label": "Marinade Finance's Instruction AddLiquidity",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 91
+                  "parentId": 51,
+                  "id": 101
                 },
                 {
                   "requires": [],
@@ -2918,8 +3310,8 @@
                   "label": "Marinade Finance's Instruction RemoveLiquidity",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 92
+                  "parentId": 51,
+                  "id": 102
                 },
                 {
                   "requires": [],
@@ -2937,8 +3329,8 @@
                   "label": "Marinade Finance's Instruction ConfigLp",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 93
+                  "parentId": 51,
+                  "id": 103
                 },
                 {
                   "requires": [],
@@ -2956,8 +3348,8 @@
                   "label": "Marinade Finance's Instruction ConfigMarinade",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 94
+                  "parentId": 51,
+                  "id": 104
                 },
                 {
                   "requires": [],
@@ -2984,8 +3376,8 @@
                   "label": "Marinade Finance's Instruction OrderUnstake",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 95
+                  "parentId": 51,
+                  "id": 105
                 },
                 {
                   "requires": [],
@@ -3009,8 +3401,8 @@
                   "label": "Marinade Finance's Instruction Claim",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 96
+                  "parentId": 51,
+                  "id": 106
                 },
                 {
                   "requires": [],
@@ -3044,8 +3436,8 @@
                   "label": "Marinade Finance's Instruction StakeReserve",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 97
+                  "parentId": 51,
+                  "id": 107
                 },
                 {
                   "requires": [],
@@ -3084,8 +3476,8 @@
                   "label": "Marinade Finance's Instruction UpdateActive",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 98
+                  "parentId": 51,
+                  "id": 108
                 },
                 {
                   "requires": [],
@@ -3125,8 +3517,8 @@
                   "label": "Marinade Finance's Instruction UpdateDeactivated",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 99
+                  "parentId": 51,
+                  "id": 109
                 },
                 {
                   "requires": [],
@@ -3160,8 +3552,8 @@
                   "label": "Marinade Finance's Instruction DeactivateStake",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 100
+                  "parentId": 51,
+                  "id": 110
                 },
                 {
                   "requires": [],
@@ -3188,8 +3580,8 @@
                   "label": "Marinade Finance's Instruction EmergencyUnstake",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 101
+                  "parentId": 51,
+                  "id": 111
                 },
                 {
                   "requires": [],
@@ -3224,8 +3616,8 @@
                   "label": "Marinade Finance's Instruction PartialUnstake",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 102
+                  "parentId": 51,
+                  "id": 112
                 },
                 {
                   "requires": [],
@@ -3256,8 +3648,8 @@
                   "label": "Marinade Finance's Instruction MergeStakes",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 103
+                  "parentId": 51,
+                  "id": 113
                 },
                 {
                   "requires": [],
@@ -3292,8 +3684,8 @@
                   "label": "Marinade Finance's Account State",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 104
+                  "parentId": 51,
+                  "id": 114
                 },
                 {
                   "requires": [],
@@ -3311,8 +3703,8 @@
                   "label": "Marinade Finance's Account TicketAccountData",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 105
+                  "parentId": 51,
+                  "id": 115
                 },
                 {
                   "requires": [],
@@ -3327,8 +3719,8 @@
                   "label": "Marinade Finance's Type Fee",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 106
+                  "parentId": 51,
+                  "id": 116
                 },
                 {
                   "requires": [],
@@ -3350,8 +3742,8 @@
                   "label": "Marinade Finance's Type InitializeData",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 107
+                  "parentId": 51,
+                  "id": 117
                 },
                 {
                   "requires": [],
@@ -3369,8 +3761,8 @@
                   "label": "Marinade Finance's Type LiqPoolInitializeData",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 108
+                  "parentId": 51,
+                  "id": 118
                 },
                 {
                   "requires": [],
@@ -3388,8 +3780,8 @@
                   "label": "Marinade Finance's Type ChangeAuthorityData",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 109
+                  "parentId": 51,
+                  "id": 119
                 },
                 {
                   "requires": [],
@@ -3407,8 +3799,8 @@
                   "label": "Marinade Finance's Type ConfigLpParams",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 110
+                  "parentId": 51,
+                  "id": 120
                 },
                 {
                   "requires": [],
@@ -3430,8 +3822,8 @@
                   "label": "Marinade Finance's Type ConfigMarinadeParams",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 111
+                  "parentId": 51,
+                  "id": 121
                 },
                 {
                   "requires": [],
@@ -3457,8 +3849,8 @@
                   "label": "Marinade Finance's Type LiqPool",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 112
+                  "parentId": 51,
+                  "id": 122
                 },
                 {
                   "requires": [],
@@ -3477,8 +3869,8 @@
                   "label": "Marinade Finance's Type List",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 113
+                  "parentId": 51,
+                  "id": 123
                 },
                 {
                   "requires": [],
@@ -3496,8 +3888,8 @@
                   "label": "Marinade Finance's Type StakeRecord",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 114
+                  "parentId": 51,
+                  "id": 124
                 },
                 {
                   "requires": [],
@@ -3519,8 +3911,8 @@
                   "label": "Marinade Finance's Type StakeSystem",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 115
+                  "parentId": 51,
+                  "id": 125
                 },
                 {
                   "requires": [],
@@ -3539,8 +3931,8 @@
                   "label": "Marinade Finance's Type ValidatorRecord",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 116
+                  "parentId": 51,
+                  "id": 126
                 },
                 {
                   "requires": [],
@@ -3559,8 +3951,8 @@
                   "label": "Marinade Finance's Type ValidatorSystem",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 117
+                  "parentId": 51,
+                  "id": 127
                 },
                 {
                   "requires": [],
@@ -4137,8 +4529,8 @@
                   "label": "All Marinade Finance Interfaces",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 118
+                  "parentId": 51,
+                  "id": 128
                 },
                 {
                   "requires": [],
@@ -4161,8 +4553,8 @@
                   "label": "Escrow's Instruction InitializeEscrow",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 119
+                  "parentId": 51,
+                  "id": 129
                 },
                 {
                   "requires": [],
@@ -4183,8 +4575,8 @@
                   "label": "Escrow's Instruction CancelEscrow",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 120
+                  "parentId": 51,
+                  "id": 130
                 },
                 {
                   "requires": [],
@@ -4214,8 +4606,8 @@
                   "label": "Escrow's Instruction Exchange",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 121
+                  "parentId": 51,
+                  "id": 131
                 },
                 {
                   "requires": [],
@@ -4234,8 +4626,8 @@
                   "label": "Escrow's Account EscrowAccount",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 122
+                  "parentId": 51,
+                  "id": 132
                 },
                 {
                   "requires": [],
@@ -4302,22 +4694,22 @@
                   "label": "All Escrow Interfaces",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 123
+                  "parentId": 51,
+                  "id": 133
                 }
               ]
             }
           ]
         },
         {
-          "id": 124,
+          "id": 134,
           "parentId": 2,
           "type": 1,
           "label": "Client",
           "children": [
             {
-              "id": 125,
-              "parentId": 124,
+              "id": 135,
+              "parentId": 134,
               "type": 1,
               "label": "System",
               "children": [
@@ -4351,8 +4743,8 @@
                   "label": "Get Funded Keypair",
                   "type": 3,
                   "children": [],
-                  "parentId": 125,
-                  "id": 126
+                  "parentId": 135,
+                  "id": 136
                 },
                 {
                   "requires": [
@@ -4365,8 +4757,8 @@
                   "label": "Clone Keypair",
                   "type": 3,
                   "children": [],
-                  "parentId": 125,
-                  "id": 127
+                  "parentId": 135,
+                  "id": 137
                 },
                 {
                   "requires": [
@@ -4401,8 +4793,8 @@
                   "label": "Create Account",
                   "type": 3,
                   "children": [],
-                  "parentId": 125,
-                  "id": 128
+                  "parentId": 135,
+                  "id": 138
                 },
                 {
                   "requires": [
@@ -4422,8 +4814,8 @@
                   "label": "Get Account Data",
                   "type": 3,
                   "children": [],
-                  "parentId": 125,
-                  "id": 129
+                  "parentId": 135,
+                  "id": 139
                 },
                 {
                   "requires": [
@@ -4452,8 +4844,8 @@
                   "label": "Airdrop",
                   "type": 3,
                   "children": [],
-                  "parentId": 125,
-                  "id": 130
+                  "parentId": 135,
+                  "id": 140
                 }
               ]
             }

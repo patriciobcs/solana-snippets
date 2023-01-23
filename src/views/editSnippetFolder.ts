@@ -15,6 +15,7 @@ export class EditSnippetFolder extends EditView {
   handleReceivedMessage(message: any): any {
     switch (message.command) {
       case "edit-folder":
+        // eslint-disable-next-line no-case-declarations
         const label = message.data.label;
 
         // Call provider only if there is data change

@@ -17,7 +17,8 @@ default = []
 
 [dependencies]
 anchor-lang = "0.26.0"
-anchor-spl = "0.26.0"
+anchor-spl = { version = "0.26.0", features = ["dex"] }
+borsh = "0.10.0"
 
 [dev-dependencies]
 anchor-client = "0.26.0"

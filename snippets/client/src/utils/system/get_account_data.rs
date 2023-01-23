@@ -2,7 +2,6 @@
 //* description: Gets the data of an account
 //* platform: client
 //* category: system
-//* prefix: gaccount
 //* requires
 use solana_program_test::ProgramTestContext;
 use solana_sdk::pubkey::Pubkey;

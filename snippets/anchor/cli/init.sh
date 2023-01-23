@@ -4,5 +4,5 @@
 #* category: CLI
 
 #* content
-anchor init anchor-program
+anchor init anchor_program
 #* content

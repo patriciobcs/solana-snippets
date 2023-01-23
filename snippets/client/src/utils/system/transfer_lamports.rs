@@ -2,7 +2,6 @@
 //* description: Transfer lamports from one account to another
 //* platform: client
 //* category: system
-//* prefix: transferlamp
 //* requires
 use solana_program_test::ProgramTestContext;
 use solana_program_test::BanksClientError;

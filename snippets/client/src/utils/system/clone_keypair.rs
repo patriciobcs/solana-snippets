@@ -2,7 +2,6 @@
 //* description: Clone a keypair
 //* platform: client
 //* category: system
-//* prefix: clonekey
 //* requires
 use solana_sdk::signature::Keypair;
 

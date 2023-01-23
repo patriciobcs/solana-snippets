@@ -2,7 +2,6 @@
 //* description: Gets the keypair with funds
 //* platform: client
 //* category: system
-//* prefix: gfkeypair
 //* requires
 use solana_program::system_instruction;
 use solana_program_test::ProgramTestContext;

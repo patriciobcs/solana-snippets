@@ -100,8 +100,8 @@ export abstract class EditView {
             )
           )
         ),
-        snippet: snippet,
         docsUrl: EditView.docsUrl,
+        snippet: Object.assign({}, snippet, { content: (snippet.content || []).join("\n"), requires: (snippet.requires || []).join("\n") }),
       }
     );
 

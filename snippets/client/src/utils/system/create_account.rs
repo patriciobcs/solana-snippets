@@ -2,7 +2,6 @@
 //* description: Creates an account of size len
 //* platform: client
 //* category: system
-//* prefix: caccount
 //* requires
 use solana_program_test::ProgramTestContext;
 use solana_program_test::BanksClientError;

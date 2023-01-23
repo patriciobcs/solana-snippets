@@ -68,6 +68,7 @@ export class Snippet {
     if (
       !Snippet.isSnippet(snippet) ||
       !snippet.content ||
+      snippet.content == undefined ||
       snippet.content.length === 0
     ) {
       return "";

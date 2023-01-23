@@ -12,12 +12,15 @@ fn parse_config(contents: String, config_name: &str) -> String {
 }
 
 trait StringAsComment {
-    fn as_comment(&self) -> String;
+    fn as_comment(&self, extension: &str)-> String;
 }
 
 impl StringAsComment for str {
-    fn as_comment(&self) -> String {
-        format!("{} {}", ONE_LINE_COMMENT, self)
+    fn as_comment(&self, extension: &str) -> String {
+        match extension {
+            "sh" => format!("#* {}", self),
+            _ => format!("//* {}", self),
+        }
     } 
 }
 
@@ -64,13 +67,22 @@ enum Reading {
 }
 
 fn generate_snippets(filepath: PathBuf) -> Vec<(String, JsonValue)> {
+    let extension = filepath.extension().unwrap().to_str().unwrap();
+    let content_tag = match extension {
+        "sh" => ALT_CONTENT_TAG,
+        _ => CONTENT_TAG,
+    };
+    let display = match extension {
+        "sh" => "terminal",
+        _ => "ra",
+    };
     let default_config = object! {
         prefix: [],
         body: [],
         requires: [],
         description: "",
         scope: "expr",
-        display: "ra",
+        display: display,
         category: "",
         platform: "",
     };
@@ -85,7 +97,7 @@ fn generate_snippets(filepath: PathBuf) -> Vec<(String, JsonValue)> {
             if let Ok(contents) = line {
                 match reading {
                     Reading::TITLE => {
-                        if title == None && contents.trim().starts_with(&TITLE.as_comment()) {
+                        if title == None && contents.trim().starts_with(&TITLE.as_comment(extension)) {
                             title = Some(parse_config(contents, TITLE));
                             reading = Reading::CONFIG;
                         }
@@ -94,17 +106,17 @@ fn generate_snippets(filepath: PathBuf) -> Vec<(String, JsonValue)> {
                         if contents.trim().len() == 0 {
                             reading = Reading::NONE;
                         } else {
-                            if contents.trim().starts_with(&DESCRIPTION.as_comment()) {
+                            if contents.trim().starts_with(&DESCRIPTION.as_comment(extension)) {
                                 config[DESCRIPTION] = parse_config(contents, DESCRIPTION).into();
-                            } else if contents.trim().starts_with(&PREFIX.as_comment()) {
+                            } else if contents.trim().starts_with(&PREFIX.as_comment(extension)) {
                                 config[PREFIX].push(parse_config(contents, PREFIX)).ok();
-                            } else if contents.trim().starts_with(&CATEGORY.as_comment()) {
+                            } else if contents.trim().starts_with(&CATEGORY.as_comment(extension)) {
                                 config[CATEGORY] = parse_config(contents, CATEGORY).into();
-                            } else if contents.trim().starts_with(&PLATFORM.as_comment()) {
+                            } else if contents.trim().starts_with(&PLATFORM.as_comment(extension)) {
                                 config[PLATFORM] = parse_config(contents, PLATFORM).into();
-                            } else if contents.trim().starts_with(&DISPLAY.as_comment()) {
+                            } else if contents.trim().starts_with(&DISPLAY.as_comment(extension)) {
                                 config[DISPLAY] = parse_config(contents, DISPLAY).into();
-                            } else if contents.trim().starts_with(&REQUIRES.as_comment()) {
+                            } else if contents.trim().starts_with(&REQUIRES.as_comment(extension)) {
                                 reading = Reading::REQUIRES;
                             } 
                         }
@@ -117,7 +129,7 @@ fn generate_snippets(filepath: PathBuf) -> Vec<(String, JsonValue)> {
                         }
                     }
                     Reading::CONTENT => {
-                        if contents.contains(CONTENT_TAG) {
+                        if contents.contains(content_tag) {
                             snippets.push((title.clone().unwrap(), config.clone()));
                             reading = Reading::TITLE;
                             inputs = HashMap::new();
@@ -129,9 +141,9 @@ fn generate_snippets(filepath: PathBuf) -> Vec<(String, JsonValue)> {
                         }
                     }
                     Reading::NONE => {
-                        if contents.contains(CONTENT_TAG) {
+                        if contents.contains(content_tag) {
                             reading = Reading::CONTENT;
-                        } else if contents.contains(&REQUIRES.as_comment()) {
+                        } else if contents.contains(&REQUIRES.as_comment(extension)) {
                             reading = Reading::REQUIRES;
                         }
                     }

@@ -87,7 +87,11 @@ fn generate_extension_snippets(snippets_path: &String, output_path: &String) {
 
         snippet["content"] = snippet[BODY].clone();
         snippet["label"] = key.into(); 
-        snippet["type"] = (if snippet[DISPLAY] == "ra" { 3 } else { 2 }).into();
+        snippet["type"] = match snippet[DISPLAY].as_str().unwrap() {
+            "ra" => 3,
+            "terminal" => 4,
+            _ => 2
+        }.into();
         snippet["children"] = array![];
         snippet["parentId"] = category_id;
         snippet["id"] = id.into();

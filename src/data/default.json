@@ -1,7 +1,7 @@
 {
   "id": 1,
   "parentId": -1,
-  "lastId": 111,
+  "lastId": 130,
   "type": 0,
   "label": "snippets",
   "children": [
@@ -19,6 +19,170 @@
           "children": [
             {
               "id": 4,
+              "parentId": 3,
+              "type": 1,
+              "label": "CLI",
+              "children": [
+                {
+                  "requires": [],
+                  "description": "Load an Account on the Test Validator (download with `Download Account`), check more in [Solana Cookbook](https://solanacookbook.com/references/local-development.html#using-mainnet-accounts-and-programs).",
+                  "content": [
+                    "solana-test-validator --account SRMuApVNdxXokk5GT7XD5cUUgXMBCoAz2LHeuAoKWRt SRM_token.json --reset"
+                  ],
+                  "label": "Load Account",
+                  "type": 4,
+                  "children": [],
+                  "parentId": 4,
+                  "id": 5
+                },
+                {
+                  "requires": [],
+                  "description": "Send SOL to another account, modify the recipient address (currently is set to the extension's author)",
+                  "content": [
+                    "solana transfer D8ctahEVEnsseDpHHGHn7iwRRPsnYTx2cSre5fc1Th5t 0.1"
+                  ],
+                  "label": "Transfer SOL",
+                  "type": 4,
+                  "children": [],
+                  "parentId": 4,
+                  "id": 6
+                },
+                {
+                  "requires": [],
+                  "description": "Bonk an account, modify the recipient address (currently is bonking the extension's author)",
+                  "content": [
+                    "spl-token transfer 6dhTynDkYsVM7cbF7TKfC9DWB636TcEM935fq7JzL2ES 1 D8ctahEVEnsseDpHHGHn7iwRRPsnYTx2cSre5fc1Th5t"
+                  ],
+                  "label": "Bonk",
+                  "type": 4,
+                  "children": [],
+                  "parentId": 4,
+                  "id": 7
+                },
+                {
+                  "requires": [],
+                  "description": "Get an airdrop to your Solana's CLI account",
+                  "content": [
+                    "solana airdrop 1"
+                  ],
+                  "label": "Airdrop Me",
+                  "type": 4,
+                  "children": [],
+                  "parentId": 4,
+                  "id": 8
+                },
+                {
+                  "requires": [],
+                  "description": "Load an Program on the Test Validator (download with `Download Program`), check more in [Solana Cookbook](https://solanacookbook.com/references/local-development.html#using-mainnet-accounts-and-programs).",
+                  "content": [
+                    "solana-test-validator --bpf-program 9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin serum_dex_v3.so --reset"
+                  ],
+                  "label": "Load Program",
+                  "type": 4,
+                  "children": [],
+                  "parentId": 4,
+                  "id": 9
+                },
+                {
+                  "requires": [],
+                  "description": "Set the endpoint to the Solana Testnet RPC",
+                  "content": [
+                    "solana config set --url https://api.testnet.solana.com"
+                  ],
+                  "label": "Connect to Testnet",
+                  "type": 4,
+                  "children": [],
+                  "parentId": 4,
+                  "id": 10
+                },
+                {
+                  "requires": [],
+                  "description": "Set the endpoint to a custom Solana RPC",
+                  "content": [
+                    "solana config set --url http://privaterpc.com"
+                  ],
+                  "label": "Connect to Custom",
+                  "type": 4,
+                  "children": [],
+                  "parentId": 4,
+                  "id": 14
+                },
+                {
+                  "requires": [],
+                  "description": "Send tokens to another account (`<token_address> <amount> <recipient>`), modify the recipient address (currently is set to the extension's creator)",
+                  "content": [
+                    "spl-token transfer mSoLzYCxHdYgdzU16g5QSh3i5K3z3KZK7ytfqcJm7So 1 D8ctahEVEnsseDpHHGHn7iwRRPsnYTx2cSre5fc1Th5t"
+                  ],
+                  "label": "Transfer Token",
+                  "type": 4,
+                  "children": [],
+                  "parentId": 4,
+                  "id": 15
+                },
+                {
+                  "requires": [],
+                  "description": "Download a Program from the endpoint chain (can be used on local validator), check more in [Solana Cookbook](https://solanacookbook.com/references/local-development.html#using-mainnet-accounts-and-programs).",
+                  "content": [
+                    "solana program dump -u m 9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin serum_dex_v3.so"
+                  ],
+                  "label": "Download Program",
+                  "type": 4,
+                  "children": [],
+                  "parentId": 4,
+                  "id": 16
+                },
+                {
+                  "requires": [],
+                  "description": "Set the endpoint to the Solana Mainnet Beta RPC",
+                  "content": [
+                    "solana config set --url https://api.mainnet-beta.solana.com"
+                  ],
+                  "label": "Connect to Mainnet",
+                  "type": 4,
+                  "children": [],
+                  "parentId": 4,
+                  "id": 17
+                },
+                {
+                  "requires": [],
+                  "description": "Download an Account from the endpoint chain (can be used on local validator), check more in [Solana Cookbook](https://solanacookbook.com/references/local-development.html#using-mainnet-accounts-and-programs).",
+                  "content": [
+                    "solana account -u m --output json-compact --output-file SRM_token.json SRMuApVNdxXokk5GT7XD5cUUgXMBCoAz2LHeuAoKWRt"
+                  ],
+                  "label": "Download Account",
+                  "type": 4,
+                  "children": [],
+                  "parentId": 4,
+                  "id": 18
+                },
+                {
+                  "requires": [],
+                  "description": "Start the Solana test validator, check more in [Solana Cookbook](https://solanacookbook.com/references/local-development.html#starting-a-local-validator).",
+                  "content": [
+                    "cargo build-sbf"
+                  ],
+                  "label": "Test Validator",
+                  "type": 4,
+                  "children": [],
+                  "parentId": 4,
+                  "id": 20
+                },
+                {
+                  "requires": [],
+                  "description": "Set the endpoint to the Solana Devnet RPC",
+                  "content": [
+                    "solana config set --url https://api.devnet.solana.com"
+                  ],
+                  "label": "Connect to Devnet",
+                  "type": 4,
+                  "children": [],
+                  "parentId": 4,
+                  "id": 21
+                }
+              ]
+            },
+            {
+              "id": 22,
               "parentId": 3,
               "type": 1,
               "label": "Token",
@@ -49,8 +213,8 @@
                   "label": "Burn Tokens",
                   "type": 3,
                   "children": [],
-                  "parentId": 4,
-                  "id": 5
+                  "parentId": 22,
+                  "id": 23
                 },
                 {
                   "requires": [
@@ -77,8 +241,8 @@
                   "label": "Init Associated Token Account",
                   "type": 3,
                   "children": [],
-                  "parentId": 4,
-                  "id": 6
+                  "parentId": 22,
+                  "id": 24
                 },
                 {
                   "requires": [
@@ -103,8 +267,8 @@
                   "label": "Revoke Tokens Delegation",
                   "type": 3,
                   "children": [],
-                  "parentId": 4,
-                  "id": 7
+                  "parentId": 22,
+                  "id": 25
                 },
                 {
                   "requires": [
@@ -132,8 +296,8 @@
                   "label": "Transfer Tokens",
                   "type": 3,
                   "children": [],
-                  "parentId": 4,
-                  "id": 8
+                  "parentId": 22,
+                  "id": 26
                 },
                 {
                   "requires": [
@@ -161,13 +325,13 @@
                   "label": "Delegate Tokens",
                   "type": 3,
                   "children": [],
-                  "parentId": 4,
-                  "id": 9
+                  "parentId": 22,
+                  "id": 27
                 }
               ]
             },
             {
-              "id": 10,
+              "id": 28,
               "parentId": 3,
               "type": 1,
               "label": "System",
@@ -184,8 +348,8 @@
                   "label": "Get Clock Sysvar",
                   "type": 3,
                   "children": [],
-                  "parentId": 10,
-                  "id": 11
+                  "parentId": 28,
+                  "id": 29
                 },
                 {
                   "requires": [
@@ -198,8 +362,8 @@
                   "label": "Get Account",
                   "type": 3,
                   "children": [],
-                  "parentId": 10,
-                  "id": 12
+                  "parentId": 28,
+                  "id": 30
                 },
                 {
                   "requires": [
@@ -220,8 +384,8 @@
                   "label": "Transfer Native SOL",
                   "type": 3,
                   "children": [],
-                  "parentId": 10,
-                  "id": 13
+                  "parentId": 28,
+                  "id": 31
                 },
                 {
                   "requires": [
@@ -235,8 +399,8 @@
                   "label": "Get Rent Sysvar",
                   "type": 3,
                   "children": [],
-                  "parentId": 10,
-                  "id": 14
+                  "parentId": 28,
+                  "id": 32
                 },
                 {
                   "requires": [
@@ -251,8 +415,8 @@
                   "label": "Unpack Account",
                   "type": 3,
                   "children": [],
-                  "parentId": 10,
-                  "id": 15
+                  "parentId": 28,
+                  "id": 33
                 },
                 {
                   "requires": [
@@ -270,8 +434,8 @@
                   "label": "Check Rent Exempt",
                   "type": 3,
                   "children": [],
-                  "parentId": 10,
-                  "id": 16
+                  "parentId": 28,
+                  "id": 34
                 },
                 {
                   "requires": [
@@ -285,22 +449,66 @@
                   "label": "Get Accounts Iterator",
                   "type": 3,
                   "children": [],
-                  "parentId": 10,
-                  "id": 17
+                  "parentId": 28,
+                  "id": 35
                 }
               ]
             }
           ]
         },
         {
-          "id": 18,
+          "id": 11,
           "parentId": 2,
           "type": 1,
           "label": "Anchor",
           "children": [
             {
-              "id": 19,
-              "parentId": 18,
+              "id": 12,
+              "parentId": 11,
+              "type": 1,
+              "label": "CLI",
+              "children": [
+                {
+                  "requires": [],
+                  "description": "Build your Anchor program",
+                  "content": [
+                    "anchor test"
+                  ],
+                  "label": "Build",
+                  "type": 4,
+                  "children": [],
+                  "parentId": 12,
+                  "id": 13
+                },
+                {
+                  "requires": [],
+                  "description": "Test your Anchor program",
+                  "content": [
+                    "anchor test"
+                  ],
+                  "label": "Test",
+                  "type": 4,
+                  "children": [],
+                  "parentId": 12,
+                  "id": 19
+                },
+                {
+                  "requires": [],
+                  "description": "Initialize a new Anchor program (edit this snippet with the name you want)",
+                  "content": [
+                    "anchor init anchor-program"
+                  ],
+                  "label": "Init",
+                  "type": 4,
+                  "children": [],
+                  "parentId": 12,
+                  "id": 36
+                }
+              ]
+            },
+            {
+              "id": 37,
+              "parentId": 11,
               "type": 1,
               "label": "System",
               "children": [
@@ -313,14 +521,37 @@
                   "label": "Get Bump",
                   "type": 3,
                   "children": [],
-                  "parentId": 19,
-                  "id": 20
+                  "parentId": 37,
+                  "id": 38
+                },
+                {
+                  "requires": [],
+                  "description": "Template for an instruction context and its processor",
+                  "content": [
+                    "use anchor_lang::prelude::*",
+                    "",
+                    "#[derive(Accounts)]",
+                    "pub struct ${1:Instruction} {}",
+                    "",
+                    "pub fn processor(_ctx: Context<${1:Instruction}>) -> Result<()> {",
+                    "Ok(())",
+                    "}"
+                  ],
+                  "label": "Instruction",
+                  "type": 2,
+                  "children": [],
+                  "parentId": 37,
+                  "id": 39
                 },
                 {
                   "requires": [],
                   "description": "Creates a basic program entrypoint",
                   "content": [
+                    "mod instructions;",
+                    "",
                     "use anchor_lang::prelude::*;",
+                    "",
+                    "declare_id!(\"Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS\");",
                     "",
                     "#[program]",
                     "pub mod anchor {",
@@ -334,14 +565,14 @@
                   "label": "Program",
                   "type": 2,
                   "children": [],
-                  "parentId": 19,
-                  "id": 21
+                  "parentId": 37,
+                  "id": 40
                 }
               ]
             },
             {
-              "id": 22,
-              "parentId": 18,
+              "id": 41,
+              "parentId": 11,
               "type": 1,
               "label": "Interfaces",
               "children": [
@@ -361,8 +592,8 @@
                   "label": "Jupiter's Instruction Route",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 23
+                  "parentId": 41,
+                  "id": 42
                 },
                 {
                   "requires": [],
@@ -397,8 +628,8 @@
                   "label": "Jupiter's Instruction WhirlpoolSwapExactOutput",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 24
+                  "parentId": 41,
+                  "id": 43
                 },
                 {
                   "requires": [],
@@ -420,8 +651,8 @@
                   "label": "Jupiter's Instruction CreateOpenOrders",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 25
+                  "parentId": 41,
+                  "id": 44
                 },
                 {
                   "requires": [],
@@ -445,8 +676,8 @@
                   "label": "Jupiter's Instruction MercurialSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 26
+                  "parentId": 41,
+                  "id": 45
                 },
                 {
                   "requires": [],
@@ -478,8 +709,8 @@
                   "label": "Jupiter's Instruction CykuraSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 27
+                  "parentId": 41,
+                  "id": 46
                 },
                 {
                   "requires": [],
@@ -526,8 +757,8 @@
                   "label": "Jupiter's Instruction SerumSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 28
+                  "parentId": 41,
+                  "id": 47
                 },
                 {
                   "requires": [],
@@ -556,8 +787,8 @@
                   "label": "Jupiter's Instruction SaberSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 29
+                  "parentId": 41,
+                  "id": 48
                 },
                 {
                   "requires": [],
@@ -584,8 +815,8 @@
                   "label": "Jupiter's Instruction SaberAddDecimals",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 30
+                  "parentId": 41,
+                  "id": 49
                 },
                 {
                   "requires": [],
@@ -617,8 +848,8 @@
                   "label": "Jupiter's Instruction TokenSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 31
+                  "parentId": 41,
+                  "id": 50
                 },
                 {
                   "requires": [],
@@ -649,8 +880,8 @@
                   "label": "Jupiter's Instruction SenchaSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 32
+                  "parentId": 41,
+                  "id": 51
                 },
                 {
                   "requires": [],
@@ -682,8 +913,8 @@
                   "label": "Jupiter's Instruction StepSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 33
+                  "parentId": 41,
+                  "id": 52
                 },
                 {
                   "requires": [],
@@ -716,8 +947,8 @@
                   "label": "Jupiter's Instruction CropperSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 34
+                  "parentId": 41,
+                  "id": 53
                 },
                 {
                   "requires": [],
@@ -762,8 +993,8 @@
                   "label": "Jupiter's Instruction RaydiumSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 35
+                  "parentId": 41,
+                  "id": 54
                 },
                 {
                   "requires": [],
@@ -801,8 +1032,8 @@
                   "label": "Jupiter's Instruction CremaSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 36
+                  "parentId": 41,
+                  "id": 55
                 },
                 {
                   "requires": [],
@@ -838,8 +1069,8 @@
                   "label": "Jupiter's Instruction LifinitySwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 37
+                  "parentId": 41,
+                  "id": 56
                 },
                 {
                   "requires": [],
@@ -880,8 +1111,8 @@
                   "label": "Jupiter's Instruction MarinadeDeposit",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 38
+                  "parentId": 41,
+                  "id": 57
                 },
                 {
                   "requires": [],
@@ -916,8 +1147,8 @@
                   "label": "Jupiter's Instruction MarinadeUnstake",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 39
+                  "parentId": 41,
+                  "id": 58
                 },
                 {
                   "requires": [],
@@ -949,8 +1180,8 @@
                   "label": "Jupiter's Instruction AldrinSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 40
+                  "parentId": 41,
+                  "id": 59
                 },
                 {
                   "requires": [],
@@ -983,8 +1214,8 @@
                   "label": "Jupiter's Instruction AldrinV2Swap",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 41
+                  "parentId": 41,
+                  "id": 60
                 },
                 {
                   "requires": [],
@@ -1019,8 +1250,8 @@
                   "label": "Jupiter's Instruction WhirlpoolSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 42
+                  "parentId": 41,
+                  "id": 61
                 },
                 {
                   "requires": [],
@@ -1052,8 +1283,8 @@
                   "label": "Jupiter's Instruction InvariantSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 43
+                  "parentId": 41,
+                  "id": 62
                 },
                 {
                   "requires": [],
@@ -1096,8 +1327,8 @@
                   "label": "Jupiter's Instruction MeteoraSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 44
+                  "parentId": 41,
+                  "id": 63
                 },
                 {
                   "requires": [],
@@ -1137,8 +1368,8 @@
                   "label": "Jupiter's Instruction GoosefxSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 45
+                  "parentId": 41,
+                  "id": 64
                 },
                 {
                   "requires": [],
@@ -1173,8 +1404,8 @@
                   "label": "Jupiter's Instruction DeltafiSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 46
+                  "parentId": 41,
+                  "id": 65
                 },
                 {
                   "requires": [],
@@ -1212,8 +1443,8 @@
                   "label": "Jupiter's Instruction BalansolSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 47
+                  "parentId": 41,
+                  "id": 66
                 },
                 {
                   "requires": [],
@@ -1254,8 +1485,8 @@
                   "label": "Jupiter's Instruction MarcoPoloSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 48
+                  "parentId": 41,
+                  "id": 67
                 },
                 {
                   "requires": [],
@@ -1297,8 +1528,8 @@
                   "label": "Jupiter's Instruction DradexSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 49
+                  "parentId": 41,
+                  "id": 68
                 },
                 {
                   "requires": [],
@@ -1334,8 +1565,8 @@
                   "label": "Jupiter's Instruction LifinityV2Swap",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 50
+                  "parentId": 41,
+                  "id": 69
                 },
                 {
                   "requires": [],
@@ -1368,8 +1599,8 @@
                   "label": "Jupiter's Instruction RaydiumClmmSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 51
+                  "parentId": 41,
+                  "id": 70
                 },
                 {
                   "requires": [],
@@ -1385,8 +1616,8 @@
                   "label": "Jupiter's Type AmountWithSlippage",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 52
+                  "parentId": 41,
+                  "id": 71
                 },
                 {
                   "requires": [],
@@ -1402,8 +1633,8 @@
                   "label": "Jupiter's Type SplitLegDeeper",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 53
+                  "parentId": 41,
+                  "id": 72
                 },
                 {
                   "requires": [],
@@ -1419,8 +1650,8 @@
                   "label": "Jupiter's Type SplitLeg",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 54
+                  "parentId": 41,
+                  "id": 73
                 },
                 {
                   "requires": [],
@@ -1429,8 +1660,8 @@
                   "label": "Jupiter's Type SwapInstrution",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 55
+                  "parentId": 41,
+                  "id": 74
                 },
                 {
                   "requires": [],
@@ -1446,8 +1677,8 @@
                   "label": "Jupiter's Type Side",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 56
+                  "parentId": 41,
+                  "id": 75
                 },
                 {
                   "requires": [],
@@ -1464,8 +1695,8 @@
                   "label": "Jupiter's Type SwapLegSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 57
+                  "parentId": 41,
+                  "id": 76
                 },
                 {
                   "requires": [],
@@ -1482,8 +1713,8 @@
                   "label": "Jupiter's Type SwapLegDeeper",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 58
+                  "parentId": 41,
+                  "id": 77
                 },
                 {
                   "requires": [],
@@ -1500,8 +1731,8 @@
                   "label": "Jupiter's Type SwapLeg",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 59
+                  "parentId": 41,
+                  "id": 78
                 },
                 {
                   "requires": [],
@@ -1543,8 +1774,8 @@
                   "label": "Jupiter's Type Swap",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 60
+                  "parentId": 41,
+                  "id": 79
                 },
                 {
                   "requires": [],
@@ -1562,8 +1793,8 @@
                   "label": "Jupiter's Type SwapAction",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 61
+                  "parentId": 41,
+                  "id": 80
                 },
                 {
                   "requires": [],
@@ -2369,8 +2600,8 @@
                   "label": "All Jupiter Interfaces",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 62
+                  "parentId": 41,
+                  "id": 81
                 },
                 {
                   "requires": [],
@@ -2406,8 +2637,8 @@
                   "label": "Marinade Finance's Instruction Initialize",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 63
+                  "parentId": 41,
+                  "id": 82
                 },
                 {
                   "requires": [],
@@ -2425,8 +2656,8 @@
                   "label": "Marinade Finance's Instruction ChangeAuthority",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 64
+                  "parentId": 41,
+                  "id": 83
                 },
                 {
                   "requires": [],
@@ -2454,8 +2685,8 @@
                   "label": "Marinade Finance's Instruction AddValidator",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 65
+                  "parentId": 41,
+                  "id": 84
                 },
                 {
                   "requires": [],
@@ -2479,8 +2710,8 @@
                   "label": "Marinade Finance's Instruction RemoveValidator",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 66
+                  "parentId": 41,
+                  "id": 85
                 },
                 {
                   "requires": [],
@@ -2500,8 +2731,8 @@
                   "label": "Marinade Finance's Instruction SetValidatorScore",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 67
+                  "parentId": 41,
+                  "id": 86
                 },
                 {
                   "requires": [],
@@ -2519,8 +2750,8 @@
                   "label": "Marinade Finance's Instruction ConfigValidatorSystem",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 68
+                  "parentId": 41,
+                  "id": 87
                 },
                 {
                   "requires": [],
@@ -2552,8 +2783,8 @@
                   "label": "Marinade Finance's Instruction Deposit",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 69
+                  "parentId": 41,
+                  "id": 88
                 },
                 {
                   "requires": [],
@@ -2591,8 +2822,8 @@
                   "label": "Marinade Finance's Instruction DepositStakeAccount",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 70
+                  "parentId": 41,
+                  "id": 89
                 },
                 {
                   "requires": [],
@@ -2624,8 +2855,8 @@
                   "label": "Marinade Finance's Instruction LiquidUnstake",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 71
+                  "parentId": 41,
+                  "id": 90
                 },
                 {
                   "requires": [],
@@ -2653,8 +2884,8 @@
                   "label": "Marinade Finance's Instruction AddLiquidity",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 72
+                  "parentId": 41,
+                  "id": 91
                 },
                 {
                   "requires": [],
@@ -2687,8 +2918,8 @@
                   "label": "Marinade Finance's Instruction RemoveLiquidity",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 73
+                  "parentId": 41,
+                  "id": 92
                 },
                 {
                   "requires": [],
@@ -2706,8 +2937,8 @@
                   "label": "Marinade Finance's Instruction ConfigLp",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 74
+                  "parentId": 41,
+                  "id": 93
                 },
                 {
                   "requires": [],
@@ -2725,8 +2956,8 @@
                   "label": "Marinade Finance's Instruction ConfigMarinade",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 75
+                  "parentId": 41,
+                  "id": 94
                 },
                 {
                   "requires": [],
@@ -2753,8 +2984,8 @@
                   "label": "Marinade Finance's Instruction OrderUnstake",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 76
+                  "parentId": 41,
+                  "id": 95
                 },
                 {
                   "requires": [],
@@ -2778,8 +3009,8 @@
                   "label": "Marinade Finance's Instruction Claim",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 77
+                  "parentId": 41,
+                  "id": 96
                 },
                 {
                   "requires": [],
@@ -2813,8 +3044,8 @@
                   "label": "Marinade Finance's Instruction StakeReserve",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 78
+                  "parentId": 41,
+                  "id": 97
                 },
                 {
                   "requires": [],
@@ -2853,8 +3084,8 @@
                   "label": "Marinade Finance's Instruction UpdateActive",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 79
+                  "parentId": 41,
+                  "id": 98
                 },
                 {
                   "requires": [],
@@ -2894,8 +3125,8 @@
                   "label": "Marinade Finance's Instruction UpdateDeactivated",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 80
+                  "parentId": 41,
+                  "id": 99
                 },
                 {
                   "requires": [],
@@ -2929,8 +3160,8 @@
                   "label": "Marinade Finance's Instruction DeactivateStake",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 81
+                  "parentId": 41,
+                  "id": 100
                 },
                 {
                   "requires": [],
@@ -2957,8 +3188,8 @@
                   "label": "Marinade Finance's Instruction EmergencyUnstake",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 82
+                  "parentId": 41,
+                  "id": 101
                 },
                 {
                   "requires": [],
@@ -2993,8 +3224,8 @@
                   "label": "Marinade Finance's Instruction PartialUnstake",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 83
+                  "parentId": 41,
+                  "id": 102
                 },
                 {
                   "requires": [],
@@ -3025,8 +3256,8 @@
                   "label": "Marinade Finance's Instruction MergeStakes",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 84
+                  "parentId": 41,
+                  "id": 103
                 },
                 {
                   "requires": [],
@@ -3061,8 +3292,8 @@
                   "label": "Marinade Finance's Account State",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 85
+                  "parentId": 41,
+                  "id": 104
                 },
                 {
                   "requires": [],
@@ -3080,8 +3311,8 @@
                   "label": "Marinade Finance's Account TicketAccountData",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 86
+                  "parentId": 41,
+                  "id": 105
                 },
                 {
                   "requires": [],
@@ -3096,8 +3327,8 @@
                   "label": "Marinade Finance's Type Fee",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 87
+                  "parentId": 41,
+                  "id": 106
                 },
                 {
                   "requires": [],
@@ -3119,8 +3350,8 @@
                   "label": "Marinade Finance's Type InitializeData",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 88
+                  "parentId": 41,
+                  "id": 107
                 },
                 {
                   "requires": [],
@@ -3138,8 +3369,8 @@
                   "label": "Marinade Finance's Type LiqPoolInitializeData",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 89
+                  "parentId": 41,
+                  "id": 108
                 },
                 {
                   "requires": [],
@@ -3157,8 +3388,8 @@
                   "label": "Marinade Finance's Type ChangeAuthorityData",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 90
+                  "parentId": 41,
+                  "id": 109
                 },
                 {
                   "requires": [],
@@ -3176,8 +3407,8 @@
                   "label": "Marinade Finance's Type ConfigLpParams",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 91
+                  "parentId": 41,
+                  "id": 110
                 },
                 {
                   "requires": [],
@@ -3199,8 +3430,8 @@
                   "label": "Marinade Finance's Type ConfigMarinadeParams",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 92
+                  "parentId": 41,
+                  "id": 111
                 },
                 {
                   "requires": [],
@@ -3226,8 +3457,8 @@
                   "label": "Marinade Finance's Type LiqPool",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 93
+                  "parentId": 41,
+                  "id": 112
                 },
                 {
                   "requires": [],
@@ -3246,8 +3477,8 @@
                   "label": "Marinade Finance's Type List",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 94
+                  "parentId": 41,
+                  "id": 113
                 },
                 {
                   "requires": [],
@@ -3265,8 +3496,8 @@
                   "label": "Marinade Finance's Type StakeRecord",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 95
+                  "parentId": 41,
+                  "id": 114
                 },
                 {
                   "requires": [],
@@ -3288,8 +3519,8 @@
                   "label": "Marinade Finance's Type StakeSystem",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 96
+                  "parentId": 41,
+                  "id": 115
                 },
                 {
                   "requires": [],
@@ -3308,8 +3539,8 @@
                   "label": "Marinade Finance's Type ValidatorRecord",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 97
+                  "parentId": 41,
+                  "id": 116
                 },
                 {
                   "requires": [],
@@ -3328,8 +3559,8 @@
                   "label": "Marinade Finance's Type ValidatorSystem",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 98
+                  "parentId": 41,
+                  "id": 117
                 },
                 {
                   "requires": [],
@@ -3906,8 +4137,8 @@
                   "label": "All Marinade Finance Interfaces",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 99
+                  "parentId": 41,
+                  "id": 118
                 },
                 {
                   "requires": [],
@@ -3930,8 +4161,8 @@
                   "label": "Escrow's Instruction InitializeEscrow",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 100
+                  "parentId": 41,
+                  "id": 119
                 },
                 {
                   "requires": [],
@@ -3952,8 +4183,8 @@
                   "label": "Escrow's Instruction CancelEscrow",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 101
+                  "parentId": 41,
+                  "id": 120
                 },
                 {
                   "requires": [],
@@ -3983,8 +4214,8 @@
                   "label": "Escrow's Instruction Exchange",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 102
+                  "parentId": 41,
+                  "id": 121
                 },
                 {
                   "requires": [],
@@ -4003,8 +4234,8 @@
                   "label": "Escrow's Account EscrowAccount",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 103
+                  "parentId": 41,
+                  "id": 122
                 },
                 {
                   "requires": [],
@@ -4071,22 +4302,22 @@
                   "label": "All Escrow Interfaces",
                   "type": 2,
                   "children": [],
-                  "parentId": 22,
-                  "id": 104
+                  "parentId": 41,
+                  "id": 123
                 }
               ]
             }
           ]
         },
         {
-          "id": 105,
+          "id": 124,
           "parentId": 2,
           "type": 1,
           "label": "Client",
           "children": [
             {
-              "id": 106,
-              "parentId": 105,
+              "id": 125,
+              "parentId": 124,
               "type": 1,
               "label": "System",
               "children": [
@@ -4120,8 +4351,8 @@
                   "label": "Get Funded Keypair",
                   "type": 3,
                   "children": [],
-                  "parentId": 106,
-                  "id": 107
+                  "parentId": 125,
+                  "id": 126
                 },
                 {
                   "requires": [
@@ -4134,8 +4365,8 @@
                   "label": "Clone Keypair",
                   "type": 3,
                   "children": [],
-                  "parentId": 106,
-                  "id": 108
+                  "parentId": 125,
+                  "id": 127
                 },
                 {
                   "requires": [
@@ -4170,8 +4401,8 @@
                   "label": "Create Account",
                   "type": 3,
                   "children": [],
-                  "parentId": 106,
-                  "id": 109
+                  "parentId": 125,
+                  "id": 128
                 },
                 {
                   "requires": [
@@ -4191,8 +4422,8 @@
                   "label": "Get Account Data",
                   "type": 3,
                   "children": [],
-                  "parentId": 106,
-                  "id": 110
+                  "parentId": 125,
+                  "id": 129
                 },
                 {
                   "requires": [
@@ -4221,8 +4452,8 @@
                   "label": "Airdrop",
                   "type": 3,
                   "children": [],
-                  "parentId": 106,
-                  "id": 111
+                  "parentId": 125,
+                  "id": 130
                 }
               ]
             }

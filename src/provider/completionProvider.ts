@@ -55,11 +55,13 @@ export class SnippetCompletionProvider {
     const rustAnalyzerSnippets: any = {};
 
     candidates.map((element: Snippet) => {
+      const label = element.label.replace("'s", "").replace(/[\n| |']/g, "").replace("__(ws)", " (ws)");
       switch (element.type) {
         case 2:
           vsCodeSnippets.push(
             this.getVSCodeSnippetCompletion(
               element,
+              label,
               isTriggeredByChar,
               position
             )
@@ -67,7 +69,7 @@ export class SnippetCompletionProvider {
           break;
         case 3:
           rustAnalyzerSnippets[element.label] =
-            this.getRustAnalyzerSnippetCompletion(element);
+            this.getRustAnalyzerSnippetCompletion(element, `__${label}`);
           break;
       }
     });
@@ -79,14 +81,12 @@ export class SnippetCompletionProvider {
 
   getVSCodeSnippetCompletion(
     element: Snippet,
+    label: string,
     isTriggeredByChar: boolean,
     position: any
   ): vscode.CompletionItem {
     return <vscode.CompletionItem>{
-      label: `sol:${element.label
-        .replace("\n", "")
-        .replace(" ", "-")
-        .replace("__(ws)", " (ws)")}`,
+      label,
       insertText: new vscode.SnippetString(Snippet.getContent(element)),
       detail: element.label.replace("__(ws)", " (snippet from workspace)"),
       kind: vscode.CompletionItemKind.Snippet,
@@ -104,12 +104,9 @@ export class SnippetCompletionProvider {
     };
   }
 
-  getRustAnalyzerSnippetCompletion(element: Snippet) {
+  getRustAnalyzerSnippetCompletion(element: Snippet, label: string) {
     return {
-      prefix: `sol:${element.label
-        .replace("\n", "")
-        .replace(" ", "-")
-        .replace("__(ws)", " (ws)")}`,
+      prefix: [label],
       body: element.content,
       requires: element.requires,
       description: element.label.replace("__(ws)", " (workspace)"),

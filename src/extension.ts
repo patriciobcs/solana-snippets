@@ -87,7 +87,7 @@ export function activate(context: vscode.ExtensionContext) {
   // Initialize generic completion item provider
   const triggerCharacter: any =
     vscode.workspace.getConfiguration(snippetsConfigKey).get("triggerKey") ||
-    "sol";
+    "__";
 
   const snippetCompletionProvider = new SnippetCompletionProvider(
     triggerCharacter,

@@ -9,6 +9,7 @@ impl Processor {
         _input: &[u8],
     ) -> ProgramResult {
         msg!("Generic Instruction");
+        
         Ok(())
     }
 }

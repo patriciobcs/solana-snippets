@@ -1,7 +1,7 @@
 use std::{fs::{read_to_string, File}, path::Path, os::unix::prelude::FileExt};
 
 use json::JsonValue;
-use crate::utils::get_dirs;
+use crate::{utils::get_dirs, consts::MOD_FILE_CONTENT};
 
 // function the convert camelCase to snake_case
 fn camel_to_snake_case(s: &str) -> String {
@@ -26,6 +26,54 @@ fn capitalize_first_letter(s: &str) -> String {
 	}
 }
 
+// function that converts snake_case to capitalize phrase
+fn snake_to_capitalize_phrase(s: &str) -> String {
+	let mut result = String::new();
+	let mut prev_char = '_';
+	for c in s.chars() {
+		if c == '_' {
+			result.push(' ');
+		} else if prev_char == '_' {
+			result.push(c.to_ascii_uppercase());
+		} else {
+			result.push(c);
+		}
+		prev_char = c;
+	}
+	result
+}
+
+pub fn convert_to_rust_type(ty: &str) -> String {
+	match ty {
+			"string" => "String".to_string(),
+			"publicKey" => "Pubkey".to_string(),
+			"bytes" => "Vec<u8>".to_string(),
+			_ => ty.to_string(),
+	}
+}
+
+pub fn get_rust_type(field_idl: &JsonValue) -> String {
+	if field_idl["type"].has_key("option") {
+		let ty = if field_idl["type"]["option"].has_key("defined") {
+			field_idl["type"]["option"]["defined"].as_str().unwrap()
+		} else {
+			field_idl["type"]["option"].as_str().unwrap()
+		};
+		format!("Option<{}>", convert_to_rust_type(ty))
+	} else if field_idl["type"].has_key("vec") {
+		let ty = if field_idl["type"]["vec"].has_key("defined") {
+			field_idl["type"]["vec"]["defined"].as_str().unwrap()
+		} else {
+			field_idl["type"]["vec"].as_str().unwrap()
+		};
+		format!("Vec<{}>", convert_to_rust_type(ty))
+	} else if field_idl["type"].has_key("defined") {
+		convert_to_rust_type(field_idl["type"]["defined"].as_str().unwrap())
+	} else { 
+		convert_to_rust_type(field_idl["type"].as_str().unwrap())
+	}
+}
+
 pub fn get_instruction_account_content(account_idl: &JsonValue) -> String {
 	let name = camel_to_snake_case(account_idl["name"].as_str().unwrap());
 	
@@ -35,7 +83,6 @@ pub fn get_instruction_account_content(account_idl: &JsonValue) -> String {
 	}
 	
 	let mut content = String::new();
-	
 	
 	let is_mut = account_idl["isMut"].as_bool().unwrap();
 	let is_signer = account_idl["isSigner"].as_bool().unwrap();
@@ -59,17 +106,20 @@ pub fn get_instruction_account_content(account_idl: &JsonValue) -> String {
 }
 
 pub fn get_instruction_content(instruction_idl: &JsonValue) -> String {
+	let mut instruction_idl = instruction_idl.clone();
 	let mut content = String::new();
-	let accounts = instruction_idl["accounts"].members();
-
-	for account in accounts.clone() {
+	let name = capitalize_first_letter(instruction_idl["name"].as_str().unwrap());
+	
+	for account in instruction_idl["accounts"].members_mut() {
 		if account.has_key("accounts") {
-			content.push_str(&get_instruction_content(account));
+			account["name"] = format!("{}{}", account["name"].clone(), name).into();
+			content.push_str(&get_instruction_content(&account));
 		}
 	}
 
-	let name = capitalize_first_letter(instruction_idl["name"].as_str().unwrap());
 	let _args = instruction_idl["args"].members();
+	let accounts = instruction_idl["accounts"].members();
+
 
 	content.push_str(&format!("#[derive(Accounts)]\npub struct {}<'info> {{\n", name));
 
@@ -80,14 +130,6 @@ pub fn get_instruction_content(instruction_idl: &JsonValue) -> String {
 	content.push_str("}\n\n");
 
 	content
-}
-
-pub fn convert_to_rust_type(ty: &str) -> String {
-	match ty {
-			"string" => "String".to_string(),
-			"publicKey" => "Pubkey".to_string(),
-			_ => ty.to_string(),
-	}
 }
 
 // function that converts the idl to the struct of the account of the given IDL
@@ -101,11 +143,7 @@ pub fn get_account_content(account_idl: &JsonValue) -> String {
 
 	for field in fields {
 		let name = camel_to_snake_case(field["name"].as_str().unwrap());
-		let ty = if field["type"].has_key("defined") {
-			field["type"]["defined"].as_str().unwrap().to_string()
-		} else { 
-			convert_to_rust_type(field["type"].as_str().unwrap())
-		};
+		let ty = get_rust_type(field);
 
 		content.push_str(&format!("  pub {}: {},\n", name, ty));
 	}
@@ -115,24 +153,81 @@ pub fn get_account_content(account_idl: &JsonValue) -> String {
 	content
 }
 
-pub fn get_interface_from_idl_single_snippet(idl: &JsonValue, program_id: &String) -> String {
-	let name = idl["name"].as_str().unwrap();
+pub fn get_type_content(account_idl: &JsonValue) -> String {
+	let mut content = String::new();
+	
+	let name = capitalize_first_letter(account_idl["name"].as_str().unwrap());
 
-	let mut content = format!("//* title: All {} Interfaces
-//* description: Creates the interface of the {} program
+	match account_idl["type"]["kind"].as_str().unwrap() {
+		"struct" => {
+				content.push_str(&format!("#[derive(Clone, Debug, AnchorSerialize, AnchorDeserialize)]\npub struct {} {{\n", name));
+				let fields = account_idl["type"]["fields"].members();
+			
+				for field in fields {
+					let name = camel_to_snake_case(field["name"].as_str().unwrap());
+					let ty = get_rust_type(field);
+			
+					content.push_str(&format!("  pub {}: {},\n", name, ty));
+				}
+			},
+			"enum" => {
+				content.push_str(&format!("#[derive(Clone, Debug, AnchorSerialize, AnchorDeserialize)]\npub enum {} {{\n", name));
+				let fields = account_idl["type"]["variants"].members();
+			
+				for field in fields {
+					let name = capitalize_first_letter(field["name"].as_str().unwrap());
+					
+					let enum_fields = if field.has_key("fields") {
+						let mut enum_content = String::from(" { ");
+						for (index, enum_field) in field["fields"].members().enumerate() {
+							if !enum_field.has_key("name") { return String::new(); }
+							let enum_name = enum_field["name"].as_str().unwrap();
+							let enum_ty = get_rust_type(enum_field);
+							if index > 0 {
+								enum_content.push_str(", ");
+							}
+							enum_content.push_str(&format!("{}: {}", enum_name, enum_ty));
+						}
+						enum_content.push_str(" }");
+
+						enum_content
+					} else {
+						String::new()
+					};
+			
+					content.push_str(&format!("  {}{},\n", name, enum_fields));
+				}
+			}
+			_ => {}
+	}
+
+	content.push_str("}\n\n");
+
+	content
+}
+
+pub fn get_snippet_header(title: &String, description: &String) -> String {
+	format!("//* title: {}
+//* description: {}
 //* platform: anchor
 //* category: interfaces
-//* prefix: program
 //* display: vscode
+		
+/*/* content */*/\n", title, description)
+}
 
-/*/* content */*/\n", capitalize_first_letter(name), name);
-	
-	content.push_str("use anchor_lang::prelude::*;\n\n");
+pub fn parse_as_snippet(title: &String, description: &String, snippet: &String) -> String {
+	format!("{}{}/*/* content */*/\n\n", get_snippet_header(title, description), snippet)
+}
+ 
+fn get_single_snippet_interface(idl: &JsonValue, program_id: &String) -> String {
+	let mut content = String::from("use anchor_lang::prelude::*;\n\n");
 	
 	content.push_str(&format!("declare_id!(\"{}\");\n\n", program_id)); 
-	
+
 	let instructions = idl["instructions"].members();
 	let accounts = idl["accounts"].members();
+	let types = idl["types"].members();
 	
 	for instruction in instructions {
 		content.push_str(&get_instruction_content(instruction));
@@ -142,13 +237,24 @@ pub fn get_interface_from_idl_single_snippet(idl: &JsonValue, program_id: &Strin
 		content.push_str(&get_account_content(account));
 	}
 
-	content.push_str("/*/* content */*/\n\n");
+	for ty in types {
+		content.push_str(&get_type_content(ty));
+	}
 
 	content
 }
 
+pub fn get_interface_from_idl_single_snippet(idl: &JsonValue, program_id: &String) -> String {
+	let name = snake_to_capitalize_phrase(idl["name"].as_str().unwrap());
+
+	let title = format!("All {} Interfaces", name);
+	let description = format!("Creates the interface of the `{}` program", name);
+	
+	parse_as_snippet(&title, &description, &get_single_snippet_interface(idl, program_id))
+}
+
 pub fn get_interface_from_idl_snippets(idl: &JsonValue, program_id: &String) -> String {
-	let name = idl["name"].as_str().unwrap();
+	let program_name = snake_to_capitalize_phrase(idl["name"].as_str().unwrap());
 
 	let mut content = String::from("use anchor_lang::prelude::*;\n\n");
 	
@@ -156,37 +262,27 @@ pub fn get_interface_from_idl_snippets(idl: &JsonValue, program_id: &String) -> 
 	
 	let instructions = idl["instructions"].members();
 	let accounts = idl["accounts"].members();
+	let types = idl["types"].members();
 	
 	for instruction in instructions {
-		let instruction_name = instruction["name"].as_str().unwrap();
-		content.push_str(&format!("//* title: {capitalized_instruction} {capitalized_program} Interface
-//* description: Creates the interface of the instruction {instruction} of the {program} program
-//* platform: anchor
-//* category: interfaces
-//* prefix: program
-//* display: vscode
-		
-/*/* content */*/\n", capitalized_program = capitalize_first_letter(name), program = name, capitalized_instruction = capitalize_first_letter(instruction_name), instruction = instruction_name));
-			
-		content.push_str(&get_instruction_content(instruction));
-
-		content.push_str("/*/* content */*/\n\n");
+		let name = instruction["name"].as_str().unwrap();
+		let title = format!("{}'s Instruction {}", program_name, capitalize_first_letter(name));
+		let description = format!("Creates the interface instruction `{}` of the `{}` program", name, program_name);
+		content.push_str(&parse_as_snippet(&title, &description, &get_instruction_content(instruction)));
 	}
 
 	for account in accounts {
-		let account_name = account["name"].as_str().unwrap();
-		content.push_str(&format!("//* title: {capitalized_instruction} {capitalized_program} Interface
-//* description: Creates the interface of the instruction {instruction} of the {program} program
-//* platform: anchor
-//* category: interfaces
-//* prefix: program
-//* display: vscode
-		
-/*/* content */*/\n", capitalized_program = capitalize_first_letter(name), program = name, capitalized_instruction = capitalize_first_letter(account_name), instruction = account_name));
-			
-		content.push_str(&get_account_content(account));
+		let name = account["name"].as_str().unwrap();
+		let title = format!("{}'s Account {}", program_name, capitalize_first_letter(name));
+		let description = format!("Generates the account `{}` of the `{}` program", name, program_name);
+		content.push_str(&parse_as_snippet(&title, &description, &get_account_content(account)));
+	}
 
-		content.push_str("/*/* content */*/\n\n");
+	for ty in types {
+		let name = ty["name"].as_str().unwrap();
+		let title = format!("{}'s Type {}", program_name, capitalize_first_letter(name));
+		let description = format!("Generates the type `{}` of the `{}` program", name, program_name);
+		content.push_str(&parse_as_snippet(&title, &description, &get_type_content(ty)));
 	}
 
 	content
@@ -214,5 +310,8 @@ pub fn scan_programs_idls_and_generate_interfaces(programs_path: &String) {
 
     let interfaces_output_file = File::create(format!("{}/multiple.rs", output_path)).unwrap();
     interfaces_output_file.write_all_at(interfaces_content.as_bytes(), 0).ok();
+		
+		let main_interface_output_file = File::create(format!("{}/mod.rs", output_path)).unwrap();
+    main_interface_output_file.write_all_at(MOD_FILE_CONTENT.as_bytes(), 0).ok();
 	}
 }

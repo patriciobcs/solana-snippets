@@ -1,10 +1,9 @@
 //* title: All Escrow Interfaces
-//* description: Creates the interface of the escrow program
+//* description: Creates the interface of the `Escrow` program
 //* platform: anchor
 //* category: interfaces
-//* prefix: program
 //* display: vscode
-
+		
 /*/* content */*/
 use anchor_lang::prelude::*;
 

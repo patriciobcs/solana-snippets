@@ -2,11 +2,10 @@ use anchor_lang::prelude::*;
 
 declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnP");
 
-//* title: InitializeEscrow Escrow Interface
-//* description: Creates the interface of the instruction initializeEscrow of the escrow program
+//* title: Escrow's Instruction InitializeEscrow
+//* description: Creates the interface instruction `initializeEscrow` of the `Escrow` program
 //* platform: anchor
 //* category: interfaces
-//* prefix: program
 //* display: vscode
 		
 /*/* content */*/
@@ -25,11 +24,10 @@ pub struct InitializeEscrow<'info> {
 
 /*/* content */*/
 
-//* title: CancelEscrow Escrow Interface
-//* description: Creates the interface of the instruction cancelEscrow of the escrow program
+//* title: Escrow's Instruction CancelEscrow
+//* description: Creates the interface instruction `cancelEscrow` of the `Escrow` program
 //* platform: anchor
 //* category: interfaces
-//* prefix: program
 //* display: vscode
 		
 /*/* content */*/
@@ -46,11 +44,10 @@ pub struct CancelEscrow<'info> {
 
 /*/* content */*/
 
-//* title: Exchange Escrow Interface
-//* description: Creates the interface of the instruction exchange of the escrow program
+//* title: Escrow's Instruction Exchange
+//* description: Creates the interface instruction `exchange` of the `Escrow` program
 //* platform: anchor
 //* category: interfaces
-//* prefix: program
 //* display: vscode
 		
 /*/* content */*/
@@ -76,11 +73,10 @@ pub struct Exchange<'info> {
 
 /*/* content */*/
 
-//* title: EscrowAccount Escrow Interface
-//* description: Creates the interface of the instruction EscrowAccount of the escrow program
+//* title: Escrow's Account EscrowAccount
+//* description: Generates the account `EscrowAccount` of the `Escrow` program
 //* platform: anchor
 //* category: interfaces
-//* prefix: program
 //* display: vscode
 		
 /*/* content */*/

@@ -10,3 +10,5 @@ pub const SCOPE: &str = "scope";
 pub const BODY: &str = "body";
 pub const REQUIRES: &str = "requires";
 pub const CONTENT_TAG: &str = "/*/* content */*/";
+
+pub const MOD_FILE_CONTENT: &str = "pub mod single;\npub mod multiple;\n";

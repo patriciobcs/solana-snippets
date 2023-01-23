@@ -14,4 +14,3 @@ pub mod anchor {
 
 #[derive(Accounts)]
 pub struct Initialize {}
-

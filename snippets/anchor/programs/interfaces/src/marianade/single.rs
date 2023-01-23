@@ -1,17 +1,16 @@
+//* title: All Marinade Finance Interfaces
+//* description: Creates the interface of the `Marinade Finance` program
+//* platform: anchor
+//* category: interfaces
+//* display: vscode
+		
+/*/* content */*/
 use anchor_lang::prelude::*;
 
 declare_id!("MarBmsSgKXdrN1egZf5sqe1TMai9K1rChYNDJgjq7aD");
 
-//* title: Initialize Marinade_finance Interface
-//* description: Creates the interface of the instruction initialize of the marinade_finance program
-//* platform: anchor
-//* category: interfaces
-//* prefix: program
-//* display: vscode
-		
-/*/* content */*/
 #[derive(Accounts)]
-pub struct LiqPool<'info> {
+pub struct LiqPoolInitialize<'info> {
   pub lp_mint: AccountInfo<'info>,
   pub sol_leg_pda: AccountInfo<'info>,
   pub msol_leg: AccountInfo<'info>,
@@ -30,22 +29,12 @@ pub struct Initialize<'info> {
   pub validator_list: AccountInfo<'info>,
   pub msol_mint: AccountInfo<'info>,
   pub operational_sol_account: AccountInfo<'info>,
-  pub liq_pool: LiqPool<'info>,
+  pub liq_pool_initialize: LiqPoolInitialize<'info>,
   pub treasury_msol_account: AccountInfo<'info>,
   pub clock: AccountInfo<'info>,
   pub rent: AccountInfo<'info>,
 }
 
-/*/* content */*/
-
-//* title: ChangeAuthority Marinade_finance Interface
-//* description: Creates the interface of the instruction changeAuthority of the marinade_finance program
-//* platform: anchor
-//* category: interfaces
-//* prefix: program
-//* display: vscode
-		
-/*/* content */*/
 #[derive(Accounts)]
 pub struct ChangeAuthority<'info> {
   #[account(mut)]
@@ -54,16 +43,6 @@ pub struct ChangeAuthority<'info> {
   pub admin_authority: AccountInfo<'info>,
 }
 
-/*/* content */*/
-
-//* title: AddValidator Marinade_finance Interface
-//* description: Creates the interface of the instruction addValidator of the marinade_finance program
-//* platform: anchor
-//* category: interfaces
-//* prefix: program
-//* display: vscode
-		
-/*/* content */*/
 #[derive(Accounts)]
 pub struct AddValidator<'info> {
   #[account(mut)]
@@ -82,16 +61,6 @@ pub struct AddValidator<'info> {
   pub system_program: AccountInfo<'info>,
 }
 
-/*/* content */*/
-
-//* title: RemoveValidator Marinade_finance Interface
-//* description: Creates the interface of the instruction removeValidator of the marinade_finance program
-//* platform: anchor
-//* category: interfaces
-//* prefix: program
-//* display: vscode
-		
-/*/* content */*/
 #[derive(Accounts)]
 pub struct RemoveValidator<'info> {
   #[account(mut)]
@@ -106,16 +75,6 @@ pub struct RemoveValidator<'info> {
   pub operational_sol_account: AccountInfo<'info>,
 }
 
-/*/* content */*/
-
-//* title: SetValidatorScore Marinade_finance Interface
-//* description: Creates the interface of the instruction setValidatorScore of the marinade_finance program
-//* platform: anchor
-//* category: interfaces
-//* prefix: program
-//* display: vscode
-		
-/*/* content */*/
 #[derive(Accounts)]
 pub struct SetValidatorScore<'info> {
   #[account(mut)]
@@ -126,16 +85,6 @@ pub struct SetValidatorScore<'info> {
   pub validator_list: AccountInfo<'info>,
 }
 
-/*/* content */*/
-
-//* title: ConfigValidatorSystem Marinade_finance Interface
-//* description: Creates the interface of the instruction configValidatorSystem of the marinade_finance program
-//* platform: anchor
-//* category: interfaces
-//* prefix: program
-//* display: vscode
-		
-/*/* content */*/
 #[derive(Accounts)]
 pub struct ConfigValidatorSystem<'info> {
   #[account(mut)]
@@ -144,16 +93,6 @@ pub struct ConfigValidatorSystem<'info> {
   pub manager_authority: AccountInfo<'info>,
 }
 
-/*/* content */*/
-
-//* title: Deposit Marinade_finance Interface
-//* description: Creates the interface of the instruction deposit of the marinade_finance program
-//* platform: anchor
-//* category: interfaces
-//* prefix: program
-//* display: vscode
-		
-/*/* content */*/
 #[derive(Accounts)]
 pub struct Deposit<'info> {
   #[account(mut)]
@@ -176,16 +115,6 @@ pub struct Deposit<'info> {
   pub token_program: AccountInfo<'info>,
 }
 
-/*/* content */*/
-
-//* title: DepositStakeAccount Marinade_finance Interface
-//* description: Creates the interface of the instruction depositStakeAccount of the marinade_finance program
-//* platform: anchor
-//* category: interfaces
-//* prefix: program
-//* display: vscode
-		
-/*/* content */*/
 #[derive(Accounts)]
 pub struct DepositStakeAccount<'info> {
   #[account(mut)]
@@ -214,16 +143,6 @@ pub struct DepositStakeAccount<'info> {
   pub stake_program: AccountInfo<'info>,
 }
 
-/*/* content */*/
-
-//* title: LiquidUnstake Marinade_finance Interface
-//* description: Creates the interface of the instruction liquidUnstake of the marinade_finance program
-//* platform: anchor
-//* category: interfaces
-//* prefix: program
-//* display: vscode
-		
-/*/* content */*/
 #[derive(Accounts)]
 pub struct LiquidUnstake<'info> {
   #[account(mut)]
@@ -246,16 +165,6 @@ pub struct LiquidUnstake<'info> {
   pub token_program: AccountInfo<'info>,
 }
 
-/*/* content */*/
-
-//* title: AddLiquidity Marinade_finance Interface
-//* description: Creates the interface of the instruction addLiquidity of the marinade_finance program
-//* platform: anchor
-//* category: interfaces
-//* prefix: program
-//* display: vscode
-		
-/*/* content */*/
 #[derive(Accounts)]
 pub struct AddLiquidity<'info> {
   #[account(mut)]
@@ -274,16 +183,6 @@ pub struct AddLiquidity<'info> {
   pub token_program: AccountInfo<'info>,
 }
 
-/*/* content */*/
-
-//* title: RemoveLiquidity Marinade_finance Interface
-//* description: Creates the interface of the instruction removeLiquidity of the marinade_finance program
-//* platform: anchor
-//* category: interfaces
-//* prefix: program
-//* display: vscode
-		
-/*/* content */*/
 #[derive(Accounts)]
 pub struct RemoveLiquidity<'info> {
   #[account(mut)]
@@ -307,16 +206,6 @@ pub struct RemoveLiquidity<'info> {
   pub token_program: AccountInfo<'info>,
 }
 
-/*/* content */*/
-
-//* title: ConfigLp Marinade_finance Interface
-//* description: Creates the interface of the instruction configLp of the marinade_finance program
-//* platform: anchor
-//* category: interfaces
-//* prefix: program
-//* display: vscode
-		
-/*/* content */*/
 #[derive(Accounts)]
 pub struct ConfigLp<'info> {
   #[account(mut)]
@@ -325,16 +214,6 @@ pub struct ConfigLp<'info> {
   pub admin_authority: AccountInfo<'info>,
 }
 
-/*/* content */*/
-
-//* title: ConfigMarinade Marinade_finance Interface
-//* description: Creates the interface of the instruction configMarinade of the marinade_finance program
-//* platform: anchor
-//* category: interfaces
-//* prefix: program
-//* display: vscode
-		
-/*/* content */*/
 #[derive(Accounts)]
 pub struct ConfigMarinade<'info> {
   #[account(mut)]
@@ -343,16 +222,6 @@ pub struct ConfigMarinade<'info> {
   pub admin_authority: AccountInfo<'info>,
 }
 
-/*/* content */*/
-
-//* title: OrderUnstake Marinade_finance Interface
-//* description: Creates the interface of the instruction orderUnstake of the marinade_finance program
-//* platform: anchor
-//* category: interfaces
-//* prefix: program
-//* display: vscode
-		
-/*/* content */*/
 #[derive(Accounts)]
 pub struct OrderUnstake<'info> {
   #[account(mut)]
@@ -370,16 +239,6 @@ pub struct OrderUnstake<'info> {
   pub token_program: AccountInfo<'info>,
 }
 
-/*/* content */*/
-
-//* title: Claim Marinade_finance Interface
-//* description: Creates the interface of the instruction claim of the marinade_finance program
-//* platform: anchor
-//* category: interfaces
-//* prefix: program
-//* display: vscode
-		
-/*/* content */*/
 #[derive(Accounts)]
 pub struct Claim<'info> {
   #[account(mut)]
@@ -394,16 +253,6 @@ pub struct Claim<'info> {
   pub system_program: AccountInfo<'info>,
 }
 
-/*/* content */*/
-
-//* title: StakeReserve Marinade_finance Interface
-//* description: Creates the interface of the instruction stakeReserve of the marinade_finance program
-//* platform: anchor
-//* category: interfaces
-//* prefix: program
-//* display: vscode
-		
-/*/* content */*/
 #[derive(Accounts)]
 pub struct StakeReserve<'info> {
   #[account(mut)]
@@ -428,18 +277,8 @@ pub struct StakeReserve<'info> {
   pub stake_program: AccountInfo<'info>,
 }
 
-/*/* content */*/
-
-//* title: UpdateActive Marinade_finance Interface
-//* description: Creates the interface of the instruction updateActive of the marinade_finance program
-//* platform: anchor
-//* category: interfaces
-//* prefix: program
-//* display: vscode
-		
-/*/* content */*/
 #[derive(Accounts)]
-pub struct Common<'info> {
+pub struct CommonUpdateActive<'info> {
   #[account(mut)]
   pub state: AccountInfo<'info>,
   #[account(mut)]
@@ -462,23 +301,13 @@ pub struct Common<'info> {
 
 #[derive(Accounts)]
 pub struct UpdateActive<'info> {
-  pub common: Common<'info>,
+  pub common_update_active: CommonUpdateActive<'info>,
   #[account(mut)]
   pub validator_list: AccountInfo<'info>,
 }
 
-/*/* content */*/
-
-//* title: UpdateDeactivated Marinade_finance Interface
-//* description: Creates the interface of the instruction updateDeactivated of the marinade_finance program
-//* platform: anchor
-//* category: interfaces
-//* prefix: program
-//* display: vscode
-		
-/*/* content */*/
 #[derive(Accounts)]
-pub struct Common<'info> {
+pub struct CommonUpdateDeactivated<'info> {
   #[account(mut)]
   pub state: AccountInfo<'info>,
   #[account(mut)]
@@ -501,22 +330,12 @@ pub struct Common<'info> {
 
 #[derive(Accounts)]
 pub struct UpdateDeactivated<'info> {
-  pub common: Common<'info>,
+  pub common_update_deactivated: CommonUpdateDeactivated<'info>,
   #[account(mut)]
   pub operational_sol_account: AccountInfo<'info>,
   pub system_program: AccountInfo<'info>,
 }
 
-/*/* content */*/
-
-//* title: DeactivateStake Marinade_finance Interface
-//* description: Creates the interface of the instruction deactivateStake of the marinade_finance program
-//* platform: anchor
-//* category: interfaces
-//* prefix: program
-//* display: vscode
-		
-/*/* content */*/
 #[derive(Accounts)]
 pub struct DeactivateStake<'info> {
   #[account(mut)]
@@ -541,16 +360,6 @@ pub struct DeactivateStake<'info> {
   pub stake_program: AccountInfo<'info>,
 }
 
-/*/* content */*/
-
-//* title: EmergencyUnstake Marinade_finance Interface
-//* description: Creates the interface of the instruction emergencyUnstake of the marinade_finance program
-//* platform: anchor
-//* category: interfaces
-//* prefix: program
-//* display: vscode
-		
-/*/* content */*/
 #[derive(Accounts)]
 pub struct EmergencyUnstake<'info> {
   #[account(mut)]
@@ -568,16 +377,6 @@ pub struct EmergencyUnstake<'info> {
   pub stake_program: AccountInfo<'info>,
 }
 
-/*/* content */*/
-
-//* title: PartialUnstake Marinade_finance Interface
-//* description: Creates the interface of the instruction partialUnstake of the marinade_finance program
-//* platform: anchor
-//* category: interfaces
-//* prefix: program
-//* display: vscode
-		
-/*/* content */*/
 #[derive(Accounts)]
 pub struct PartialUnstake<'info> {
   #[account(mut)]
@@ -603,16 +402,6 @@ pub struct PartialUnstake<'info> {
   pub stake_program: AccountInfo<'info>,
 }
 
-/*/* content */*/
-
-//* title: MergeStakes Marinade_finance Interface
-//* description: Creates the interface of the instruction mergeStakes of the marinade_finance program
-//* platform: anchor
-//* category: interfaces
-//* prefix: program
-//* display: vscode
-		
-/*/* content */*/
 #[derive(Accounts)]
 pub struct MergeStakes<'info> {
   #[account(mut)]
@@ -634,16 +423,6 @@ pub struct MergeStakes<'info> {
   pub stake_program: AccountInfo<'info>,
 }
 
-/*/* content */*/
-
-//* title: State Marinade_finance Interface
-//* description: Creates the interface of the instruction State of the marinade_finance program
-//* platform: anchor
-//* category: interfaces
-//* prefix: program
-//* display: vscode
-		
-/*/* content */*/
 #[account]
 pub struct State {
   pub msol_mint: Pubkey,
@@ -669,22 +448,128 @@ pub struct State {
   pub emergency_cooling_down: u64,
 }
 
-/*/* content */*/
-
-//* title: TicketAccountData Marinade_finance Interface
-//* description: Creates the interface of the instruction TicketAccountData of the marinade_finance program
-//* platform: anchor
-//* category: interfaces
-//* prefix: program
-//* display: vscode
-		
-/*/* content */*/
 #[account]
 pub struct TicketAccountData {
   pub state_address: Pubkey,
   pub beneficiary: Pubkey,
   pub lamports_amount: u64,
   pub created_epoch: u64,
+}
+
+#[derive(Clone, Debug, AnchorSerialize, AnchorDeserialize)]
+pub struct Fee {
+  pub basis_points: u32,
+}
+
+#[derive(Clone, Debug, AnchorSerialize, AnchorDeserialize)]
+pub struct InitializeData {
+  pub admin_authority: Pubkey,
+  pub validator_manager_authority: Pubkey,
+  pub min_stake: u64,
+  pub reward_fee: Fee,
+  pub liq_pool: LiqPoolInitializeData,
+  pub additional_stake_record_space: u32,
+  pub additional_validator_record_space: u32,
+  pub slots_for_stake_delta: u64,
+}
+
+#[derive(Clone, Debug, AnchorSerialize, AnchorDeserialize)]
+pub struct LiqPoolInitializeData {
+  pub lp_liquidity_target: u64,
+  pub lp_max_fee: Fee,
+  pub lp_min_fee: Fee,
+  pub lp_treasury_cut: Fee,
+}
+
+#[derive(Clone, Debug, AnchorSerialize, AnchorDeserialize)]
+pub struct ChangeAuthorityData {
+  pub admin: Option<Pubkey>,
+  pub validator_manager: Option<Pubkey>,
+  pub operational_sol_account: Option<Pubkey>,
+  pub treasury_msol_account: Option<Pubkey>,
+}
+
+#[derive(Clone, Debug, AnchorSerialize, AnchorDeserialize)]
+pub struct ConfigLpParams {
+  pub min_fee: Option<Fee>,
+  pub max_fee: Option<Fee>,
+  pub liquidity_target: Option<u64>,
+  pub treasury_cut: Option<Fee>,
+}
+
+#[derive(Clone, Debug, AnchorSerialize, AnchorDeserialize)]
+pub struct ConfigMarinadeParams {
+  pub rewards_fee: Option<Fee>,
+  pub slots_for_stake_delta: Option<u64>,
+  pub min_stake: Option<u64>,
+  pub min_deposit: Option<u64>,
+  pub min_withdraw: Option<u64>,
+  pub staking_sol_cap: Option<u64>,
+  pub liquidity_sol_cap: Option<u64>,
+  pub auto_add_validator_enabled: Option<bool>,
+}
+
+#[derive(Clone, Debug, AnchorSerialize, AnchorDeserialize)]
+pub struct LiqPool {
+  pub lp_mint: Pubkey,
+  pub lp_mint_authority_bump_seed: u8,
+  pub sol_leg_bump_seed: u8,
+  pub msol_leg_authority_bump_seed: u8,
+  pub msol_leg: Pubkey,
+  pub lp_liquidity_target: u64,
+  pub lp_max_fee: Fee,
+  pub lp_min_fee: Fee,
+  pub treasury_cut: Fee,
+  pub lp_supply: u64,
+  pub lent_from_sol_leg: u64,
+  pub liquidity_sol_cap: u64,
+}
+
+#[derive(Clone, Debug, AnchorSerialize, AnchorDeserialize)]
+pub struct List {
+  pub account: Pubkey,
+  pub item_size: u32,
+  pub count: u32,
+  pub new_account: Pubkey,
+  pub copied_count: u32,
+}
+
+#[derive(Clone, Debug, AnchorSerialize, AnchorDeserialize)]
+pub struct StakeRecord {
+  pub stake_account: Pubkey,
+  pub last_update_delegated_lamports: u64,
+  pub last_update_epoch: u64,
+  pub is_emergency_unstaking: u8,
+}
+
+#[derive(Clone, Debug, AnchorSerialize, AnchorDeserialize)]
+pub struct StakeSystem {
+  pub stake_list: List,
+  pub delayed_unstake_cooling_down: u64,
+  pub stake_deposit_bump_seed: u8,
+  pub stake_withdraw_bump_seed: u8,
+  pub slots_for_stake_delta: u64,
+  pub last_stake_delta_epoch: u64,
+  pub min_stake: u64,
+  pub extra_stake_delta_runs: u32,
+}
+
+#[derive(Clone, Debug, AnchorSerialize, AnchorDeserialize)]
+pub struct ValidatorRecord {
+  pub validator_account: Pubkey,
+  pub active_balance: u64,
+  pub score: u32,
+  pub last_stake_delta_epoch: u64,
+  pub duplication_flag_bump_seed: u8,
+}
+
+#[derive(Clone, Debug, AnchorSerialize, AnchorDeserialize)]
+pub struct ValidatorSystem {
+  pub validator_list: List,
+  pub manager_authority: Pubkey,
+  pub total_validator_score: u32,
+  pub total_active_balance: u64,
+  pub auto_add_validator_enabled: u8,
 }
 
 /*/* content */*/

@@ -2,8 +2,8 @@
 //* description: Template for an instruction context and its processor
 //* platform: anchor
 //* category: system
-//* prefix: instruction
-//* requires
+//* display: vscode
+
 /*/* content */*/
 use anchor_lang::prelude::*
 

@@ -2,23 +2,20 @@
   "name": "solana-snippets",
   "displayName": "Solana Snippets",
   "description": "Extension to quickly write and customize well tested Solana snippets.",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "publisher": "patriciobcs",
   "license": "MIT",
   "author": {
     "name": "Patricio"
   },
   "icon": "resources/logo.png",
-  "repository": {
-    "type": "git",
-    "urls": "https://github.com/patriciobcs/solana-snippets.git"
-  },
+  "repository": "https://github.com/patriciobcs/solana-snippets.git",
   "homepage": "https://github.com/patriciobcs/solana-snippets/blob/main/README.md",
   "bugs": {
     "url": "https://github.com/patriciobcs/solana-snippets/issues"
   },
   "engines": {
-    "vscode": "^1.28.0"
+    "vscode": "^1.74.0"
   },
   "categories": [
     "Snippets",

@@ -1,4 +1,4 @@
-#* title: Add Instruction
+#* title: Add Anchor Instruction
 #* description: Add a new instruction to your Anchor program (define the name in the terminal with `add=<instruction_name>` before running the snippet)
 #* platform: anchor
 #* category: CLI

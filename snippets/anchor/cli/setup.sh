@@ -1,4 +1,4 @@
-#* title: Setup
+#* title: Anchor Setup
 #* description: Add Anchor to you Rust program
 #* platform: anchor
 #* category: CLI

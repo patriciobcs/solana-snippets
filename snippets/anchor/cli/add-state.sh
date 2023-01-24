@@ -1,4 +1,4 @@
-#* title: Add State
+#* title: Add Anchor State
 #* description: Add a new state to your Anchor program (define the name in the terminal with `add=<state_name>` before running the snippet)
 #* platform: anchor
 #* category: CLI

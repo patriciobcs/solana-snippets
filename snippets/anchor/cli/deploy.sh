@@ -1,4 +1,4 @@
-#* title: Deploy
+#* title: Anchor Deploy
 #* description: Deploy your Anchor program
 #* platform: anchor
 #* category: CLI

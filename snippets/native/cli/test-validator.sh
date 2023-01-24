@@ -4,5 +4,5 @@
 #* category: CLI
 
 #* content
-cargo build-sbf
+solana-test-validator
 #* content

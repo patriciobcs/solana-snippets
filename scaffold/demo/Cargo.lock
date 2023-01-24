@@ -96,17 +96,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "anchor"
-version = "0.1.0"
-dependencies = [
- "anchor-lang",
- "solana-program",
- "solana-program-test",
- "solana-sdk",
- "spl-token",
-]
-
-[[package]]
 name = "anchor-attribute-access-control"
 version = "0.26.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1002,6 +991,17 @@ name = "data-encoding"
 version = "2.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "23d8666cb01533c39dde32bcbab8e227b4ed6679b2c925eba05feabea39508fb"
+
+[[package]]
+name = "demo"
+version = "0.1.0"
+dependencies = [
+ "anchor-lang",
+ "solana-program",
+ "solana-program-test",
+ "solana-sdk",
+ "spl-token",
+]
 
 [[package]]
 name = "der"

@@ -1,4 +1,4 @@
-#* title: Test
+#* title: Anchor Test
 #* description: Test your Anchor program
 #* platform: anchor
 #* category: CLI

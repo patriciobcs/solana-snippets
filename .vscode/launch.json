@@ -16,12 +16,12 @@
 			]
 		},
 		{
-			"name": "Run Anchor",
+			"name": "Run Demo",
 			"type": "extensionHost",
 			"request": "launch",
 			"runtimeExecutable": "${execPath}",
 			"args": [
-				"${workspaceFolder}/scaffold/anchor-program/",
+				"${workspaceFolder}/scaffold/demo/",
 				"--extensionDevelopmentPath=${workspaceFolder}"
 			]
 		},

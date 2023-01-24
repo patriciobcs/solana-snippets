@@ -1,4 +1,4 @@
-#* title: Build
+#* title: Anchor Build
 #* description: Build your Anchor program
 #* platform: anchor
 #* category: CLI

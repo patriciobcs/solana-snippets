@@ -19,9 +19,9 @@ let mut context = program.start_with_context().await;
 let instruction = Instruction {
   program_id: demo::id(),
   accounts: demo::accounts::Initialize {
-          user: context.payer.pubkey(),
-          demo: solana_sdk::pubkey::Pubkey::find_program_address(&[b"demo"], &demo::id()).0,
-          system_program: solana_program::system_program::id(),
+    user: context.payer.pubkey(),
+    demo: solana_sdk::pubkey::Pubkey::find_program_address(&[b"demo"], &demo::id()).0,
+    system_program: solana_program::system_program::id(),
   }.to_account_metas(None),
   data: demo::instruction::Initialize {}.data(),
 };

@@ -2,6 +2,8 @@
 
 The [Solana Snippets VSCode Extension](https://marketplace.visualstudio.com/items?itemName=patriciobcs.solana-snippets) allows you to quickly insert Solana snippets into your code or your terminal. The snippets are tested in a real [Solana program](./snippets) (code) or real Shell Scripts (terminal), and presented as VSCode and Rust Analyzer snippets with a sidebar to navigate through them.
 
+![demo](resources/demo.gif)
+
 ## Snippets
 
 Snippets are small fragments of code that can be used to speed up the development process. In this extension you can find three types of snippets:

@@ -1,7 +1,7 @@
 {
   "id": 1,
   "parentId": -1,
-  "lastId": 140,
+  "lastId": 146,
   "type": 0,
   "label": "snippets",
   "children": [
@@ -494,11 +494,11 @@
                 },
                 {
                   "requires": [],
-                  "description": "Add the Anchor SPL Dex library to your Anchor program (use on the program folder)",
+                  "description": "Add Anchor to you Rust program",
                   "content": [
-                    "cargo add anchor-spl --features dex"
+                    "cargo add anchor-lang"
                   ],
-                  "label": "Add Anchor SPL",
+                  "label": "Setup",
                   "type": 4,
                   "children": [],
                   "parentId": 12,
@@ -515,6 +515,18 @@
                   "children": [],
                   "parentId": 12,
                   "id": 37
+                },
+                {
+                  "requires": [],
+                  "description": "Add the Anchor SPL library to your Anchor program (use on the program folder)",
+                  "content": [
+                    "cargo add anchor-spl"
+                  ],
+                  "label": "Add Anchor SPL",
+                  "type": 4,
+                  "children": [],
+                  "parentId": 12,
+                  "id": 38
                 },
                 {
                   "requires": [],
@@ -535,7 +547,51 @@
                   "type": 4,
                   "children": [],
                   "parentId": 12,
-                  "id": 38
+                  "id": 39
+                },
+                {
+                  "requires": [],
+                  "description": "Add a new instruction to your Anchor program (define the name in the terminal with `add=<instruction_name>` before running the snippet)",
+                  "content": [
+                    "instruction=\"generic_instruction\"",
+                    "if ! [ -z ${add+x} ]; then instruction=$add; fi",
+                    "mkdir -p src/instructions",
+                    "touch src/instructions/mod.rs",
+                    "instruction_file=src/instructions/$instruction.rs",
+                    "touch $instruction_file",
+                    "instruction_camel_case=$(echo ${instruction//_/ } | awk '{for(i=1;i<=NF;i++) {printf(\"%s%s\",toupper(substr($i,1,1)),substr($i,2))} }')",
+                    "echo \"\\npub mod $instruction;\\npub use $instruction::*;\" >> src/instructions/mod.rs",
+                    "echo \"use anchor_lang::prelude::*;\\n\\n#[derive(Accounts)]\\npub struct $instruction_camel_case {}\\n\\npub fn processor(_ctx: Context<$instruction_camel_case>) -> Result<()> {\\n\\n\\t\\tOk(())\\n}\" > $instruction_file",
+                    "lib=$(sed '/}$/r'<(",
+                    "echo \"    pub fn $instruction(ctx: Context<$instruction_camel_case>) -> Result<()> {\";",
+                    "echo \"        instructions::$instruction::processor(ctx)?;\";",
+                    "echo \"        Ok(())\";",
+                    "echo \"    }\";",
+                    ") src/lib.rs)",
+                    "echo \"$lib\" > src/lib.rs"
+                  ],
+                  "label": "Add Instruction",
+                  "type": 4,
+                  "children": [],
+                  "parentId": 12,
+                  "id": 40
+                },
+                {
+                  "requires": [],
+                  "description": "Add a new state to your Anchor program (define the name in the terminal with `add=<state_name>` before running the snippet)",
+                  "content": [
+                    "state=\"generic_state\"",
+                    "if ! [ -z ${add+x} ]; then state=$add; fi",
+                    "mkdir -p src/state",
+                    "touch src/state/mod.rs",
+                    "touch src/state/$state.rs",
+                    "echo \"\\npub mod $state;\\npub use $state::*;\" >> src/state/mod.rs"
+                  ],
+                  "label": "Add State",
+                  "type": 4,
+                  "children": [],
+                  "parentId": 12,
+                  "id": 41
                 },
                 {
                   "requires": [],
@@ -547,7 +603,7 @@
                   "type": 4,
                   "children": [],
                   "parentId": 12,
-                  "id": 39
+                  "id": 42
                 },
                 {
                   "requires": [],
@@ -567,12 +623,26 @@
                   "type": 4,
                   "children": [],
                   "parentId": 12,
-                  "id": 40
+                  "id": 43
+                },
+                {
+                  "requires": [],
+                  "description": "Adds the Anchor SPL DEX library to your Anchor program and start the test validator with the Openbook DEX program.",
+                  "content": [
+                    "cargo add anchor-spl --features dex",
+                    "solana program dump -u m srmqPvymJeFKQ4zGQed1GFppgkRHL9kaELCbyksJtPX openbook_dex_v3.so",
+                    "solana-test-validator --bpf-program srmqPvymJeFKQ4zGQed1GFppgkRHL9kaELCbyksJtPX openbook_dex_v3.so --reset"
+                  ],
+                  "label": "Setup Openbook",
+                  "type": 4,
+                  "children": [],
+                  "parentId": 12,
+                  "id": 53
                 }
               ]
             },
             {
-              "id": 41,
+              "id": 44,
               "parentId": 11,
               "type": 1,
               "label": "System",
@@ -586,8 +656,8 @@
                   "label": "Get Bump",
                   "type": 3,
                   "children": [],
-                  "parentId": 41,
-                  "id": 42
+                  "parentId": 44,
+                  "id": 45
                 },
                 {
                   "requires": [],
@@ -605,8 +675,8 @@
                   "label": "Instruction",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 49
+                  "parentId": 44,
+                  "id": 55
                 },
                 {
                   "requires": [],
@@ -630,13 +700,13 @@
                   "label": "Program",
                   "type": 2,
                   "children": [],
-                  "parentId": 41,
-                  "id": 50
+                  "parentId": 44,
+                  "id": 56
                 }
               ]
             },
             {
-              "id": 43,
+              "id": 46,
               "parentId": 11,
               "type": 1,
               "label": "Dex",
@@ -666,8 +736,193 @@
                   "label": "Openbook's Struct",
                   "type": 2,
                   "children": [],
-                  "parentId": 43,
-                  "id": 44
+                  "parentId": 46,
+                  "id": 47
+                },
+                {
+                  "requires": [],
+                  "description": "Client for sending orders to the Openbook DEX.",
+                  "content": [
+                    "use anchor_lang::prelude::*;",
+                    "use anchor_spl::dex;",
+                    "use anchor_spl::dex::serum_dex::instruction::SelfTradeBehavior;",
+                    "use anchor_spl::dex::serum_dex::matching::OrderType;",
+                    "use anchor_spl::dex::serum_dex::matching::Side;",
+                    "use anchor_spl::dex::serum_dex::state::MarketState;",
+                    "use std::num::NonZeroU64;",
+                    "",
+                    "// Client for sending orders to the Openbook DEX.",
+                    "pub struct OrderbookClient<'info> {",
+                    "pub market: MarketAccounts<'info>,",
+                    "pub authority: AccountInfo<'info>,",
+                    "pub pc_wallet: AccountInfo<'info>,",
+                    "pub dex_program: AccountInfo<'info>,",
+                    "pub token_program: AccountInfo<'info>,",
+                    "pub rent: AccountInfo<'info>,",
+                    "}",
+                    "",
+                    "impl<'info> OrderbookClient<'info> {",
+                    "// Executes the sell order portion of the swap, purchasing as much of the",
+                    "// quote currency as possible for the given `base_amount`.",
+                    "//",
+                    "// `base_amount` is the \"native\" amount of the base currency, i.e., token",
+                    "// amount including decimals.",
+                    "pub fn sell(&self, base_amount: u64, referral: Option<AccountInfo<'info>>) -> Result<()> {",
+                    "    let limit_price = 1;",
+                    "    let max_coin_qty = {",
+                    "        // The loaded market must be dropped before CPI.",
+                    "        let market = MarketState::load(&self.market.market, &dex::ID)",
+                    "            .map_err(|de| ProgramError::from(de))?;",
+                    "        coin_lots(&market, base_amount)",
+                    "    };",
+                    "    let max_native_pc_qty = u64::MAX;",
+                    "    self.order_cpi(",
+                    "        limit_price,",
+                    "        max_coin_qty,",
+                    "        max_native_pc_qty,",
+                    "        Side::Ask,",
+                    "        referral,",
+                    "    )",
+                    "}",
+                    "",
+                    "// Executes the buy order portion of the swap, purchasing as much of the",
+                    "// base currency as possible, for the given `quote_amount`.",
+                    "//",
+                    "// `quote_amount` is the \"native\" amount of the quote currency, i.e., token",
+                    "// amount including decimals.",
+                    "pub fn buy(&self, quote_amount: u64, referral: Option<AccountInfo<'info>>) -> Result<()> {",
+                    "    let limit_price = u64::MAX;",
+                    "    let max_coin_qty = u64::MAX;",
+                    "    let max_native_pc_qty = quote_amount;",
+                    "    self.order_cpi(",
+                    "        limit_price,",
+                    "        max_coin_qty,",
+                    "        max_native_pc_qty,",
+                    "        Side::Bid,",
+                    "        referral,",
+                    "    )",
+                    "}",
+                    "",
+                    "// Executes a new order on the serum dex via CPI.",
+                    "//",
+                    "// * `limit_price` - the limit order price in lot units.",
+                    "// * `max_coin_qty`- the max number of the base currency lot units.",
+                    "// * `max_native_pc_qty` - the max number of quote currency in native token",
+                    "//                         units (includes decimals).",
+                    "// * `side` - bid or ask, i.e. the type of order.",
+                    "// * `referral` - referral account, earning a fee.",
+                    "pub fn order_cpi(",
+                    "    &self,",
+                    "    limit_price: u64,",
+                    "    max_coin_qty: u64,",
+                    "    max_native_pc_qty: u64,",
+                    "    side: Side,",
+                    "    referral: Option<AccountInfo<'info>>,",
+                    ") -> Result<()> {",
+                    "    // Client order id is only used for cancels. Not used here so hardcode.",
+                    "    let client_order_id = 0;",
+                    "    // Limit is the dex's custom compute budge parameter, setting an upper",
+                    "    // bound on the number of matching cycles the program can perform",
+                    "    // before giving up and posting the remaining unmatched order.",
+                    "    let limit = 65535;",
+                    "",
+                    "    let dex_accs = dex::NewOrderV3 {",
+                    "        market: self.market.market.clone(),",
+                    "        open_orders: self.market.open_orders.clone(),",
+                    "        request_queue: self.market.request_queue.clone(),",
+                    "        event_queue: self.market.event_queue.clone(),",
+                    "        market_bids: self.market.bids.clone(),",
+                    "        market_asks: self.market.asks.clone(),",
+                    "        order_payer_token_account: self.market.order_payer_token_account.clone(),",
+                    "        open_orders_authority: self.authority.clone(),",
+                    "        coin_vault: self.market.coin_vault.clone(),",
+                    "        pc_vault: self.market.pc_vault.clone(),",
+                    "        token_program: self.token_program.clone(),",
+                    "        rent: self.rent.clone(),",
+                    "    };",
+                    "    let mut ctx = CpiContext::new(self.dex_program.clone(), dex_accs);",
+                    "    if let Some(referral) = referral {",
+                    "        ctx = ctx.with_remaining_accounts(vec![referral]);",
+                    "    }",
+                    "    dex::new_order_v3(",
+                    "        ctx,",
+                    "        side.into(),",
+                    "        NonZeroU64::new(limit_price).unwrap(),",
+                    "        NonZeroU64::new(max_coin_qty).unwrap(),",
+                    "        NonZeroU64::new(max_native_pc_qty).unwrap(),",
+                    "        SelfTradeBehavior::DecrementTake,",
+                    "        OrderType::ImmediateOrCancel,",
+                    "        client_order_id,",
+                    "        limit,",
+                    "    )",
+                    "}",
+                    "",
+                    "pub fn settle(&self, referral: Option<AccountInfo<'info>>) -> Result<()> {",
+                    "    let settle_accs = dex::SettleFunds {",
+                    "        market: self.market.market.clone(),",
+                    "        open_orders: self.market.open_orders.clone(),",
+                    "        open_orders_authority: self.authority.clone(),",
+                    "        coin_vault: self.market.coin_vault.clone(),",
+                    "        pc_vault: self.market.pc_vault.clone(),",
+                    "        coin_wallet: self.market.coin_wallet.clone(),",
+                    "        pc_wallet: self.pc_wallet.clone(),",
+                    "        vault_signer: self.market.vault_signer.clone(),",
+                    "        token_program: self.token_program.clone(),",
+                    "    };",
+                    "    let mut ctx = CpiContext::new(self.dex_program.clone(), settle_accs);",
+                    "    if let Some(referral) = referral {",
+                    "        ctx = ctx.with_remaining_accounts(vec![referral]);",
+                    "    }",
+                    "    dex::settle_funds(ctx)",
+                    "}",
+                    "}",
+                    "",
+                    "// Returns the amount of lots for the base currency of a trade with `size`.",
+                    "pub fn coin_lots(market: &MarketState, size: u64) -> u64 {",
+                    "size.checked_div(market.coin_lot_size).unwrap()",
+                    "}",
+                    "",
+                    "// Market accounts are the accounts used to place orders against the dex minus",
+                    "// common accounts, i.e., program ids, sysvars, and the `pc_wallet`.",
+                    "#[derive(Accounts, Clone)]",
+                    "pub struct MarketAccounts<'info> {",
+                    "#[account(mut)]",
+                    "pub market: AccountInfo<'info>,",
+                    "#[account(mut)]",
+                    "pub open_orders: AccountInfo<'info>,",
+                    "#[account(mut)]",
+                    "pub request_queue: AccountInfo<'info>,",
+                    "#[account(mut)]",
+                    "pub event_queue: AccountInfo<'info>,",
+                    "#[account(mut)]",
+                    "pub bids: AccountInfo<'info>,",
+                    "#[account(mut)]",
+                    "pub asks: AccountInfo<'info>,",
+                    "// The `spl_token::Account` that funds will be taken from, i.e., transferred",
+                    "// from the user into the market's vault.",
+                    "// For bids, this is the base currency. For asks, the quote.",
+                    "#[account(mut)]",
+                    "pub order_payer_token_account: AccountInfo<'info>,",
+                    "// Also known as the \"base\" currency. For a given A/B market,",
+                    "// this is the vault for the A mint.",
+                    "#[account(mut)]",
+                    "pub coin_vault: AccountInfo<'info>,",
+                    "// Also known as the \"quote\" currency. For a given A/B market,",
+                    "// this is the vault for the B mint.",
+                    "#[account(mut)]",
+                    "pub pc_vault: AccountInfo<'info>,",
+                    "// PDA owner of the DEX's token accounts for base + quote currencies.",
+                    "pub vault_signer: AccountInfo<'info>,",
+                    "// User wallets.",
+                    "#[account(mut)]",
+                    "pub coin_wallet: AccountInfo<'info>,",
+                    "}"
+                  ],
+                  "label": "Openbook's Orderbook Client",
+                  "type": 2,
+                  "children": [],
+                  "parentId": 46,
+                  "id": 48
                 },
                 {
                   "requires": [],
@@ -704,8 +959,135 @@
                   "label": "Openbook's Update Order",
                   "type": 2,
                   "children": [],
-                  "parentId": 43,
-                  "id": 45
+                  "parentId": 46,
+                  "id": 49
+                },
+                {
+                  "requires": [],
+                  "description": "Swap two tokens on the Openbook protocol",
+                  "content": [
+                    "use anchor_lang::prelude::*;",
+                    "use anchor_spl::token;",
+                    "use anchor_spl::dex::serum_dex::matching::Side;",
+                    "",
+                    "// The only constraint imposed on these accounts is that the market's base",
+                    "// currency mint is not equal to the quote currency's. All other checks are",
+                    "// done by the DEX on CPI.",
+                    "#[derive(Accounts)]",
+                    "pub struct Swap<'info> {",
+                    "pub market: MarketAccounts<'info>,",
+                    "#[account(signer)]",
+                    "pub authority: AccountInfo<'info>,",
+                    "#[account(mut)]",
+                    "pub pc_wallet: AccountInfo<'info>,",
+                    "// Programs.",
+                    "pub dex_program: AccountInfo<'info>,",
+                    "pub token_program: AccountInfo<'info>,",
+                    "// Sysvars.",
+                    "pub rent: AccountInfo<'info>,",
+                    "}",
+                    "",
+                    "impl<'info> From<&Swap<'info>> for OrderbookClient<'info> {",
+                    "fn from(accounts: &Swap<'info>) -> OrderbookClient<'info> {",
+                    "    OrderbookClient {",
+                    "        market: accounts.market.clone(),",
+                    "        authority: accounts.authority.clone(),",
+                    "        pc_wallet: accounts.pc_wallet.clone(),",
+                    "        dex_program: accounts.dex_program.clone(),",
+                    "        token_program: accounts.token_program.clone(),",
+                    "        rent: accounts.rent.clone(),",
+                    "    }",
+                    "}",
+                    "}",
+                    "",
+                    "pub fn processor<'info>(",
+                    "ctx: Context<'_, '_, '_, 'info, Swap<'info>>,",
+                    "side: Side,",
+                    "amount: u64,",
+                    "min_expected_swap_amount: u64,",
+                    ") -> Result<()> {",
+                    "// Optional referral account (earns a referral fee).",
+                    "let referral = ctx.remaining_accounts.iter().next().map(Clone::clone);",
+                    "",
+                    "// Side determines swap direction.",
+                    "let (from_token, to_token) = match side {",
+                    "    Side::Bid => (&ctx.accounts.pc_wallet, &ctx.accounts.market.coin_wallet),",
+                    "    Side::Ask => (&ctx.accounts.market.coin_wallet, &ctx.accounts.pc_wallet),",
+                    "};",
+                    "",
+                    "// Token balances before the trade.",
+                    "let from_amount_before = token::accessor::amount(from_token)?;",
+                    "let to_amount_before = token::accessor::amount(to_token)?;",
+                    "",
+                    "// Execute trade.",
+                    "let orderbook: OrderbookClient<'info> = (&*ctx.accounts).into();",
+                    "match side {",
+                    "    Side::Bid => orderbook.buy(amount, referral.clone())?,",
+                    "    Side::Ask => orderbook.sell(amount, referral.clone())?,",
+                    "};",
+                    "orderbook.settle(referral)?;",
+                    "",
+                    "// Token balances after the trade.",
+                    "let from_amount_after = token::accessor::amount(from_token)?;",
+                    "let to_amount_after = token::accessor::amount(to_token)?;",
+                    "",
+                    "//  Calculate the delta, i.e. the amount swapped.",
+                    "let from_amount = from_amount_before.checked_sub(from_amount_after).unwrap();",
+                    "let to_amount = to_amount_after.checked_sub(to_amount_before).unwrap();",
+                    "",
+                    "if to_amount < min_expected_swap_amount {",
+                    "    return Err(ProgramError::InvalidAccountData.into());",
+                    "}",
+                    "",
+                    "emit!(DidSwap {",
+                    "    authority: *ctx.accounts.authority.key,",
+                    "    given_amount: amount,",
+                    "    min_expected_swap_amount,",
+                    "    from_amount,",
+                    "    to_amount,",
+                    "    spill_amount: 0,",
+                    "    from_mint: token::accessor::mint(from_token)?,",
+                    "    to_mint: token::accessor::mint(to_token)?,",
+                    "    quote_mint: match side {",
+                    "        Side::Bid => token::accessor::mint(from_token)?,",
+                    "        Side::Ask => token::accessor::mint(to_token)?,",
+                    "    },",
+                    "});",
+                    "",
+                    "Ok(())",
+                    "}",
+                    "",
+                    "// Event emitted when a swap occurs for two base currencies on two different",
+                    "// markets (quoted in the same token).",
+                    "#[event]",
+                    "pub struct DidSwap {",
+                    "// User given (max) amount to swap.",
+                    "pub given_amount: u64,",
+                    "// The minimum amount of the *to* token expected to be received from",
+                    "// executing the swap.",
+                    "pub min_expected_swap_amount: u64,",
+                    "// Amount of the `from` token sold.",
+                    "pub from_amount: u64,",
+                    "// Amount of the `to` token purchased.",
+                    "pub to_amount: u64,",
+                    "// Amount of the quote currency accumulated from the swap.",
+                    "pub spill_amount: u64,",
+                    "// Mint sold.",
+                    "pub from_mint: Pubkey,",
+                    "// Mint purchased.",
+                    "pub to_mint: Pubkey,",
+                    "// Mint of the token used as the quote currency in the two markets used",
+                    "// for swapping.",
+                    "pub quote_mint: Pubkey,",
+                    "// User that signed the transaction.",
+                    "pub authority: Pubkey,",
+                    "}"
+                  ],
+                  "label": "Openbook's Swap",
+                  "type": 2,
+                  "children": [],
+                  "parentId": 46,
+                  "id": 50
                 },
                 {
                   "requires": [],
@@ -758,8 +1140,8 @@
                   "label": "Openbook's Account Order",
                   "type": 2,
                   "children": [],
-                  "parentId": 43,
-                  "id": 46
+                  "parentId": 46,
+                  "id": 51
                 },
                 {
                   "requires": [],
@@ -856,8 +1238,8 @@
                   "label": "Openbook's Create Order",
                   "type": 2,
                   "children": [],
-                  "parentId": 43,
-                  "id": 47
+                  "parentId": 46,
+                  "id": 52
                 },
                 {
                   "requires": [],
@@ -957,13 +1339,13 @@
                   "label": "Openbook's Execute Order",
                   "type": 2,
                   "children": [],
-                  "parentId": 43,
-                  "id": 48
+                  "parentId": 46,
+                  "id": 54
                 }
               ]
             },
             {
-              "id": 51,
+              "id": 57,
               "parentId": 11,
               "type": 1,
               "label": "Interfaces",
@@ -984,8 +1366,8 @@
                   "label": "Jupiter's Instruction Route",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 52
+                  "parentId": 57,
+                  "id": 58
                 },
                 {
                   "requires": [],
@@ -1020,8 +1402,8 @@
                   "label": "Jupiter's Instruction WhirlpoolSwapExactOutput",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 53
+                  "parentId": 57,
+                  "id": 59
                 },
                 {
                   "requires": [],
@@ -1043,8 +1425,8 @@
                   "label": "Jupiter's Instruction CreateOpenOrders",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 54
+                  "parentId": 57,
+                  "id": 60
                 },
                 {
                   "requires": [],
@@ -1068,8 +1450,8 @@
                   "label": "Jupiter's Instruction MercurialSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 55
+                  "parentId": 57,
+                  "id": 61
                 },
                 {
                   "requires": [],
@@ -1101,8 +1483,8 @@
                   "label": "Jupiter's Instruction CykuraSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 56
+                  "parentId": 57,
+                  "id": 62
                 },
                 {
                   "requires": [],
@@ -1149,8 +1531,8 @@
                   "label": "Jupiter's Instruction SerumSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 57
+                  "parentId": 57,
+                  "id": 63
                 },
                 {
                   "requires": [],
@@ -1179,8 +1561,8 @@
                   "label": "Jupiter's Instruction SaberSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 58
+                  "parentId": 57,
+                  "id": 64
                 },
                 {
                   "requires": [],
@@ -1207,8 +1589,8 @@
                   "label": "Jupiter's Instruction SaberAddDecimals",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 59
+                  "parentId": 57,
+                  "id": 65
                 },
                 {
                   "requires": [],
@@ -1240,8 +1622,8 @@
                   "label": "Jupiter's Instruction TokenSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 60
+                  "parentId": 57,
+                  "id": 66
                 },
                 {
                   "requires": [],
@@ -1272,8 +1654,8 @@
                   "label": "Jupiter's Instruction SenchaSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 61
+                  "parentId": 57,
+                  "id": 67
                 },
                 {
                   "requires": [],
@@ -1305,8 +1687,8 @@
                   "label": "Jupiter's Instruction StepSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 62
+                  "parentId": 57,
+                  "id": 68
                 },
                 {
                   "requires": [],
@@ -1339,8 +1721,8 @@
                   "label": "Jupiter's Instruction CropperSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 63
+                  "parentId": 57,
+                  "id": 69
                 },
                 {
                   "requires": [],
@@ -1385,8 +1767,8 @@
                   "label": "Jupiter's Instruction RaydiumSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 64
+                  "parentId": 57,
+                  "id": 70
                 },
                 {
                   "requires": [],
@@ -1424,8 +1806,8 @@
                   "label": "Jupiter's Instruction CremaSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 65
+                  "parentId": 57,
+                  "id": 71
                 },
                 {
                   "requires": [],
@@ -1461,8 +1843,8 @@
                   "label": "Jupiter's Instruction LifinitySwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 66
+                  "parentId": 57,
+                  "id": 72
                 },
                 {
                   "requires": [],
@@ -1503,8 +1885,8 @@
                   "label": "Jupiter's Instruction MarinadeDeposit",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 67
+                  "parentId": 57,
+                  "id": 73
                 },
                 {
                   "requires": [],
@@ -1539,8 +1921,8 @@
                   "label": "Jupiter's Instruction MarinadeUnstake",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 68
+                  "parentId": 57,
+                  "id": 74
                 },
                 {
                   "requires": [],
@@ -1572,8 +1954,8 @@
                   "label": "Jupiter's Instruction AldrinSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 69
+                  "parentId": 57,
+                  "id": 75
                 },
                 {
                   "requires": [],
@@ -1606,8 +1988,8 @@
                   "label": "Jupiter's Instruction AldrinV2Swap",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 70
+                  "parentId": 57,
+                  "id": 76
                 },
                 {
                   "requires": [],
@@ -1642,8 +2024,8 @@
                   "label": "Jupiter's Instruction WhirlpoolSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 71
+                  "parentId": 57,
+                  "id": 77
                 },
                 {
                   "requires": [],
@@ -1675,8 +2057,8 @@
                   "label": "Jupiter's Instruction InvariantSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 72
+                  "parentId": 57,
+                  "id": 78
                 },
                 {
                   "requires": [],
@@ -1719,8 +2101,8 @@
                   "label": "Jupiter's Instruction MeteoraSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 73
+                  "parentId": 57,
+                  "id": 79
                 },
                 {
                   "requires": [],
@@ -1760,8 +2142,8 @@
                   "label": "Jupiter's Instruction GoosefxSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 74
+                  "parentId": 57,
+                  "id": 80
                 },
                 {
                   "requires": [],
@@ -1796,8 +2178,8 @@
                   "label": "Jupiter's Instruction DeltafiSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 75
+                  "parentId": 57,
+                  "id": 81
                 },
                 {
                   "requires": [],
@@ -1835,8 +2217,8 @@
                   "label": "Jupiter's Instruction BalansolSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 76
+                  "parentId": 57,
+                  "id": 82
                 },
                 {
                   "requires": [],
@@ -1877,8 +2259,8 @@
                   "label": "Jupiter's Instruction MarcoPoloSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 77
+                  "parentId": 57,
+                  "id": 83
                 },
                 {
                   "requires": [],
@@ -1920,8 +2302,8 @@
                   "label": "Jupiter's Instruction DradexSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 78
+                  "parentId": 57,
+                  "id": 84
                 },
                 {
                   "requires": [],
@@ -1957,8 +2339,8 @@
                   "label": "Jupiter's Instruction LifinityV2Swap",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 79
+                  "parentId": 57,
+                  "id": 85
                 },
                 {
                   "requires": [],
@@ -1991,8 +2373,8 @@
                   "label": "Jupiter's Instruction RaydiumClmmSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 80
+                  "parentId": 57,
+                  "id": 86
                 },
                 {
                   "requires": [],
@@ -2008,8 +2390,8 @@
                   "label": "Jupiter's Type AmountWithSlippage",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 81
+                  "parentId": 57,
+                  "id": 87
                 },
                 {
                   "requires": [],
@@ -2025,8 +2407,8 @@
                   "label": "Jupiter's Type SplitLegDeeper",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 82
+                  "parentId": 57,
+                  "id": 88
                 },
                 {
                   "requires": [],
@@ -2042,8 +2424,8 @@
                   "label": "Jupiter's Type SplitLeg",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 83
+                  "parentId": 57,
+                  "id": 89
                 },
                 {
                   "requires": [],
@@ -2052,8 +2434,8 @@
                   "label": "Jupiter's Type SwapInstrution",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 84
+                  "parentId": 57,
+                  "id": 90
                 },
                 {
                   "requires": [],
@@ -2069,8 +2451,8 @@
                   "label": "Jupiter's Type Side",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 85
+                  "parentId": 57,
+                  "id": 91
                 },
                 {
                   "requires": [],
@@ -2087,8 +2469,8 @@
                   "label": "Jupiter's Type SwapLegSwap",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 86
+                  "parentId": 57,
+                  "id": 92
                 },
                 {
                   "requires": [],
@@ -2105,8 +2487,8 @@
                   "label": "Jupiter's Type SwapLegDeeper",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 87
+                  "parentId": 57,
+                  "id": 93
                 },
                 {
                   "requires": [],
@@ -2123,8 +2505,8 @@
                   "label": "Jupiter's Type SwapLeg",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 88
+                  "parentId": 57,
+                  "id": 94
                 },
                 {
                   "requires": [],
@@ -2166,8 +2548,8 @@
                   "label": "Jupiter's Type Swap",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 89
+                  "parentId": 57,
+                  "id": 95
                 },
                 {
                   "requires": [],
@@ -2185,8 +2567,8 @@
                   "label": "Jupiter's Type SwapAction",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 90
+                  "parentId": 57,
+                  "id": 96
                 },
                 {
                   "requires": [],
@@ -2992,8 +3374,8 @@
                   "label": "All Jupiter Interfaces",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 91
+                  "parentId": 57,
+                  "id": 97
                 },
                 {
                   "requires": [],
@@ -3029,8 +3411,8 @@
                   "label": "Marinade Finance's Instruction Initialize",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 92
+                  "parentId": 57,
+                  "id": 98
                 },
                 {
                   "requires": [],
@@ -3048,8 +3430,8 @@
                   "label": "Marinade Finance's Instruction ChangeAuthority",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 93
+                  "parentId": 57,
+                  "id": 99
                 },
                 {
                   "requires": [],
@@ -3077,8 +3459,8 @@
                   "label": "Marinade Finance's Instruction AddValidator",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 94
+                  "parentId": 57,
+                  "id": 100
                 },
                 {
                   "requires": [],
@@ -3102,8 +3484,8 @@
                   "label": "Marinade Finance's Instruction RemoveValidator",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 95
+                  "parentId": 57,
+                  "id": 101
                 },
                 {
                   "requires": [],
@@ -3123,8 +3505,8 @@
                   "label": "Marinade Finance's Instruction SetValidatorScore",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 96
+                  "parentId": 57,
+                  "id": 102
                 },
                 {
                   "requires": [],
@@ -3142,8 +3524,8 @@
                   "label": "Marinade Finance's Instruction ConfigValidatorSystem",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 97
+                  "parentId": 57,
+                  "id": 103
                 },
                 {
                   "requires": [],
@@ -3175,8 +3557,8 @@
                   "label": "Marinade Finance's Instruction Deposit",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 98
+                  "parentId": 57,
+                  "id": 104
                 },
                 {
                   "requires": [],
@@ -3214,8 +3596,8 @@
                   "label": "Marinade Finance's Instruction DepositStakeAccount",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 99
+                  "parentId": 57,
+                  "id": 105
                 },
                 {
                   "requires": [],
@@ -3247,8 +3629,8 @@
                   "label": "Marinade Finance's Instruction LiquidUnstake",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 100
+                  "parentId": 57,
+                  "id": 106
                 },
                 {
                   "requires": [],
@@ -3276,8 +3658,8 @@
                   "label": "Marinade Finance's Instruction AddLiquidity",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 101
+                  "parentId": 57,
+                  "id": 107
                 },
                 {
                   "requires": [],
@@ -3310,8 +3692,8 @@
                   "label": "Marinade Finance's Instruction RemoveLiquidity",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 102
+                  "parentId": 57,
+                  "id": 108
                 },
                 {
                   "requires": [],
@@ -3329,8 +3711,8 @@
                   "label": "Marinade Finance's Instruction ConfigLp",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 103
+                  "parentId": 57,
+                  "id": 109
                 },
                 {
                   "requires": [],
@@ -3348,8 +3730,8 @@
                   "label": "Marinade Finance's Instruction ConfigMarinade",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 104
+                  "parentId": 57,
+                  "id": 110
                 },
                 {
                   "requires": [],
@@ -3376,8 +3758,8 @@
                   "label": "Marinade Finance's Instruction OrderUnstake",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 105
+                  "parentId": 57,
+                  "id": 111
                 },
                 {
                   "requires": [],
@@ -3401,8 +3783,8 @@
                   "label": "Marinade Finance's Instruction Claim",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 106
+                  "parentId": 57,
+                  "id": 112
                 },
                 {
                   "requires": [],
@@ -3436,8 +3818,8 @@
                   "label": "Marinade Finance's Instruction StakeReserve",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 107
+                  "parentId": 57,
+                  "id": 113
                 },
                 {
                   "requires": [],
@@ -3476,8 +3858,8 @@
                   "label": "Marinade Finance's Instruction UpdateActive",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 108
+                  "parentId": 57,
+                  "id": 114
                 },
                 {
                   "requires": [],
@@ -3517,8 +3899,8 @@
                   "label": "Marinade Finance's Instruction UpdateDeactivated",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 109
+                  "parentId": 57,
+                  "id": 115
                 },
                 {
                   "requires": [],
@@ -3552,8 +3934,8 @@
                   "label": "Marinade Finance's Instruction DeactivateStake",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 110
+                  "parentId": 57,
+                  "id": 116
                 },
                 {
                   "requires": [],
@@ -3580,8 +3962,8 @@
                   "label": "Marinade Finance's Instruction EmergencyUnstake",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 111
+                  "parentId": 57,
+                  "id": 117
                 },
                 {
                   "requires": [],
@@ -3616,8 +3998,8 @@
                   "label": "Marinade Finance's Instruction PartialUnstake",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 112
+                  "parentId": 57,
+                  "id": 118
                 },
                 {
                   "requires": [],
@@ -3648,8 +4030,8 @@
                   "label": "Marinade Finance's Instruction MergeStakes",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 113
+                  "parentId": 57,
+                  "id": 119
                 },
                 {
                   "requires": [],
@@ -3684,8 +4066,8 @@
                   "label": "Marinade Finance's Account State",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 114
+                  "parentId": 57,
+                  "id": 120
                 },
                 {
                   "requires": [],
@@ -3703,8 +4085,8 @@
                   "label": "Marinade Finance's Account TicketAccountData",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 115
+                  "parentId": 57,
+                  "id": 121
                 },
                 {
                   "requires": [],
@@ -3719,8 +4101,8 @@
                   "label": "Marinade Finance's Type Fee",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 116
+                  "parentId": 57,
+                  "id": 122
                 },
                 {
                   "requires": [],
@@ -3742,8 +4124,8 @@
                   "label": "Marinade Finance's Type InitializeData",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 117
+                  "parentId": 57,
+                  "id": 123
                 },
                 {
                   "requires": [],
@@ -3761,8 +4143,8 @@
                   "label": "Marinade Finance's Type LiqPoolInitializeData",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 118
+                  "parentId": 57,
+                  "id": 124
                 },
                 {
                   "requires": [],
@@ -3780,8 +4162,8 @@
                   "label": "Marinade Finance's Type ChangeAuthorityData",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 119
+                  "parentId": 57,
+                  "id": 125
                 },
                 {
                   "requires": [],
@@ -3799,8 +4181,8 @@
                   "label": "Marinade Finance's Type ConfigLpParams",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 120
+                  "parentId": 57,
+                  "id": 126
                 },
                 {
                   "requires": [],
@@ -3822,8 +4204,8 @@
                   "label": "Marinade Finance's Type ConfigMarinadeParams",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 121
+                  "parentId": 57,
+                  "id": 127
                 },
                 {
                   "requires": [],
@@ -3849,8 +4231,8 @@
                   "label": "Marinade Finance's Type LiqPool",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 122
+                  "parentId": 57,
+                  "id": 128
                 },
                 {
                   "requires": [],
@@ -3869,8 +4251,8 @@
                   "label": "Marinade Finance's Type List",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 123
+                  "parentId": 57,
+                  "id": 129
                 },
                 {
                   "requires": [],
@@ -3888,8 +4270,8 @@
                   "label": "Marinade Finance's Type StakeRecord",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 124
+                  "parentId": 57,
+                  "id": 130
                 },
                 {
                   "requires": [],
@@ -3911,8 +4293,8 @@
                   "label": "Marinade Finance's Type StakeSystem",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 125
+                  "parentId": 57,
+                  "id": 131
                 },
                 {
                   "requires": [],
@@ -3931,8 +4313,8 @@
                   "label": "Marinade Finance's Type ValidatorRecord",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 126
+                  "parentId": 57,
+                  "id": 132
                 },
                 {
                   "requires": [],
@@ -3951,8 +4333,8 @@
                   "label": "Marinade Finance's Type ValidatorSystem",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 127
+                  "parentId": 57,
+                  "id": 133
                 },
                 {
                   "requires": [],
@@ -4529,8 +4911,8 @@
                   "label": "All Marinade Finance Interfaces",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 128
+                  "parentId": 57,
+                  "id": 134
                 },
                 {
                   "requires": [],
@@ -4553,8 +4935,8 @@
                   "label": "Escrow's Instruction InitializeEscrow",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 129
+                  "parentId": 57,
+                  "id": 135
                 },
                 {
                   "requires": [],
@@ -4575,8 +4957,8 @@
                   "label": "Escrow's Instruction CancelEscrow",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 130
+                  "parentId": 57,
+                  "id": 136
                 },
                 {
                   "requires": [],
@@ -4606,8 +4988,8 @@
                   "label": "Escrow's Instruction Exchange",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 131
+                  "parentId": 57,
+                  "id": 137
                 },
                 {
                   "requires": [],
@@ -4626,8 +5008,8 @@
                   "label": "Escrow's Account EscrowAccount",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 132
+                  "parentId": 57,
+                  "id": 138
                 },
                 {
                   "requires": [],
@@ -4694,22 +5076,22 @@
                   "label": "All Escrow Interfaces",
                   "type": 2,
                   "children": [],
-                  "parentId": 51,
-                  "id": 133
+                  "parentId": 57,
+                  "id": 139
                 }
               ]
             }
           ]
         },
         {
-          "id": 134,
+          "id": 140,
           "parentId": 2,
           "type": 1,
           "label": "Client",
           "children": [
             {
-              "id": 135,
-              "parentId": 134,
+              "id": 141,
+              "parentId": 140,
               "type": 1,
               "label": "System",
               "children": [
@@ -4743,8 +5125,8 @@
                   "label": "Get Funded Keypair",
                   "type": 3,
                   "children": [],
-                  "parentId": 135,
-                  "id": 136
+                  "parentId": 141,
+                  "id": 142
                 },
                 {
                   "requires": [
@@ -4757,8 +5139,8 @@
                   "label": "Clone Keypair",
                   "type": 3,
                   "children": [],
-                  "parentId": 135,
-                  "id": 137
+                  "parentId": 141,
+                  "id": 143
                 },
                 {
                   "requires": [
@@ -4793,8 +5175,8 @@
                   "label": "Create Account",
                   "type": 3,
                   "children": [],
-                  "parentId": 135,
-                  "id": 138
+                  "parentId": 141,
+                  "id": 144
                 },
                 {
                   "requires": [
@@ -4814,8 +5196,8 @@
                   "label": "Get Account Data",
                   "type": 3,
                   "children": [],
-                  "parentId": 135,
-                  "id": 139
+                  "parentId": 141,
+                  "id": 145
                 },
                 {
                   "requires": [
@@ -4844,8 +5226,8 @@
                   "label": "Airdrop",
                   "type": 3,
                   "children": [],
-                  "parentId": 135,
-                  "id": 140
+                  "parentId": 141,
+                  "id": 146
                 }
               ]
             }

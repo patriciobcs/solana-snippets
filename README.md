@@ -6,18 +6,18 @@ The [Solana Snippets VSCode Extension](https://marketplace.visualstudio.com/item
 
 Snippets are small fragments of code that can be used to speed up the development process. In this extension you can find three types of snippets:
 
-|                        Icon                         |     Type      |                                  Description                                   | Trigger |                                  Example                                   |
-| :-------------------------------------------------: | :-----------: | :----------------------------------------------------------------------------: | :-----: | :------------------------------------------------------------------------: |
-|   <img src="resources/icons/dark/code.svg"></img>   |    VSCode     |                   VSCode format snippets (work in all files)                   |    >    | [`Anchor Program Structure`](snippets/anchor/programs/core/src/program.rs) |
-|   <img src="resources/icons/dark/rust.svg"></img>   | Rust Analyzer |          Rust Analyzer snippets (they have automatic imports in Rust)          |  \_\_   |     [`Transfer SOL`](snippets/native/src/core/system/transfer_sol.rs)      |
-| <img src="resources/icons/dark/terminal.svg"></img> |   Terminal    | Terminal commands snippets that run directly in the VSCode integrated terminal |         |             [`Get Airdrop`](./snippets/native/cli/airdrop.sh)              |
+|                        Icon                         |     Type      |                                      Description                                       | Trigger |                                  Example                                   |
+| :-------------------------------------------------: | :-----------: | :------------------------------------------------------------------------------------: | :-----: | :------------------------------------------------------------------------: |
+|   <img src="resources/icons/dark/code.svg"></img>   |    VSCode     |                       VSCode format snippets (work in all files)                       |    >    | [`Anchor Program Structure`](snippets/anchor/programs/core/src/program.rs) |
+|   <img src="resources/icons/dark/rust.svg"></img>   | Rust Analyzer | Rust Analyzer snippets. They have automatic imports in Rust. Currently only in Native. |  \_\_   |     [`Transfer SOL`](snippets/native/src/core/system/transfer_sol.rs)      |
+| <img src="resources/icons/dark/terminal.svg"></img> |   Terminal    |     Terminal commands snippets that run directly in the VSCode integrated terminal     |         |             [`Get Airdrop`](./snippets/native/cli/airdrop.sh)              |
 
 All the snippets are defined in multiple Rust files. This files uses comments to define the beginning and ending of the snippet. This approach allows to build and **test** the snippets before compiling the snippets to JSON and package them into the extension.
 
 ### Usage
 
 - In any file type ">" to visualize all the `VSCode` snippets.
-- In any Rust file type "__" inside a function/method to visualize all the `Rust Analyzer` snippets. If the snippets require some imports, they will be automatically added.
+- In any Rust file type "\_\_" inside a function/method to visualize all the `Rust Analyzer` snippets. If the snippets require some imports, they will be automatically added.
 - When there are multiple inputs to fill in the snippet like a transfer execution [`sender`, `receiver`, `amount`], use `TAB` to switch to the next input. If the default input (placeholder) is sufficient, press `TAB` to keep it and pass to the following input. Repeated inputs only need to be filled once.
 - Open the Sidebar (Solana logo) and select any snippet to insert it in the current file (code snippets) or execute it (terminal snippets). Rust Snippets imports are not added automatically in this way.
 - Type the name of any snippet (without spaces) in the file to insert it. The names can be seen in the sidebar or by using the command `Solana Snippets: Open Snippet`.

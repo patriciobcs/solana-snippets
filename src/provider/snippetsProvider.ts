@@ -4,6 +4,7 @@ import * as path from "path";
 import { Snippet } from "../types/snippet";
 import { CommandsConsts } from "../config/commands";
 import { SnippetService } from "../service/snippetService";
+import { MarkdownString } from "vscode";
 
 export class SnippetsProvider implements vscode.TreeDataProvider<Snippet> {
   constructor(
@@ -131,26 +132,30 @@ export class SnippetsProvider implements vscode.TreeDataProvider<Snippet> {
       };
     } else {
       const maxLength = 20;
+      const description = snippet.description || "";
       const value = Snippet.getContent(snippet);
-      treeItem.tooltip = `${
-        value
-          ? "'" +
-            value.replace("\n", "").slice(0, maxLength) +
-            (value.length > 20 ? "..." : "") +
-            "'"
-          : "''"
-      }`;
-      treeItem.contextValue = "snippet";
+      // treeItem.tooltip = `${
+      //   value
+      //     ? "'" +
+      //       value.replace("\n", "").slice(0, maxLength) +
+      //       (value.length > 20 ? "..." : "") +
+      //       "'"
+      //     : "''"
+      // }`;
 
       let icon = "logo";
+      let lang = "rust";
 
       switch (snippet.type) {
         case 1: icon = "folder"; break;
         case 2: icon = "code"; break;
         case 3: icon = "rust"; break;
-        case 4: icon = "terminal"; treeItem.contextValue += "Terminal"; break;
+        case 4: icon = "terminal"; treeItem.contextValue += "Terminal"; lang = "sh"; break;
         case 5: icon = "info"; treeItem.contextValue += "Info";break;
       }
+      
+      treeItem.tooltip = new MarkdownString(`${description}\n\n\`\`\`${lang}\n${value}\n\`\`\``);
+      treeItem.contextValue = "snippet";
 
       icon += ".svg";
 

@@ -21,7 +21,7 @@
 			"request": "launch",
 			"runtimeExecutable": "${execPath}",
 			"args": [
-				"${workspaceFolder}/scaffold/anchor/",
+				"${workspaceFolder}/scaffold/anchor-program/",
 				"--extensionDevelopmentPath=${workspaceFolder}"
 			]
 		},

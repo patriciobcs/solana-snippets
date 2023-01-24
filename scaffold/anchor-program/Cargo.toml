@@ -1,0 +1,20 @@
+[package]
+name = "anchor"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[features]
+no-entrypoint = []
+test-sbf = []
+
+[dependencies]
+anchor-lang = "0.26.0"
+solana-program = "1.14.7"
+spl-token = { version = "3.5", features = ["no-entrypoint"] }
+
+[dev-dependencies]
+solana-program-test = "1.11.6"
+solana-sdk = "1.11.6"
